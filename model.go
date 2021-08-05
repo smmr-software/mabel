@@ -2,41 +2,33 @@ package main
 
 import "github.com/anacrolix/torrent"
 
-type model struct {
-	width   int
-	height  int
-	torrent struct {
-		client torrent.Client
-		config torrent.ClientConfig
-	}
-	addPrompt struct {
-		enabled bool
-		phase   string
-		state   struct {
-			download string
-		}
-	}
+type modelTorrent struct {
+	client torrent.Client
+	config torrent.ClientConfig
 }
 
-func initialAddPrompt() struct {
+type modelAddPrompt struct {
 	enabled bool
 	phase   string
-	state   struct {
-		download string
-	}
-} {
-	s := struct {
-		enabled bool
-		phase   string
-		state   struct {
-			download string
-		}
-	}{
+	state   modelAddPromptState
+}
+
+type modelAddPromptState struct {
+	download string
+}
+
+type model struct {
+	width     int
+	height    int
+	torrent   modelTorrent
+	addPrompt modelAddPrompt
+}
+
+func initialAddPrompt() modelAddPrompt {
+	s := modelAddPrompt{
 		enabled: false,
 		phase:   "tab-select",
-		state: struct {
-			download string
-		}{
+		state: modelAddPromptState{
 			download: "magnet",
 		},
 	}
