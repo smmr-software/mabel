@@ -11,6 +11,41 @@ type model struct {
 	}
 	addPrompt struct {
 		enabled bool
-		magnet  bool
+		phase   string
+		state   struct {
+			download string
+		}
 	}
+}
+
+func initialAddPrompt() struct {
+	enabled bool
+	phase   string
+	state   struct {
+		download string
+	}
+} {
+	s := struct {
+		enabled bool
+		phase   string
+		state   struct {
+			download string
+		}
+	}{
+		enabled: false,
+		phase:   "tab-select",
+		state: struct {
+			download string
+		}{
+			download: "magnet",
+		},
+	}
+	return s
+}
+
+func initialModel() model {
+	m := model{
+		addPrompt: initialAddPrompt(),
+	}
+	return m
 }

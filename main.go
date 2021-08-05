@@ -30,12 +30,12 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.addPrompt.enabled = true
 			}
 		case "h":
-			if m.addPrompt.enabled && m.addPrompt.magnet {
-				m.addPrompt.magnet = false
+			if m.addPrompt.enabled && m.addPrompt.phase == "tab-select" {
+				m.addPrompt.state.download = "magnet"
 			}
 		case "l":
-			if m.addPrompt.enabled && !m.addPrompt.magnet {
-				m.addPrompt.magnet = true
+			if m.addPrompt.enabled && m.addPrompt.phase == "tab-select" {
+				m.addPrompt.state.download = "torrent"
 			}
 		}
 	}
@@ -66,12 +66,12 @@ func (m model) View() string {
 
 	if m.addPrompt.enabled {
 		body := title.Render("Add Torrent") + "\n\n"
-		if m.addPrompt.magnet {
-			body += button.inactive.Render(" Torrent ") + "    "
-			body += button.active.Render(" Magnet ") + "\n\n"
+		if m.addPrompt.state.download == "magnet" {
+			body += button.active.Render(" Magnet ") + "    "
+			body += button.inactive.Render(" Torrent ") + "\n\n"
 		} else {
-			body += button.active.Render(" Torrent ") + "    "
-			body += button.inactive.Render(" Magnet ") + "\n\n"
+			body += button.inactive.Render(" Magnet ") + "    "
+			body += button.active.Render(" Torrent ") + "\n\n"
 		}
 		return fullscreen.Render(
 			gloss.Place(
@@ -88,7 +88,7 @@ func (m model) View() string {
 }
 
 func main() {
-	if err := tea.NewProgram(model{}, tea.WithAltScreen()).Start(); err != nil {
+	if err := tea.NewProgram(initialModel(), tea.WithAltScreen()).Start(); err != nil {
 		os.Exit(1)
 	}
 }
