@@ -1,24 +1,10 @@
 package main
 
 import (
-	"github.com/anacrolix/torrent"
 	tea "github.com/charmbracelet/bubbletea"
 	gloss "github.com/charmbracelet/lipgloss"
 	"os"
 )
-
-type model struct {
-	width   int
-	height  int
-	torrent struct {
-		client torrent.Client
-		config torrent.ClientConfig
-	}
-	addPrompt struct {
-		enabled bool
-		magnet  bool
-	}
-}
 
 func (m model) Init() tea.Cmd {
 	return nil
