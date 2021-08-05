@@ -18,10 +18,9 @@ type modelAddPromptState struct {
 }
 
 type model struct {
-	width     int
-	height    int
-	torrent   modelTorrent
-	addPrompt modelAddPrompt
+	width, height int
+	torrent       modelTorrent
+	addPrompt     modelAddPrompt
 }
 
 func initialAddPrompt() modelAddPrompt {
