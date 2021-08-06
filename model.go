@@ -5,6 +5,12 @@ import (
 	"github.com/charmbracelet/bubbles/textinput"
 )
 
+type model struct {
+	width, height int
+	torrent       modelTorrent
+	addPrompt     modelAddPrompt
+}
+
 type modelTorrent struct {
 	client torrent.Client
 	config torrent.ClientConfig
@@ -21,12 +27,6 @@ type modelAddPromptState struct {
 	magnetLink  textinput.Model
 	torrentPath textinput.Model
 	savePath    textinput.Model
-}
-
-type model struct {
-	width, height int
-	torrent       modelTorrent
-	addPrompt     modelAddPrompt
 }
 
 func initialAddPrompt() modelAddPrompt {
@@ -51,8 +51,6 @@ func initialAddPrompt() modelAddPrompt {
 }
 
 func initialModel() model {
-	m := model{
-		addPrompt: initialAddPrompt(),
-	}
+	m := model{addPrompt: initialAddPrompt()}
 	return m
 }
