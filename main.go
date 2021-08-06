@@ -19,11 +19,11 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		switch msg.String() {
 		case "ctrl+c":
 			return m, tea.Quit
-		case "q":
+		case "esc", "q":
 			if !m.addPrompt.enabled {
 				return m, tea.Quit
 			} else {
-				m.addPrompt.enabled = false
+				m.addPrompt = initialAddPrompt()
 			}
 		case "a":
 			if !m.addPrompt.enabled {
@@ -36,6 +36,48 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "l":
 			if m.addPrompt.enabled && m.addPrompt.phase == "tab-select" {
 				m.addPrompt.state.download = "torrent"
+			}
+		case "enter", "tab":
+			if m.addPrompt.enabled {
+				switch m.addPrompt.phase {
+				case "tab-select":
+					if m.addPrompt.state.download == "magnet" {
+						m.addPrompt.phase = "magnet-link"
+						m.addPrompt.state.magnetLink.Focus()
+					} else {
+						m.addPrompt.phase = "torrent-path"
+						m.addPrompt.state.torrentPath.Focus()
+					}
+				case "magnet-link", "torrent-path":
+					m.addPrompt.phase = "save-path"
+					m.addPrompt.state.magnetLink.Blur()
+					m.addPrompt.state.torrentPath.Blur()
+					m.addPrompt.state.savePath.Focus()
+				case "save-path":
+					m.addPrompt.phase = "approval"
+					m.addPrompt.state.savePath.Blur()
+				}
+			}
+		case "shift+tab":
+			if m.addPrompt.enabled {
+				switch m.addPrompt.phase {
+				case "magnet-link", "torrent-path":
+					m.addPrompt.phase = "tab-select"
+					m.addPrompt.state.magnetLink.Blur()
+					m.addPrompt.state.torrentPath.Blur()
+				case "save-path":
+					if m.addPrompt.state.download == "magnet" {
+						m.addPrompt.phase = "magnet-link"
+						m.addPrompt.state.magnetLink.Focus()
+					} else {
+						m.addPrompt.phase = "torrent-path"
+						m.addPrompt.state.torrentPath.Focus()
+					}
+					m.addPrompt.state.savePath.Blur()
+				case "approval":
+					m.addPrompt.phase = "save-path"
+					m.addPrompt.state.savePath.Focus()
+				}
 			}
 		}
 	}
@@ -68,10 +110,18 @@ func (m model) View() string {
 		body := title.Render("Add Torrent") + "\n\n"
 		if m.addPrompt.state.download == "magnet" {
 			body += button.active.Render(" Magnet ") + "    "
-			body += button.inactive.Render(" Torrent ") + "\n\n"
+			body += button.inactive.Render(" Torrent ") + "\n\n\n"
+			body += m.addPrompt.state.magnetLink.View() + "\n\n"
 		} else {
 			body += button.inactive.Render(" Magnet ") + "    "
-			body += button.active.Render(" Torrent ") + "\n\n"
+			body += button.active.Render(" Torrent ") + "\n\n\n"
+			body += m.addPrompt.state.torrentPath.View() + "\n\n"
+		}
+		body += m.addPrompt.state.savePath.View() + "\n\n\n\n"
+		if m.addPrompt.phase == "approval" {
+			body += button.active.Render(" Start Download ")
+		} else {
+			body += button.inactive.Render(" Start Download ")
 		}
 		return fullscreen.Render(
 			gloss.Place(

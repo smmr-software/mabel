@@ -1,6 +1,9 @@
 package main
 
-import "github.com/anacrolix/torrent"
+import (
+	"github.com/anacrolix/torrent"
+	"github.com/charmbracelet/bubbles/textinput"
+)
 
 type modelTorrent struct {
 	client torrent.Client
@@ -14,7 +17,10 @@ type modelAddPrompt struct {
 }
 
 type modelAddPromptState struct {
-	download string
+	download    string
+	magnetLink  textinput.Model
+	torrentPath textinput.Model
+	savePath    textinput.Model
 }
 
 type model struct {
@@ -24,11 +30,21 @@ type model struct {
 }
 
 func initialAddPrompt() modelAddPrompt {
+	magnetLink := textinput.NewModel()
+	magnetLink.Placeholder = "Magnet Link"
+	torrentPath := textinput.NewModel()
+	torrentPath.Placeholder = "Path to Torrent File"
+	savePath := textinput.NewModel()
+	savePath.Placeholder = "Path to Save Directory"
+
 	s := modelAddPrompt{
 		enabled: false,
 		phase:   "tab-select",
 		state: modelAddPromptState{
-			download: "magnet",
+			download:    "magnet",
+			magnetLink:  magnetLink,
+			torrentPath: torrentPath,
+			savePath:    savePath,
 		},
 	}
 	return s
