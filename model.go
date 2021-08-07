@@ -7,6 +7,7 @@ import (
 
 type model struct {
 	width, height int
+	typing        bool
 	torrent       modelTorrent
 	addPrompt     modelAddPrompt
 }
