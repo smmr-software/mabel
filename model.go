@@ -30,10 +30,13 @@ type modelAddPromptState struct {
 func initialAddPrompt() modelAddPrompt {
 	magnetLink := textinput.NewModel()
 	magnetLink.Placeholder = "Magnet Link"
+	magnetLink.Width = 32
 	torrentPath := textinput.NewModel()
 	torrentPath.Placeholder = "Path to Torrent File"
+	torrentPath.Width = 32
 	savePath := textinput.NewModel()
 	savePath.Placeholder = "Path to Save Directory"
+	savePath.Width = 32
 
 	s := modelAddPrompt{
 		enabled: false,
