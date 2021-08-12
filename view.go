@@ -49,7 +49,9 @@ func (m model) View() string {
 		)
 	} else {
 		if torrents := m.torrent.Torrents(); len(torrents) > 0 {
-			body.WriteString(entry.Render("You have some torrents!"))
+			for _, t := range torrents {
+				body.WriteString(entry.Render(t.Name()))
+			}
 		} else {
 			body.WriteString(entry.Render("You have no torrents!"))
 		}

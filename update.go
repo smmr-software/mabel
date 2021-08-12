@@ -1,9 +1,29 @@
 package main
 
 import (
+	torrent "github.com/anacrolix/torrent"
 	tea "github.com/charmbracelet/bubbletea"
 	gloss "github.com/charmbracelet/lipgloss"
+	home "github.com/mitchellh/go-homedir"
 )
+
+type magnetLinkMsg string
+type torrentFromFileMsg string
+type torrentDownloadStarted struct{}
+
+func addMagnetLink(uri string) tea.Cmd {
+	return func() tea.Msg { return magnetLinkMsg(uri) }
+}
+func addTorrentFromFile(path string) tea.Cmd {
+	return func() tea.Msg { return torrentFromFileMsg(path) }
+}
+func downloadTorrent(t *torrent.Torrent) tea.Cmd {
+	return func() tea.Msg {
+		<-t.GotInfo()
+		t.DownloadAll()
+		return torrentDownloadStarted{}
+	}
+}
 
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
@@ -20,6 +40,12 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		} else {
 			return defaultKeyPress(m, msg)
 		}
+	case magnetLinkMsg:
+		t, _ := m.torrent.AddMagnet(string(msg))
+		return m, downloadTorrent(t)
+	case torrentFromFileMsg:
+		t, _ := m.torrent.AddTorrentFromFile(string(msg))
+		return m, downloadTorrent(t)
 	}
 	return m, nil
 }
@@ -98,6 +124,13 @@ func addPromptKeyPress(m model, msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 			} else {
 				m.addPrompt.phase = "torrent-path"
 				m.addPrompt.state.torrentPath.Focus()
+			}
+		case "approval":
+			if m.addPrompt.state.download == "magnet" {
+				return m, addMagnetLink(m.addPrompt.state.magnetLink.Value())
+			} else {
+				path, _ := home.Expand(m.addPrompt.state.torrentPath.Value())
+				return m, addTorrentFromFile(path)
 			}
 		}
 	case "shift+tab":
