@@ -1,20 +1,17 @@
 package main
 
 import (
+	"github.com/anacrolix/log"
 	"github.com/anacrolix/torrent"
 	"github.com/charmbracelet/bubbles/textinput"
+	"os"
 )
 
 type model struct {
 	width, height int
 	typing        bool
-	torrent       modelTorrent
+	torrent       *torrent.Client
 	addPrompt     modelAddPrompt
-}
-
-type modelTorrent struct {
-	client torrent.Client
-	config torrent.ClientConfig
 }
 
 type modelAddPrompt struct {
@@ -52,6 +49,16 @@ func initialAddPrompt() modelAddPrompt {
 }
 
 func initialModel() model {
-	m := model{addPrompt: initialAddPrompt()}
+	config := torrent.NewDefaultClientConfig()
+	config.DataDir = os.TempDir()
+	config.Logger = log.Discard
+
+	client, _ := torrent.NewClient(config)
+	defer client.Close()
+
+	m := model{
+		addPrompt: initialAddPrompt(),
+		torrent:   client,
+	}
 	return m
 }
