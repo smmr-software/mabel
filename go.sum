@@ -139,6 +139,8 @@ github.com/anacrolix/torrent v1.30.0 h1:DON4OkUP01dLAeyFSyM9fxGcb/gLre3JdaL5HEbL
 github.com/anacrolix/torrent v1.30.0/go.mod h1:40Hf2bWxFqTbTWbrdig57JnmYLCjShbWWjdbB3VN5n4=
 github.com/anacrolix/torrent v1.30.1 h1:Y8Sz8V6BEALhafgc7s1a1pJKYzy6X5gfu6ocF5F7nog=
 github.com/anacrolix/torrent v1.30.1/go.mod h1:40Hf2bWxFqTbTWbrdig57JnmYLCjShbWWjdbB3VN5n4=
+github.com/anacrolix/torrent v1.30.2 h1:oLWIAk8XQX7kYGeNdNsn9C+TSrupK8DB33Au1GvP02Y=
+github.com/anacrolix/torrent v1.30.2/go.mod h1:vbNxKfaGiNq8edcCaQI1oSNJwh4GMqtMUMF9qOdZ6C0=
 github.com/anacrolix/upnp v0.1.1/go.mod h1:LXsbsp5h+WGN7YR+0A7iVXm5BL1LYryDev1zuJMWYQo=
 github.com/anacrolix/upnp v0.1.2-0.20200416075019-5e9378ed1425 h1:/Wi6l2ONI1FUFWN4cBwHOO90V4ylp4ud/eov6GUcVFk=
 github.com/anacrolix/upnp v0.1.2-0.20200416075019-5e9378ed1425/go.mod h1:Pz94W3kl8rf+wxH3IbCa9Sq+DTJr8OSbV2Q3/y51vYs=
@@ -848,6 +850,8 @@ golang.org/x/sys v0.0.0-20210420072515-93ed5bcd2bfe/go.mod h1:h1NjWce9XRLGQEsW7w
 golang.org/x/sys v0.0.0-20210423082822-04245dca01da/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20210426230700-d19ff857e887 h1:dXfMednGJh/SUUFjTLsWJz3P+TQt9qnR11GgeI3vWKs=
 golang.org/x/sys v0.0.0-20210426230700-d19ff857e887/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
+golang.org/x/sys v0.0.0-20210809222454-d867a43fc93e h1:WUoyKPm6nCo1BnNUvPGnFG3T5DUVem42yDJZZ4CNxMA=
+golang.org/x/sys v0.0.0-20210809222454-d867a43fc93e/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/term v0.0.0-20201117132131-f5c789dd3221/go.mod h1:Nr5EML6q2oocZ2LXRh80K7BxOlk5/8JxuGnuhpl+muw=
 golang.org/x/term v0.0.0-20201126162022-7de9c90e9dd1/go.mod h1:bj7SfCRtBDWHUb9snDiAeCFNEtKQo2Wmx5Cou7ajbmo=
 golang.org/x/term v0.0.0-20210422114643-f5beecf764ed h1:Ei4bQjjpYUsS4efOUz+5Nz++IVkHk87n2zBA0NxBWc0=
