@@ -42,9 +42,11 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 	case magnetLinkMsg:
 		t, _ := m.torrent.AddMagnet(string(msg))
+		m.addPrompt = initialAddPrompt()
 		return m, downloadTorrent(t)
 	case torrentFromFileMsg:
 		t, _ := m.torrent.AddTorrentFromFile(string(msg))
+		m.addPrompt = initialAddPrompt()
 		return m, downloadTorrent(t)
 	}
 	return m, nil
