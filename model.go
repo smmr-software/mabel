@@ -3,8 +3,8 @@ package main
 import (
 	"github.com/anacrolix/log"
 	"github.com/anacrolix/torrent"
+	"github.com/anacrolix/torrent/storage"
 	"github.com/charmbracelet/bubbles/textinput"
-	"os"
 )
 
 type model struct {
@@ -53,7 +53,7 @@ func initialAddPrompt() modelAddPrompt {
 
 func initialModel() model {
 	config := torrent.NewDefaultClientConfig()
-	config.DataDir = os.TempDir()
+	config.DefaultStorage = storage.NewMMap("")
 	config.Logger = log.Discard
 
 	client, _ := torrent.NewClient(config)
