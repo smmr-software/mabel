@@ -7,16 +7,8 @@ import (
 	home "github.com/mitchellh/go-homedir"
 )
 
-type magnetLinkMsg string
-type torrentFromFileMsg string
 type torrentDownloadStarted struct{}
 
-func addMagnetLink(uri string) tea.Cmd {
-	return func() tea.Msg { return magnetLinkMsg(uri) }
-}
-func addTorrentFromFile(path string) tea.Cmd {
-	return func() tea.Msg { return torrentFromFileMsg(path) }
-}
 func downloadTorrent(t *torrent.Torrent) tea.Cmd {
 	return func() tea.Msg {
 		<-t.GotInfo()
@@ -40,14 +32,6 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		} else {
 			return defaultKeyPress(m, msg)
 		}
-	case magnetLinkMsg:
-		t, _ := m.torrent.AddMagnet(string(msg))
-		m.addPrompt = initialAddPrompt()
-		return m, downloadTorrent(t)
-	case torrentFromFileMsg:
-		t, _ := m.torrent.AddTorrentFromFile(string(msg))
-		m.addPrompt = initialAddPrompt()
-		return m, downloadTorrent(t)
 	}
 	return m, nil
 }
@@ -129,10 +113,14 @@ func addPromptKeyPress(m model, msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 			}
 		case "approval":
 			if m.addPrompt.state.download == "magnet" {
-				return m, addMagnetLink(m.addPrompt.state.magnetLink.Value())
+				t, _ := m.torrent.AddMagnet(m.addPrompt.state.magnetLink.Value())
+				m.addPrompt = initialAddPrompt()
+				return m, downloadTorrent(t)
 			} else {
 				path, _ := home.Expand(m.addPrompt.state.torrentPath.Value())
-				return m, addTorrentFromFile(path)
+				t, _ := m.torrent.AddTorrentFromFile(path)
+				m.addPrompt = initialAddPrompt()
+				return m, downloadTorrent(t)
 			}
 		}
 	case "shift+tab":
