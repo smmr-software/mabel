@@ -113,12 +113,12 @@ func addPromptKeyPress(m model, msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 			}
 		case "approval":
 			if m.addPrompt.state.download == "magnet" {
-				t, _ := m.torrent.AddMagnet(m.addPrompt.state.magnetLink.Value())
+				t, _ := m.client.AddMagnet(m.addPrompt.state.magnetLink.Value())
 				m.addPrompt = initialAddPrompt()
 				return m, downloadTorrent(t)
 			} else {
 				path, _ := home.Expand(m.addPrompt.state.torrentPath.Value())
-				t, _ := m.torrent.AddTorrentFromFile(path)
+				t, _ := m.client.AddTorrentFromFile(path)
 				m.addPrompt = initialAddPrompt()
 				return m, downloadTorrent(t)
 			}

@@ -48,7 +48,7 @@ func (m model) View() string {
 			),
 		)
 	} else {
-		if torrents := m.torrent.Torrents(); len(torrents) > 0 {
+		if torrents := m.client.Torrents(); len(torrents) > 0 {
 			for _, t := range torrents {
 				name := t.Name()
 				stats := t.Stats()

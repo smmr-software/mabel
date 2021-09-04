@@ -10,7 +10,7 @@ import (
 type model struct {
 	width, height int
 	typing        bool
-	torrent       *torrent.Client
+	client        *torrent.Client
 	addPrompt     modelAddPrompt
 }
 
@@ -61,7 +61,7 @@ func initialModel() model {
 
 	m := model{
 		addPrompt: initialAddPrompt(),
-		torrent:   client,
+		client:    client,
 	}
 	return m
 }
