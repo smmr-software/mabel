@@ -57,7 +57,6 @@ func initialModel() model {
 	config.Logger = log.Discard
 
 	client, _ := torrent.NewClient(config)
-	defer client.Close()
 
 	m := model{
 		addPrompt: initialAddPrompt(),

@@ -24,6 +24,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.height = msg.Height - gloss.Width(border.Bottom+border.Top)
 	case tea.KeyMsg:
 		if msg.Type == tea.KeyCtrlC {
+			m.client.Close()
 			return m, tea.Quit
 		} else if m.typing {
 			return typingKeyPress(m, msg)
@@ -136,6 +137,7 @@ func addPromptKeyPress(m model, msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 func defaultKeyPress(m model, msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	switch msg.String() {
 	case "q":
+		m.client.Close()
 		return m, tea.Quit
 	case "a":
 		m.addPrompt.enabled = true
