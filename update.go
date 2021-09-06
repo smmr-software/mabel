@@ -5,8 +5,12 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	gloss "github.com/charmbracelet/lipgloss"
 	home "github.com/mitchellh/go-homedir"
+	"time"
 )
 
+var interval = 500 * time.Millisecond
+
+type tickMsg time.Time
 type torrentDownloadStarted struct{}
 
 func downloadTorrent(t *torrent.Torrent) tea.Cmd {
@@ -31,6 +35,8 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		} else {
 			return defaultKeyPress(m, msg)
 		}
+	case tickMsg:
+		return m, tick()
 	}
 	return m, nil
 }
@@ -71,4 +77,10 @@ func defaultKeyPress(m model, msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 		m.addPrompt.enabled = true
 	}
 	return m, nil
+}
+
+func tick() tea.Cmd {
+	return tea.Tick(time.Duration(interval), func(t time.Time) tea.Msg {
+		return tickMsg(t)
+	})
 }
