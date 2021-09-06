@@ -8,6 +8,7 @@ require (
 	github.com/charmbracelet/bubbles v0.8.0
 	github.com/charmbracelet/bubbletea v0.14.1
 	github.com/charmbracelet/lipgloss v0.4.0
+	github.com/dustin/go-humanize v1.0.0
 	github.com/mitchellh/go-homedir v1.1.0
 )
 
@@ -34,7 +35,6 @@ require (
 	github.com/bradfitz/iter v0.0.0-20191230175014-e8f45d346db8 // indirect
 	github.com/containerd/console v1.0.1 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/dustin/go-humanize v1.0.0 // indirect
 	github.com/edsrzf/mmap-go v1.0.0 // indirect
 	github.com/elliotchance/orderedmap v1.4.0 // indirect
 	github.com/google/btree v1.0.1 // indirect

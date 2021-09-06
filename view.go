@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	gloss "github.com/charmbracelet/lipgloss"
+	"github.com/dustin/go-humanize"
 	"strings"
 )
 
@@ -40,10 +41,26 @@ func (m model) View() string {
 			for _, t := range torrents {
 				name := t.Name()
 				stats := t.Stats()
+				info := t.Info()
 
-				peers := fmt.Sprintf("%d peers", stats.ActivePeers)
+				var meta string
+				if info == nil {
+					meta = "getting torrent info..."
+				} else {
+					if t.BytesMissing() != 0 {
+						meta = fmt.Sprintf(
+							"%s/%s | %d/%d peers",
+							humanize.Bytes(uint64(t.BytesCompleted())),
+							humanize.Bytes(uint64(t.Length())),
+							stats.ActivePeers,
+							stats.TotalPeers,
+						)
+					} else {
+						meta = "done!"
+					}
+				}
 
-				spacerWidth := int(float64(m.width)*0.9) - gloss.Width(name) - gloss.Width(peers)
+				spacerWidth := int(float64(m.width)*0.9) - gloss.Width(name) - gloss.Width(meta)
 
 				body.WriteString(
 					entry.Render(
@@ -51,7 +68,7 @@ func (m model) View() string {
 							gloss.Center,
 							t.Name(),
 							gloss.NewStyle().Width(spacerWidth).Render(""),
-							peers,
+							meta,
 						),
 					) + "\n",
 				)
