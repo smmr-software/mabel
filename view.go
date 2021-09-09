@@ -19,13 +19,7 @@ func (m model) View() string {
 	var body strings.Builder
 
 	if m.addPrompt.enabled {
-		body.WriteString("Add Torrent from ")
-		if m.addPrompt.magnet {
-			body.WriteString("Magnet Link")
-		} else {
-			body.WriteString("File")
-		}
-		body.WriteString("\n")
+		body.WriteString("Add Torrent\n")
 		body.WriteString(borderWindow.Render(m.addPrompt.input.View()))
 		return fullscreen.Render(
 			gloss.Place(

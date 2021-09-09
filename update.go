@@ -2,9 +2,11 @@ package main
 
 import (
 	torrent "github.com/anacrolix/torrent"
+	"github.com/anacrolix/torrent/metainfo"
 	tea "github.com/charmbracelet/bubbletea"
 	gloss "github.com/charmbracelet/lipgloss"
 	home "github.com/mitchellh/go-homedir"
+	"strings"
 	"time"
 )
 
@@ -47,10 +49,13 @@ func addPromptKeyPress(m model, msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 		m.addPrompt = initialAddPrompt()
 	case tea.KeyEnter:
 		var t *torrent.Torrent
-		if m.addPrompt.magnet {
-			t, _ = m.client.AddMagnet(m.addPrompt.input.Value())
+		input := m.addPrompt.input.Value()
+		if strings.HasPrefix(input, "magnet:") {
+			t, _ = m.client.AddMagnet(input)
+		} else if strings.HasPrefix(input, "infohash:") {
+			t, _ = m.client.AddTorrentInfoHash(metainfo.NewHashFromHex(strings.TrimPrefix(input, "infohash:")))
 		} else {
-			path, _ := home.Expand(m.addPrompt.input.Value())
+			path, _ := home.Expand(input)
 			t, _ = m.client.AddTorrentFromFile(path)
 		}
 		m.addPrompt = initialAddPrompt()
@@ -68,11 +73,7 @@ func defaultKeyPress(m model, msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	case "q":
 		m.client.Close()
 		return m, tea.Quit
-	case "m":
-		m.addPrompt.input.Focus()
-		m.addPrompt.enabled = true
-	case "t":
-		m.addPrompt.magnet = false
+	case "a":
 		m.addPrompt.input.Focus()
 		m.addPrompt.enabled = true
 	}

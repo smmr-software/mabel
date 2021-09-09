@@ -15,7 +15,6 @@ type model struct {
 
 type modelAddPrompt struct {
 	enabled bool
-	magnet  bool
 	input   textinput.Model
 }
 
@@ -25,7 +24,6 @@ func initialAddPrompt() modelAddPrompt {
 
 	s := modelAddPrompt{
 		enabled: false,
-		magnet:  true,
 		input:   input,
 	}
 	return s
