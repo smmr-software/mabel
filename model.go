@@ -5,6 +5,7 @@ import (
 	"github.com/anacrolix/torrent"
 	"github.com/anacrolix/torrent/storage"
 	"github.com/charmbracelet/bubbles/textinput"
+	"os"
 )
 
 type model struct {
@@ -30,8 +31,11 @@ func initialAddPrompt() modelAddPrompt {
 }
 
 func initialModel() model {
+	metadataDirectory := os.TempDir()
+	metadataStorage, _ := storage.NewDefaultPieceCompletionForDir(metadataDirectory)
+
 	config := torrent.NewDefaultClientConfig()
-	config.DefaultStorage = storage.NewMMap("")
+	config.DefaultStorage = storage.NewMMapWithCompletion("", metadataStorage)
 	config.Logger = log.Discard
 
 	client, _ := torrent.NewClient(config)
