@@ -3,6 +3,7 @@ package main
 import (
 	torrent "github.com/anacrolix/torrent"
 	"github.com/anacrolix/torrent/metainfo"
+	"github.com/charmbracelet/bubbles/key"
 	tea "github.com/charmbracelet/bubbletea"
 	gloss "github.com/charmbracelet/lipgloss"
 	home "github.com/mitchellh/go-homedir"
@@ -69,11 +70,11 @@ func addPromptKeyPress(m model, msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 }
 
 func defaultKeyPress(m model, msg tea.KeyMsg) (tea.Model, tea.Cmd) {
-	switch msg.String() {
-	case "q":
+	switch {
+	case key.Matches(msg, keys.quit):
 		m.client.Close()
 		return m, tea.Quit
-	case "a":
+	case key.Matches(msg, keys.addTorrent):
 		m.addPrompt.input.Focus()
 		m.addPrompt.enabled = true
 	}
