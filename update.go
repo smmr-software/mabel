@@ -27,8 +27,12 @@ func downloadTorrent(t *torrent.Torrent) tea.Cmd {
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
-		m.width = msg.Width - gloss.Width(border.Right+border.Left)
-		m.height = msg.Height - gloss.Width(border.Bottom+border.Top)
+		width := msg.Width - gloss.Width(border.Right+border.Left)
+		height := msg.Height - gloss.Width(border.Bottom+border.Top)
+
+		m.width = width
+		m.help.Width = width
+		m.height = height
 	case tea.KeyMsg:
 		if msg.Type == tea.KeyCtrlC {
 			m.client.Close()
@@ -74,6 +78,8 @@ func defaultKeyPress(m model, msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	case key.Matches(msg, keys.quit):
 		m.client.Close()
 		return m, tea.Quit
+	case key.Matches(msg, keys.help):
+		m.help.ShowAll = !m.help.ShowAll
 	case key.Matches(msg, keys.addTorrent):
 		m.addPrompt.input.Focus()
 		m.addPrompt.enabled = true

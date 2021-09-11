@@ -4,6 +4,7 @@ import (
 	"github.com/anacrolix/log"
 	"github.com/anacrolix/torrent"
 	"github.com/anacrolix/torrent/storage"
+	"github.com/charmbracelet/bubbles/help"
 	"github.com/charmbracelet/bubbles/textinput"
 	"os"
 )
@@ -11,6 +12,7 @@ import (
 type model struct {
 	width, height int
 	client        *torrent.Client
+	help          help.Model
 	addPrompt     modelAddPrompt
 }
 
@@ -41,8 +43,9 @@ func initialModel() model {
 	client, _ := torrent.NewClient(config)
 
 	m := model{
-		addPrompt: initialAddPrompt(),
 		client:    client,
+		help:      help.NewModel(),
+		addPrompt: initialAddPrompt(),
 	}
 	return m
 }

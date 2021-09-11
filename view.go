@@ -71,7 +71,13 @@ func (m model) View() string {
 			body.WriteString(entry.Render("You have no torrents!"))
 		}
 		body.WriteString("\n")
-	}
 
-	return fullscreen.Render(body.String())
+		content := body.String()
+		help := m.help.View(keys)
+		padding := m.height - gloss.Height(content) - gloss.Height(help)
+		if padding < 0 {
+			padding = 0
+		}
+		return fullscreen.Render(content + strings.Repeat("\n", padding) + help)
+	}
 }
