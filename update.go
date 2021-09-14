@@ -57,11 +57,14 @@ func addPromptKeyPress(m model, msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 		input := m.addPrompt.input.Value()
 		if strings.HasPrefix(input, "magnet:") {
 			t, _ = m.client.AddMagnet(input)
+			m.torrentMeta[t.InfoHash()] = time.Now()
 		} else if strings.HasPrefix(input, "infohash:") {
 			t, _ = m.client.AddTorrentInfoHash(metainfo.NewHashFromHex(strings.TrimPrefix(input, "infohash:")))
+			m.torrentMeta[t.InfoHash()] = time.Now()
 		} else {
 			path, _ := home.Expand(input)
 			t, _ = m.client.AddTorrentFromFile(path)
+			m.torrentMeta[t.InfoHash()] = time.Now()
 		}
 		m.addPrompt = initialAddPrompt()
 		return m, downloadTorrent(t)

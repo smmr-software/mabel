@@ -3,15 +3,18 @@ package main
 import (
 	"github.com/anacrolix/log"
 	"github.com/anacrolix/torrent"
+	"github.com/anacrolix/torrent/metainfo"
 	"github.com/anacrolix/torrent/storage"
 	"github.com/charmbracelet/bubbles/help"
 	"github.com/charmbracelet/bubbles/textinput"
 	"os"
+	"time"
 )
 
 type model struct {
 	width, height int
 	client        *torrent.Client
+	torrentMeta   map[metainfo.Hash]time.Time
 	help          help.Model
 	addPrompt     modelAddPrompt
 }
@@ -43,9 +46,10 @@ func initialModel() model {
 	client, _ := torrent.NewClient(config)
 
 	m := model{
-		client:    client,
-		help:      help.NewModel(),
-		addPrompt: initialAddPrompt(),
+		client:      client,
+		torrentMeta: make(map[metainfo.Hash]time.Time),
+		help:        help.NewModel(),
+		addPrompt:   initialAddPrompt(),
 	}
 	return m
 }

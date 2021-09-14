@@ -4,6 +4,7 @@ import (
 	"fmt"
 	gloss "github.com/charmbracelet/lipgloss"
 	"github.com/dustin/go-humanize"
+	"sort"
 	"strings"
 )
 
@@ -32,6 +33,20 @@ func (m model) View() string {
 		)
 	} else {
 		if torrents := m.client.Torrents(); len(torrents) > 0 {
+			sort.Slice(
+				torrents,
+				func(i, j int) bool {
+					var (
+						firstHash  = torrents[i].InfoHash()
+						secondHash = torrents[j].InfoHash()
+
+						firstTime  = m.torrentMeta[firstHash]
+						secondTime = m.torrentMeta[secondHash]
+					)
+
+					return firstTime.Before(secondTime)
+				},
+			)
 			for _, t := range torrents {
 				name := t.Name()
 				stats := t.Stats()
