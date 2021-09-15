@@ -2,7 +2,7 @@ package main
 
 import (
 	tea "github.com/charmbracelet/bubbletea"
-	"os"
+	"log"
 )
 
 func (m model) Init() tea.Cmd {
@@ -10,7 +10,12 @@ func (m model) Init() tea.Cmd {
 }
 
 func main() {
-	if err := tea.NewProgram(initialModel(), tea.WithAltScreen()).Start(); err != nil {
-		os.Exit(1)
+	model, err := initialModel()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if err := tea.NewProgram(model, tea.WithAltScreen()).Start(); err != nil {
+		log.Fatal(err)
 	}
 }

@@ -39,21 +39,26 @@ func initialAddPrompt() modelAddPrompt {
 	return s
 }
 
-func initialModel() model {
-	metadataDirectory := os.TempDir()
-	metadataStorage, _ := storage.NewDefaultPieceCompletionForDir(metadataDirectory)
-
+func initialModel() (model, error) {
 	config := torrent.NewDefaultClientConfig()
-	config.DefaultStorage = storage.NewMMapWithCompletion("", metadataStorage)
 	config.Logger = log.Discard
 
-	client, _ := torrent.NewClient(config)
-
-	m := model{
-		client:      client,
-		torrentMeta: make(map[metainfo.Hash]time.Time),
-		help:        help.NewModel(),
-		addPrompt:   initialAddPrompt(),
+	metadataDirectory := os.TempDir()
+	if metadataStorage, err := storage.NewDefaultPieceCompletionForDir(metadataDirectory); err != nil {
+		config.DefaultStorage = storage.NewMMap("")
+	} else {
+		config.DefaultStorage = storage.NewMMapWithCompletion("", metadataStorage)
 	}
-	return m
+
+	if client, err := torrent.NewClient(config); err != nil {
+		return model{}, err
+	} else {
+		m := model{
+			client:      client,
+			torrentMeta: make(map[metainfo.Hash]time.Time),
+			help:        help.NewModel(),
+			addPrompt:   initialAddPrompt(),
+		}
+		return m, nil
+	}
 }
