@@ -21,7 +21,9 @@ func (m model) View() string {
 
 	if m.addPrompt.enabled {
 		body.WriteString("Add Torrent\n")
-		body.WriteString(borderWindow.Render(m.addPrompt.input.View()))
+		body.WriteString(borderWindow.Render(m.addPrompt.torrent.View()))
+		body.WriteString("\n\nSave Directory (Optional)\n")
+		body.WriteString(borderWindow.Render(m.addPrompt.saveDir.View()))
 		return fullscreen.Render(
 			gloss.Place(
 				m.width, m.height,

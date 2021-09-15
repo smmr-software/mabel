@@ -21,7 +21,9 @@ type model struct {
 
 type modelAddPrompt struct {
 	enabled bool
-	input   textinput.Model
+	dir     bool
+	torrent textinput.Model
+	saveDir textinput.Model
 }
 
 func initialAddPrompt() modelAddPrompt {
@@ -30,7 +32,9 @@ func initialAddPrompt() modelAddPrompt {
 
 	s := modelAddPrompt{
 		enabled: false,
-		input:   input,
+		dir:     false,
+		torrent: input,
+		saveDir: input,
 	}
 	return s
 }
