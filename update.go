@@ -51,10 +51,10 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func addPromptKeyPress(m model, msg tea.KeyMsg) (tea.Model, tea.Cmd) {
-	switch msg.Type {
-	case tea.KeyEsc:
+	switch {
+	case key.Matches(msg, addPromptKeys.quit):
 		m.addPrompt = initialAddPrompt()
-	case tea.KeyEnter, tea.KeyTab:
+	case key.Matches(msg, addPromptKeys.forward):
 		if m.addPrompt.dir {
 			var (
 				input      = m.addPrompt.torrent.Value()
@@ -90,7 +90,7 @@ func addPromptKeyPress(m model, msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 			m.addPrompt.saveDir.Focus()
 			m.addPrompt.dir = true
 		}
-	case tea.KeyShiftTab:
+	case key.Matches(msg, addPromptKeys.back):
 		if m.addPrompt.dir {
 			m.addPrompt.saveDir.Blur()
 			m.addPrompt.torrent.Focus()

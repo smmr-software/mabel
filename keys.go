@@ -61,7 +61,7 @@ var addPromptKeys = addPromptKeyMap{
 		key.WithHelp("⇧↹", "previous"),
 	),
 	forward: key.NewBinding(
-		key.WithKeys("↵"),
+		key.WithKeys("enter", "tab"),
 		key.WithHelp("↵", "next"),
 	),
 }
