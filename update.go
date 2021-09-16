@@ -42,6 +42,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.width = width
 		m.help.Width = width
 		m.height = height
+		return m, nil
 	case tea.KeyMsg:
 		if msg.Type == tea.KeyCtrlC {
 			m.client.Close()
@@ -58,8 +59,10 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return m, tick()
 	case mabelError:
 		m.err = msg
+		return m, nil
+	default:
+		return m, nil
 	}
-	return m, nil
 }
 
 func addPromptKeyPress(m model, msg tea.KeyMsg) (tea.Model, tea.Cmd) {
