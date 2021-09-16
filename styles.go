@@ -12,12 +12,4 @@ var (
 		Bold(true).
 		Underline(true).
 		Foreground(gloss.Color("#FFF"))
-
-	button = struct {
-		inactive gloss.Style
-		active   gloss.Style
-	}{
-		inactive: gloss.NewStyle().Foreground(gloss.Color("#000")).Background(gloss.Color("#FFF")),
-		active:   gloss.NewStyle().Foreground(gloss.Color("#000")).Background(gloss.Color("86")),
-	}
 )
