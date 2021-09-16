@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-var interval = 500 * time.Millisecond
+const interval = 500 * time.Millisecond
 
 type tickMsg time.Time
 type torrentDownloadStarted struct{}
