@@ -16,6 +16,7 @@ type model struct {
 	client        *torrent.Client
 	torrentMeta   map[metainfo.Hash]time.Time
 	help          help.Model
+	err           error
 	addPrompt     modelAddPrompt
 }
 

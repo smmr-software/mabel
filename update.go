@@ -17,12 +17,19 @@ var interval = 500 * time.Millisecond
 
 type tickMsg time.Time
 type torrentDownloadStarted struct{}
+type mabelError error
 
 func downloadTorrent(t *torrent.Torrent) tea.Cmd {
 	return func() tea.Msg {
 		<-t.GotInfo()
 		t.DownloadAll()
 		return torrentDownloadStarted{}
+	}
+}
+
+func reportError(err error) tea.Cmd {
+	return func() tea.Msg {
+		return mabelError(err)
 	}
 }
 
@@ -41,11 +48,16 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, tea.Quit
 		} else if m.addPrompt.enabled {
 			return addPromptKeyPress(m, msg)
+		} else if m.err != nil {
+			m.err = nil
+			return m, nil
 		} else {
 			return defaultKeyPress(m, msg)
 		}
 	case tickMsg:
 		return m, tick()
+	case mabelError:
+		m.err = msg
 	}
 	return m, nil
 }
@@ -57,30 +69,74 @@ func addPromptKeyPress(m model, msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	case key.Matches(msg, addPromptKeys.forward):
 		if m.addPrompt.dir {
 			var (
-				input      = m.addPrompt.torrent.Value()
-				saveDir, _ = home.Expand(m.addPrompt.saveDir.Value())
-
-				metadataDirectory  = os.TempDir()
-				metadataStorage, _ = storage.NewDefaultPieceCompletionForDir(metadataDirectory)
-				dir                = storage.NewMMapWithCompletion(saveDir, metadataStorage)
+				saveDir    string
+				storageDir storage.ClientImpl
 			)
+
+			input := m.addPrompt.torrent.Value()
+			if dir, err := home.Expand(m.addPrompt.saveDir.Value()); err != nil {
+				m.addPrompt = initialAddPrompt()
+				return m, reportError(err)
+			} else {
+				saveDir = dir
+			}
+
+			metadataDirectory := os.TempDir()
+			if metadataStorage, err := storage.NewDefaultPieceCompletionForDir(metadataDirectory); err != nil {
+				storageDir = storage.NewMMap(saveDir)
+			} else {
+				storageDir = storage.NewMMapWithCompletion(saveDir, metadataStorage)
+			}
 
 			var t *torrent.Torrent
 			if strings.HasPrefix(input, "magnet:") {
-				spec, _ := torrent.TorrentSpecFromMagnetUri(input)
-				spec.Storage = dir
-				t, _, _ = m.client.AddTorrentSpec(spec)
+				var spec *torrent.TorrentSpec
+				if spc, err := torrent.TorrentSpecFromMagnetUri(input); err != nil {
+					m.addPrompt = initialAddPrompt()
+					return m, reportError(err)
+				} else {
+					spc.Storage = storageDir
+					spec = spc
+				}
+
+				if tr, _, err := m.client.AddTorrentSpec(spec); err != nil {
+					m.addPrompt = initialAddPrompt()
+					return m, reportError(err)
+				} else {
+					t = tr
+				}
 			} else if strings.HasPrefix(input, "infohash:") {
 				hash := metainfo.NewHashFromHex(strings.TrimPrefix(input, "infohash:"))
-				t, _ = m.client.AddTorrentInfoHashWithStorage(hash, dir)
+				t, _ = m.client.AddTorrentInfoHashWithStorage(hash, storageDir)
 			} else {
 				var (
-					path, _ = home.Expand(input)
-					meta, _ = metainfo.LoadFromFile(path)
-					spec    = torrent.TorrentSpecFromMetaInfo(meta)
+					path string
+					meta *metainfo.MetaInfo
 				)
-				spec.Storage = dir
-				t, _, _ = m.client.AddTorrentSpec(spec)
+
+				if p, err := home.Expand(input); err != nil {
+					m.addPrompt = initialAddPrompt()
+					return m, reportError(err)
+				} else {
+					path = p
+				}
+
+				if mt, err := metainfo.LoadFromFile(path); err != nil {
+					m.addPrompt = initialAddPrompt()
+					return m, reportError(err)
+				} else {
+					meta = mt
+				}
+
+				spec := torrent.TorrentSpecFromMetaInfo(meta)
+				spec.Storage = storageDir
+
+				if tr, _, err := m.client.AddTorrentSpec(spec); err != nil {
+					m.addPrompt = initialAddPrompt()
+					return m, reportError(err)
+				} else {
+					t = tr
+				}
 			}
 			m.torrentMeta[t.InfoHash()] = time.Now()
 			m.addPrompt = initialAddPrompt()

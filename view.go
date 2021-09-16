@@ -16,6 +16,10 @@ func (m model) View() string {
 	entry := gloss.NewStyle().
 		Width(int(float64(m.width)*0.9)).
 		Border(gloss.NormalBorder(), false, false, true)
+	popup := gloss.NewStyle().
+		Width(m.width / 3).
+		Height(m.height / 3).
+		Inherit(borderWindow)
 
 	var body strings.Builder
 
@@ -38,6 +42,18 @@ func (m model) View() string {
 				m.width, m.height,
 				gloss.Center, gloss.Bottom,
 				body.String(),
+				gloss.WithWhitespaceChars("⑀"),
+				gloss.WithWhitespaceForeground(gloss.Color("#383838")),
+			),
+		)
+	} else if m.err != nil {
+		body.WriteString(title.Render("Error") + "\n\n")
+		body.WriteString(m.err.Error())
+		return fullscreen.Render(
+			gloss.Place(
+				m.width, m.height,
+				gloss.Center, gloss.Center,
+				popup.Render(body.String()),
 				gloss.WithWhitespaceChars("⑀"),
 				gloss.WithWhitespaceForeground(gloss.Color("#383838")),
 			),
