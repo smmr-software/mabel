@@ -2,14 +2,9 @@ package main
 
 import (
 	torrent "github.com/anacrolix/torrent"
-	"github.com/anacrolix/torrent/metainfo"
-	"github.com/anacrolix/torrent/storage"
 	"github.com/charmbracelet/bubbles/key"
 	tea "github.com/charmbracelet/bubbletea"
 	gloss "github.com/charmbracelet/lipgloss"
-	home "github.com/mitchellh/go-homedir"
-	"os"
-	"strings"
 	"time"
 )
 
@@ -69,85 +64,15 @@ func addPromptKeyPress(m model, msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	switch {
 	case key.Matches(msg, addPromptKeys.quit):
 		m.addPrompt = initialAddPrompt()
+		return m, nil
 	case key.Matches(msg, addPromptKeys.forward):
 		if m.addPrompt.dir {
-			var (
-				saveDir    string
-				storageDir storage.ClientImpl
-			)
-
-			input := m.addPrompt.torrent.Value()
-			if dir, err := home.Expand(m.addPrompt.saveDir.Value()); err != nil {
-				m.addPrompt = initialAddPrompt()
-				return m, reportError(err)
-			} else {
-				saveDir = dir
-			}
-
-			metadataDirectory := os.TempDir()
-			if metadataStorage, err := storage.NewDefaultPieceCompletionForDir(metadataDirectory); err != nil {
-				storageDir = storage.NewMMap(saveDir)
-			} else {
-				storageDir = storage.NewMMapWithCompletion(saveDir, metadataStorage)
-			}
-
-			var t *torrent.Torrent
-			if strings.HasPrefix(input, "magnet:") {
-				var spec *torrent.TorrentSpec
-				if spc, err := torrent.TorrentSpecFromMagnetUri(input); err != nil {
-					m.addPrompt = initialAddPrompt()
-					return m, reportError(err)
-				} else {
-					spc.Storage = storageDir
-					spec = spc
-				}
-
-				if tr, _, err := m.client.AddTorrentSpec(spec); err != nil {
-					m.addPrompt = initialAddPrompt()
-					return m, reportError(err)
-				} else {
-					t = tr
-				}
-			} else if strings.HasPrefix(input, "infohash:") {
-				hash := metainfo.NewHashFromHex(strings.TrimPrefix(input, "infohash:"))
-				t, _ = m.client.AddTorrentInfoHashWithStorage(hash, storageDir)
-			} else {
-				var (
-					path string
-					meta *metainfo.MetaInfo
-				)
-
-				if p, err := home.Expand(input); err != nil {
-					m.addPrompt = initialAddPrompt()
-					return m, reportError(err)
-				} else {
-					path = p
-				}
-
-				if mt, err := metainfo.LoadFromFile(path); err != nil {
-					m.addPrompt = initialAddPrompt()
-					return m, reportError(err)
-				} else {
-					meta = mt
-				}
-
-				spec := torrent.TorrentSpecFromMetaInfo(meta)
-				spec.Storage = storageDir
-
-				if tr, _, err := m.client.AddTorrentSpec(spec); err != nil {
-					m.addPrompt = initialAddPrompt()
-					return m, reportError(err)
-				} else {
-					t = tr
-				}
-			}
-			m.torrentMeta[t.InfoHash()] = time.Now()
-			m.addPrompt = initialAddPrompt()
-			return m, downloadTorrent(t)
+			return addTorrent(m, msg)
 		} else {
 			m.addPrompt.torrent.Blur()
 			m.addPrompt.saveDir.Focus()
 			m.addPrompt.dir = true
+			return m, nil
 		}
 	case key.Matches(msg, addPromptKeys.back):
 		if m.addPrompt.dir {
@@ -155,6 +80,7 @@ func addPromptKeyPress(m model, msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 			m.addPrompt.torrent.Focus()
 			m.addPrompt.dir = false
 		}
+		return m, nil
 	default:
 		var cmd tea.Cmd
 		if m.addPrompt.dir {
@@ -164,7 +90,6 @@ func addPromptKeyPress(m model, msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 		}
 		return m, cmd
 	}
-	return m, nil
 }
 
 func defaultKeyPress(m model, msg tea.KeyMsg) (tea.Model, tea.Cmd) {
