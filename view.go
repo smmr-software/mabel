@@ -24,10 +24,19 @@ func (m model) View() string {
 		body.WriteString(borderWindow.Render(m.addPrompt.torrent.View()))
 		body.WriteString("\n\nSave Directory (Optional)\n")
 		body.WriteString(borderWindow.Render(m.addPrompt.saveDir.View()))
+
+		content := body.String()
+		help := m.help.View(addPromptKeys)
+		padding := ((m.height - gloss.Height(content)) / 2) - gloss.Height(help)
+		if padding < 0 {
+			padding = 0
+		}
+		body.WriteString(strings.Repeat("\n", padding) + help + "\n")
+
 		return fullscreen.Render(
 			gloss.Place(
 				m.width, m.height,
-				gloss.Center, gloss.Center,
+				gloss.Center, gloss.Bottom,
 				body.String(),
 				gloss.WithWhitespaceChars("⑀"),
 				gloss.WithWhitespaceForeground(gloss.Color("#383838")),
@@ -90,7 +99,7 @@ func (m model) View() string {
 		body.WriteString("\n")
 
 		content := body.String()
-		help := m.help.View(keys)
+		help := m.help.View(homeKeys)
 		padding := m.height - gloss.Height(content) - gloss.Height(help)
 		if padding < 0 {
 			padding = 0

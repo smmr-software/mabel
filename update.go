@@ -110,12 +110,12 @@ func addPromptKeyPress(m model, msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 
 func defaultKeyPress(m model, msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	switch {
-	case key.Matches(msg, keys.quit):
+	case key.Matches(msg, homeKeys.quit):
 		m.client.Close()
 		return m, tea.Quit
-	case key.Matches(msg, keys.help):
+	case key.Matches(msg, homeKeys.help):
 		m.help.ShowAll = !m.help.ShowAll
-	case key.Matches(msg, keys.addTorrent):
+	case key.Matches(msg, homeKeys.addTorrent):
 		m.addPrompt.torrent.Focus()
 		m.addPrompt.enabled = true
 	}
