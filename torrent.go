@@ -43,22 +43,19 @@ func getStorage(dir string) storage.ClientImpl {
 }
 
 func addMagnetLink(m model, input string, dir storage.ClientImpl) (tea.Model, tea.Cmd) {
-	var spec *torrent.TorrentSpec
-	if spc, err := torrent.TorrentSpecFromMagnetUri(input); err != nil {
+	if spec, err := torrent.TorrentSpecFromMagnetUri(input); err != nil {
 		m.addPrompt = initialAddPrompt()
 		return m, reportError(err)
 	} else {
-		spc.Storage = dir
-		spec = spc
-	}
-
-	if t, _, err := m.client.AddTorrentSpec(spec); err != nil {
-		m.addPrompt = initialAddPrompt()
-		return m, reportError(err)
-	} else {
-		m.torrentMeta[t.InfoHash()] = time.Now()
-		m.addPrompt = initialAddPrompt()
-		return m, downloadTorrent(t)
+		spec.Storage = dir
+		if t, _, err := m.client.AddTorrentSpec(spec); err != nil {
+			m.addPrompt = initialAddPrompt()
+			return m, reportError(err)
+		} else {
+			m.torrentMeta[t.InfoHash()] = time.Now()
+			m.addPrompt = initialAddPrompt()
+			return m, downloadTorrent(t)
+		}
 	}
 }
 
@@ -71,34 +68,24 @@ func addInfoHash(m model, input string, dir storage.ClientImpl) (tea.Model, tea.
 }
 
 func addFromFile(m model, input string, dir storage.ClientImpl) (tea.Model, tea.Cmd) {
-	var (
-		path string
-		meta *metainfo.MetaInfo
-	)
-
-	if p, err := home.Expand(input); err != nil {
+	if path, err := home.Expand(input); err != nil {
 		m.addPrompt = initialAddPrompt()
 		return m, reportError(err)
 	} else {
-		path = p
-	}
-
-	if mt, err := metainfo.LoadFromFile(path); err != nil {
-		m.addPrompt = initialAddPrompt()
-		return m, reportError(err)
-	} else {
-		meta = mt
-	}
-
-	spec := torrent.TorrentSpecFromMetaInfo(meta)
-	spec.Storage = dir
-
-	if t, _, err := m.client.AddTorrentSpec(spec); err != nil {
-		m.addPrompt = initialAddPrompt()
-		return m, reportError(err)
-	} else {
-		m.torrentMeta[t.InfoHash()] = time.Now()
-		m.addPrompt = initialAddPrompt()
-		return m, downloadTorrent(t)
+		if meta, err := metainfo.LoadFromFile(path); err != nil {
+			m.addPrompt = initialAddPrompt()
+			return m, reportError(err)
+		} else {
+			spec := torrent.TorrentSpecFromMetaInfo(meta)
+			spec.Storage = dir
+			if t, _, err := m.client.AddTorrentSpec(spec); err != nil {
+				m.addPrompt = initialAddPrompt()
+				return m, reportError(err)
+			} else {
+				m.torrentMeta[t.InfoHash()] = time.Now()
+				m.addPrompt = initialAddPrompt()
+				return m, downloadTorrent(t)
+			}
+		}
 	}
 }
