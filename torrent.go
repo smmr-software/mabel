@@ -12,25 +12,9 @@ import (
 )
 
 func addTorrent(m model, msg tea.Msg) (tea.Model, tea.Cmd) {
-	var (
-		saveDir    string
-		storageDir storage.ClientImpl
-	)
-
 	input := m.addPrompt.torrent.Value()
-	if dir, err := home.Expand(m.addPrompt.saveDir.Value()); err != nil {
-		m.addPrompt = initialAddPrompt()
-		return m, reportError(err)
-	} else {
-		saveDir = dir
-	}
-
-	metadataDirectory := os.TempDir()
-	if metadataStorage, err := storage.NewDefaultPieceCompletionForDir(metadataDirectory); err != nil {
-		storageDir = storage.NewMMap(saveDir)
-	} else {
-		storageDir = storage.NewMMapWithCompletion(saveDir, metadataStorage)
-	}
+	saveDir := getSaveLocation(m.addPrompt.saveDir.Value())
+	storageDir := getStorage(saveDir)
 
 	if strings.HasPrefix(input, "magnet:") {
 		return addMagnetLink(m, input, storageDir)
@@ -38,6 +22,23 @@ func addTorrent(m model, msg tea.Msg) (tea.Model, tea.Cmd) {
 		return addInfoHash(m, input, storageDir)
 	} else {
 		return addFromFile(m, input, storageDir)
+	}
+}
+
+func getSaveLocation(dir string) string {
+	if d, err := home.Expand(dir); err != nil {
+		return ""
+	} else {
+		return d
+	}
+}
+
+func getStorage(dir string) storage.ClientImpl {
+	metadataDirectory := os.TempDir()
+	if metadataStorage, err := storage.NewDefaultPieceCompletionForDir(metadataDirectory); err != nil {
+		return storage.NewMMap(dir)
+	} else {
+		return storage.NewMMapWithCompletion(dir, metadataStorage)
 	}
 }
 
