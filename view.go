@@ -85,7 +85,8 @@ func (m model) View() string {
 				} else {
 					if t.BytesMissing() != 0 {
 						meta = fmt.Sprintf(
-							"%s/%s | %d/%d peers",
+							"selected: %t | %s/%s | %d/%d peers",
+							m.selected == t.InfoHash(),
 							humanize.Bytes(uint64(t.BytesCompleted())),
 							humanize.Bytes(uint64(t.Length())),
 							stats.ActivePeers,

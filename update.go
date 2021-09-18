@@ -1,11 +1,14 @@
 package main
 
 import (
+	"sort"
+	"time"
+
 	torrent "github.com/anacrolix/torrent"
+	"github.com/anacrolix/torrent/metainfo"
 	"github.com/charmbracelet/bubbles/key"
 	tea "github.com/charmbracelet/bubbletea"
 	gloss "github.com/charmbracelet/lipgloss"
-	"time"
 )
 
 const interval = 500 * time.Millisecond
@@ -102,6 +105,89 @@ func defaultKeyPress(m model, msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	case key.Matches(msg, homeKeys.addTorrent):
 		m.addPrompt.torrent.Focus()
 		m.addPrompt.enabled = true
+	case key.Matches(msg, homeKeys.down):
+		torrents := m.client.Torrents()
+		if len(torrents) == 0 {
+			return m, nil
+		}
+		sort.Slice(
+			torrents,
+			func(i, j int) bool {
+				var (
+					firstHash  = torrents[i].InfoHash()
+					secondHash = torrents[j].InfoHash()
+
+					firstTime  = m.torrentMeta[firstHash]
+					secondTime = m.torrentMeta[secondHash]
+				)
+
+				return firstTime.Before(secondTime)
+			},
+		)
+
+		zero := metainfo.Hash{}
+		if m.selected == zero {
+			m.selected = torrents[0].InfoHash()
+		} else {
+			var index int
+			for i := range torrents {
+				if torrents[i].InfoHash() == m.selected {
+					index = i + 1
+					break
+				}
+			}
+			if index == len(torrents) {
+				m.selected = torrents[0].InfoHash()
+			} else {
+				m.selected = torrents[index].InfoHash()
+			}
+		}
+	case key.Matches(msg, homeKeys.up):
+		torrents := m.client.Torrents()
+		if len(torrents) == 0 {
+			return m, nil
+		}
+		sort.Slice(
+			torrents,
+			func(i, j int) bool {
+				var (
+					firstHash  = torrents[i].InfoHash()
+					secondHash = torrents[j].InfoHash()
+
+					firstTime  = m.torrentMeta[firstHash]
+					secondTime = m.torrentMeta[secondHash]
+				)
+
+				return firstTime.Before(secondTime)
+			},
+		)
+
+		zero := metainfo.Hash{}
+		if m.selected == zero {
+			m.selected = torrents[0].InfoHash()
+		} else {
+			var index int
+			for i := range torrents {
+				if torrents[i].InfoHash() == m.selected {
+					index = i - 1
+					break
+				}
+			}
+			if index < 0 {
+				m.selected = torrents[len(torrents)-1].InfoHash()
+			} else {
+				m.selected = torrents[index].InfoHash()
+			}
+		}
+	case key.Matches(msg, homeKeys.delete):
+		zero := metainfo.Hash{}
+		if m.selected != zero {
+			t, b := m.client.Torrent(m.selected)
+			if b {
+				t.Drop()
+			}
+		}
+		return m, nil
 	}
 	return m, nil
 }
