@@ -75,9 +75,14 @@ func (m model) View() string {
 				},
 			)
 			for _, t := range torrents {
+				selected := ""
 				name := t.Name()
 				stats := t.Stats()
 				info := t.Info()
+
+				if m.selected == t.InfoHash() {
+					selected = "* "
+				}
 
 				var meta string
 				if info == nil {
@@ -85,8 +90,7 @@ func (m model) View() string {
 				} else {
 					if t.BytesMissing() != 0 {
 						meta = fmt.Sprintf(
-							"selected: %t | %s/%s | %d/%d peers",
-							m.selected == t.InfoHash(),
+							"%s/%s | %d/%d peers",
 							humanize.Bytes(uint64(t.BytesCompleted())),
 							humanize.Bytes(uint64(t.Length())),
 							stats.ActivePeers,
@@ -97,12 +101,13 @@ func (m model) View() string {
 					}
 				}
 
-				spacerWidth := int(float64(m.width)*0.9) - gloss.Width(name) - gloss.Width(meta)
+				spacerWidth := int(float64(m.width)*0.9) - gloss.Width(selected) - gloss.Width(name) - gloss.Width(meta)
 
 				body.WriteString(
 					entry.Render(
 						gloss.JoinHorizontal(
 							gloss.Center,
+							selected,
 							t.Name(),
 							gloss.NewStyle().Width(spacerWidth).Render(""),
 							meta,
