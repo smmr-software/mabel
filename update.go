@@ -187,7 +187,9 @@ func defaultKeyPress(m model, msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 				t.Drop()
 			}
 		}
-		return m, nil
+	case key.Matches(msg, homeKeys.deselect):
+		zero := metainfo.Hash{}
+		m.selected = zero
 	}
 	return m, nil
 }

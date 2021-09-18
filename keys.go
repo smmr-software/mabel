@@ -9,6 +9,7 @@ type homeKeyMap struct {
 	delete     key.Binding
 	up         key.Binding
 	down       key.Binding
+	deselect   key.Binding
 }
 
 func (k homeKeyMap) ShortHelp() []key.Binding {
@@ -19,7 +20,7 @@ func (k homeKeyMap) FullHelp() [][]key.Binding {
 	return [][]key.Binding{
 		{k.up, k.down},
 		{k.addTorrent, k.delete},
-		{k.help, k.quit},
+		{k.deselect, k.help, k.quit},
 	}
 }
 
@@ -47,6 +48,10 @@ var homeKeys = homeKeyMap{
 	down: key.NewBinding(
 		key.WithKeys("j", "down"),
 		key.WithHelp("j/↓", "down"),
+	),
+	deselect: key.NewBinding(
+		key.WithKeys("esc"),
+		key.WithHelp("⎋", "deselect"),
 	),
 }
 
