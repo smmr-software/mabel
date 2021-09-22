@@ -88,17 +88,23 @@ func (m model) View() string {
 				if info == nil {
 					meta = "getting torrent info..."
 				} else {
+					var download string
 					if t.BytesMissing() != 0 {
-						meta = fmt.Sprintf(
-							"%s/%s | %d/%d peers",
+						download = fmt.Sprintf(
+							"%s/%s ↓",
 							humanize.Bytes(uint64(t.BytesCompleted())),
 							humanize.Bytes(uint64(t.Length())),
-							stats.ActivePeers,
-							stats.TotalPeers,
 						)
 					} else {
-						meta = "done!"
+						download = "done!"
 					}
+					meta = fmt.Sprintf(
+						"%s | %s ↑ | %d/%d peers",
+						download,
+						humanize.Bytes(uint64(stats.BytesWritten.Int64())),
+						stats.ActivePeers,
+						stats.TotalPeers,
+					)
 				}
 
 				spacerWidth := int(float64(m.width)*0.9) - gloss.Width(selected) - gloss.Width(name) - gloss.Width(meta)
