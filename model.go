@@ -44,6 +44,7 @@ func initialAddPrompt() modelAddPrompt {
 func initialModel() (model, error) {
 	config := torrent.NewDefaultClientConfig()
 	config.Logger = log.Discard
+	config.Seed = true
 
 	metadataDirectory := os.TempDir()
 	if metadataStorage, err := storage.NewDefaultPieceCompletionForDir(metadataDirectory); err != nil {
