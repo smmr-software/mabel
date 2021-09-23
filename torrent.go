@@ -1,14 +1,15 @@
 package main
 
 import (
+	"os"
+	"strings"
+	"time"
+
 	torrent "github.com/anacrolix/torrent"
 	"github.com/anacrolix/torrent/metainfo"
 	"github.com/anacrolix/torrent/storage"
 	tea "github.com/charmbracelet/bubbletea"
 	home "github.com/mitchellh/go-homedir"
-	"os"
-	"strings"
-	"time"
 )
 
 func addTorrent(m model, msg tea.Msg) (tea.Model, tea.Cmd) {

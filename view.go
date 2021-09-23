@@ -2,10 +2,11 @@ package main
 
 import (
 	"fmt"
-	gloss "github.com/charmbracelet/lipgloss"
-	"github.com/dustin/go-humanize"
 	"sort"
 	"strings"
+
+	gloss "github.com/charmbracelet/lipgloss"
+	"github.com/dustin/go-humanize"
 )
 
 func (m model) View() string {

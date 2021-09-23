@@ -1,14 +1,15 @@
 package main
 
 import (
+	"os"
+	"time"
+
 	"github.com/anacrolix/log"
 	"github.com/anacrolix/torrent"
 	"github.com/anacrolix/torrent/metainfo"
 	"github.com/anacrolix/torrent/storage"
 	"github.com/charmbracelet/bubbles/help"
 	"github.com/charmbracelet/bubbles/textinput"
-	"os"
-	"time"
 )
 
 type model struct {

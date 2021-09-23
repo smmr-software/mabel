@@ -1,8 +1,9 @@
 package main
 
 import (
-	tea "github.com/charmbracelet/bubbletea"
 	"log"
+
+	tea "github.com/charmbracelet/bubbletea"
 )
 
 func (m model) Init() tea.Cmd {
