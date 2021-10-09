@@ -4,7 +4,7 @@ go 1.17
 
 require (
 	github.com/anacrolix/log v0.9.0
-	github.com/anacrolix/torrent v1.32.0
+	github.com/anacrolix/torrent v1.33.0
 	github.com/charmbracelet/bubbles v0.9.0
 	github.com/charmbracelet/bubbletea v0.17.0
 	github.com/charmbracelet/lipgloss v0.4.0
@@ -15,9 +15,9 @@ require (
 require (
 	crawshaw.io/sqlite v0.3.3-0.20210127221821-98b1f83c5508 // indirect
 	github.com/RoaringBitmap/roaring v0.9.4 // indirect
-	github.com/anacrolix/chansync v0.2.1-0.20210910114620-14955c95ded9 // indirect
+	github.com/anacrolix/chansync v0.3.0-0.0.20211007004133-3f72684c4a93 // indirect
 	github.com/anacrolix/confluence v1.8.0 // indirect
-	github.com/anacrolix/dht/v2 v2.10.5-0.20210902001729-06cc4fe90e53 // indirect
+	github.com/anacrolix/dht/v2 v2.10.6-0.20211007004332-99263ec9c1c8 // indirect
 	github.com/anacrolix/envpprof v1.1.1 // indirect
 	github.com/anacrolix/go-libutp v1.0.4 // indirect
 	github.com/anacrolix/missinggo v1.3.0 // indirect
