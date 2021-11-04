@@ -38,7 +38,7 @@ var homeKeys = homeKeyMap{
 		key.WithHelp("a", "add torrent"),
 	),
 	delete: key.NewBinding(
-		key.WithKeys("d", "delete"),
+		key.WithKeys("d", "backspace"),
 		key.WithHelp("d/⌦", "delete"),
 	),
 	up: key.NewBinding(
