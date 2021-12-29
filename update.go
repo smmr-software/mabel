@@ -47,12 +47,12 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			m.client.Close()
 			return m, tea.Quit
 		} else if m.addPrompt.enabled {
-			return addPromptKeyPress(m, msg)
+			return addPromptKeyPress(&m, &msg)
 		} else if m.err != nil {
 			m.err = nil
 			return m, nil
 		} else {
-			return defaultKeyPress(m, msg)
+			return defaultKeyPress(&m, &msg)
 		}
 	case tickMsg:
 		return m, tick()
@@ -64,21 +64,21 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	}
 }
 
-func addPromptKeyPress(m model, msg tea.KeyMsg) (tea.Model, tea.Cmd) {
+func addPromptKeyPress(m *model, msg *tea.KeyMsg) (tea.Model, tea.Cmd) {
 	switch {
-	case key.Matches(msg, addPromptKeys.quit):
+	case key.Matches(*msg, addPromptKeys.quit):
 		m.addPrompt = initialAddPrompt()
 		return m, nil
-	case key.Matches(msg, addPromptKeys.forward):
+	case key.Matches(*msg, addPromptKeys.forward):
 		if m.addPrompt.dir {
-			return addTorrent(m, msg)
+			return addTorrent(m)
 		} else {
 			m.addPrompt.torrent.Blur()
 			m.addPrompt.saveDir.Focus()
 			m.addPrompt.dir = true
 			return m, nil
 		}
-	case key.Matches(msg, addPromptKeys.back):
+	case key.Matches(*msg, addPromptKeys.back):
 		if m.addPrompt.dir {
 			m.addPrompt.saveDir.Blur()
 			m.addPrompt.torrent.Focus()
@@ -88,25 +88,25 @@ func addPromptKeyPress(m model, msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	default:
 		var cmd tea.Cmd
 		if m.addPrompt.dir {
-			m.addPrompt.saveDir, cmd = m.addPrompt.saveDir.Update(msg)
+			m.addPrompt.saveDir, cmd = m.addPrompt.saveDir.Update(*msg)
 		} else {
-			m.addPrompt.torrent, cmd = m.addPrompt.torrent.Update(msg)
+			m.addPrompt.torrent, cmd = m.addPrompt.torrent.Update(*msg)
 		}
 		return m, cmd
 	}
 }
 
-func defaultKeyPress(m model, msg tea.KeyMsg) (tea.Model, tea.Cmd) {
+func defaultKeyPress(m *model, msg *tea.KeyMsg) (tea.Model, tea.Cmd) {
 	switch {
-	case key.Matches(msg, homeKeys.quit):
+	case key.Matches(*msg, homeKeys.quit):
 		m.client.Close()
 		return m, tea.Quit
-	case key.Matches(msg, homeKeys.help):
+	case key.Matches(*msg, homeKeys.help):
 		m.help.ShowAll = !m.help.ShowAll
-	case key.Matches(msg, homeKeys.addTorrent):
+	case key.Matches(*msg, homeKeys.addTorrent):
 		m.addPrompt.torrent.Focus()
 		m.addPrompt.enabled = true
-	case key.Matches(msg, homeKeys.down), key.Matches(msg, homeKeys.up):
+	case key.Matches(*msg, homeKeys.down), key.Matches(*msg, homeKeys.up):
 		torrents := m.client.Torrents()
 		if len(torrents) == 0 {
 			return m, nil
@@ -133,7 +133,7 @@ func defaultKeyPress(m model, msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 			var index int
 			for i := range torrents {
 				if torrents[i].InfoHash() == m.selected {
-					if key.Matches(msg, homeKeys.down) {
+					if key.Matches(*msg, homeKeys.down) {
 						index = i + 1
 					} else {
 						index = i - 1
@@ -142,16 +142,16 @@ func defaultKeyPress(m model, msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 				}
 			}
 
-			if key.Matches(msg, homeKeys.down) && index == len(torrents) {
+			if key.Matches(*msg, homeKeys.down) && index == len(torrents) {
 				m.selected = torrents[0].InfoHash()
-			} else if key.Matches(msg, homeKeys.up) && index < 0 {
+			} else if key.Matches(*msg, homeKeys.up) && index < 0 {
 				m.selected = torrents[len(torrents)-1].InfoHash()
 			} else {
 				m.selected = torrents[index].InfoHash()
 			}
 		}
 		return m, func() tea.Msg { return selectedTorrentChanged{} }
-	case key.Matches(msg, homeKeys.delete):
+	case key.Matches(*msg, homeKeys.delete):
 		zero := metainfo.Hash{}
 		if m.selected != zero {
 			t, b := m.client.Torrent(m.selected)
@@ -159,7 +159,7 @@ func defaultKeyPress(m model, msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 				t.Drop()
 			}
 		}
-	case key.Matches(msg, homeKeys.deselect):
+	case key.Matches(*msg, homeKeys.deselect):
 		zero := metainfo.Hash{}
 		m.selected = zero
 	}

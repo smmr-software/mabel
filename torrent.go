@@ -12,17 +12,17 @@ import (
 	home "github.com/mitchellh/go-homedir"
 )
 
-func addTorrent(m model, msg tea.Msg) (tea.Model, tea.Cmd) {
+func addTorrent(m *model) (tea.Model, tea.Cmd) {
 	input := m.addPrompt.torrent.Value()
 	saveDir := getSaveLocation(m.addPrompt.saveDir.Value())
-	storageDir := getStorage(saveDir)
+	storageDir := getStorage(&saveDir)
 
 	if strings.HasPrefix(input, "magnet:") {
-		return addMagnetLink(m, input, storageDir)
+		return addMagnetLink(m, &input, &storageDir)
 	} else if strings.HasPrefix(input, "infohash:") {
-		return addInfoHash(m, input, storageDir)
+		return addInfoHash(m, &input, &storageDir)
 	} else {
-		return addFromFile(m, input, storageDir)
+		return addFromFile(m, &input, &storageDir)
 	}
 }
 
@@ -34,21 +34,21 @@ func getSaveLocation(dir string) string {
 	}
 }
 
-func getStorage(dir string) storage.ClientImpl {
+func getStorage(dir *string) storage.ClientImpl {
 	metadataDirectory := os.TempDir()
 	if metadataStorage, err := storage.NewDefaultPieceCompletionForDir(metadataDirectory); err != nil {
-		return storage.NewMMap(dir)
+		return storage.NewMMap(*dir)
 	} else {
-		return storage.NewMMapWithCompletion(dir, metadataStorage)
+		return storage.NewMMapWithCompletion(*dir, metadataStorage)
 	}
 }
 
-func addMagnetLink(m model, input string, dir storage.ClientImpl) (tea.Model, tea.Cmd) {
-	if spec, err := torrent.TorrentSpecFromMagnetUri(input); err != nil {
+func addMagnetLink(m *model, input *string, dir *storage.ClientImpl) (tea.Model, tea.Cmd) {
+	if spec, err := torrent.TorrentSpecFromMagnetUri(*input); err != nil {
 		m.addPrompt = initialAddPrompt()
 		return m, reportError(err)
 	} else {
-		spec.Storage = dir
+		spec.Storage = *dir
 		if t, _, err := m.client.AddTorrentSpec(spec); err != nil {
 			m.addPrompt = initialAddPrompt()
 			return m, reportError(err)
@@ -60,16 +60,16 @@ func addMagnetLink(m model, input string, dir storage.ClientImpl) (tea.Model, te
 	}
 }
 
-func addInfoHash(m model, input string, dir storage.ClientImpl) (tea.Model, tea.Cmd) {
-	hash := metainfo.NewHashFromHex(strings.TrimPrefix(input, "infohash:"))
-	t, _ := m.client.AddTorrentInfoHashWithStorage(hash, dir)
+func addInfoHash(m *model, input *string, dir *storage.ClientImpl) (tea.Model, tea.Cmd) {
+	hash := metainfo.NewHashFromHex(strings.TrimPrefix(*input, "infohash:"))
+	t, _ := m.client.AddTorrentInfoHashWithStorage(hash, *dir)
 	m.torrentMeta[t.InfoHash()] = time.Now()
 	m.addPrompt = initialAddPrompt()
 	return m, downloadTorrent(t)
 }
 
-func addFromFile(m model, input string, dir storage.ClientImpl) (tea.Model, tea.Cmd) {
-	if path, err := home.Expand(input); err != nil {
+func addFromFile(m *model, input *string, dir *storage.ClientImpl) (tea.Model, tea.Cmd) {
+	if path, err := home.Expand(*input); err != nil {
 		m.addPrompt = initialAddPrompt()
 		return m, reportError(err)
 	} else {
@@ -78,7 +78,7 @@ func addFromFile(m model, input string, dir storage.ClientImpl) (tea.Model, tea.
 			return m, reportError(err)
 		} else {
 			spec := torrent.TorrentSpecFromMetaInfo(meta)
-			spec.Storage = dir
+			spec.Storage = *dir
 			if t, _, err := m.client.AddTorrentSpec(spec); err != nil {
 				m.addPrompt = initialAddPrompt()
 				return m, reportError(err)
