@@ -103,7 +103,7 @@ func defaultKeyPress(m *model, msg *tea.KeyMsg) (tea.Model, tea.Cmd) {
 		return m, tea.Quit
 	case key.Matches(*msg, homeKeys.help):
 		m.help.ShowAll = !m.help.ShowAll
-	case key.Matches(*msg, homeKeys.addTorrent):
+	case key.Matches(*msg, homeKeys.add):
 		m.addPrompt.torrent.Focus()
 		m.addPrompt.enabled = true
 	case key.Matches(*msg, homeKeys.down), key.Matches(*msg, homeKeys.up):
