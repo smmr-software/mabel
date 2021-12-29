@@ -2,6 +2,7 @@ package main
 
 import (
 	"os"
+	"strings"
 	"time"
 
 	"github.com/anacrolix/log"
@@ -42,6 +43,16 @@ func initialAddPrompt() modelAddPrompt {
 	return s
 }
 
+func iteratePorts(conf *torrent.ClientConfig) *torrent.Client {
+	for search := 0; search < 5; search++ {
+		conf.ListenPort += 1
+		if client, err := torrent.NewClient(conf); err == nil {
+			return client
+		}
+	}
+	return nil
+}
+
 func initialModel() (model, error) {
 	config := torrent.NewDefaultClientConfig()
 	config.Logger = log.Discard
@@ -54,15 +65,24 @@ func initialModel() (model, error) {
 		config.DefaultStorage = storage.NewMMapWithCompletion("", metadataStorage)
 	}
 
-	if client, err := torrent.NewClient(config); err != nil {
-		return model{}, err
-	} else {
-		m := model{
-			client:      client,
-			torrentMeta: make(map[metainfo.Hash]time.Time),
-			help:        help.NewModel(),
-			addPrompt:   initialAddPrompt(),
+	var client *torrent.Client
+	if cl, err := torrent.NewClient(config); err != nil {
+		if strings.HasPrefix(err.Error(), "subsequent listen") {
+			cl = iteratePorts(config)
+			if cl != nil {
+				client = cl
+			} else {
+				return model{}, err
+			}
+		} else {
+			return model{}, err
 		}
-		return m, nil
 	}
+	m := model{
+		client:      client,
+		torrentMeta: make(map[metainfo.Hash]time.Time),
+		help:        help.NewModel(),
+		addPrompt:   initialAddPrompt(),
+	}
+	return m, nil
 }
