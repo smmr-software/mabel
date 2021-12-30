@@ -5,6 +5,7 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/charmbracelet/bubbles/progress"
 	gloss "github.com/charmbracelet/lipgloss"
 	"github.com/dustin/go-humanize"
 )
@@ -50,6 +51,10 @@ func (m model) View() string {
 	} else if torrent, ok := m.client.Torrent(m.selected); m.viewingTorrentDetails && ok {
 		info := torrent.Info()
 		files := torrent.Files()
+
+		prog := progress.NewModel(progress.WithDefaultGradient())
+		percent := float64(torrent.BytesCompleted()) / float64(torrent.Length())
+
 		var icon string
 		if info.IsDir() {
 			icon = ""
@@ -66,6 +71,7 @@ func (m model) View() string {
 				humanize.Bytes(uint64(torrent.Length())),
 			),
 		)
+		body.WriteString(prog.ViewAs(percent))
 
 		content := body.String()
 		help := m.help.View(homeKeys)
