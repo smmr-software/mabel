@@ -107,7 +107,9 @@ func defaultKeyPress(m *model, msg *tea.KeyMsg) (tea.Model, tea.Cmd) {
 		m.addPrompt.torrent.Focus()
 		m.addPrompt.enabled = true
 	case key.Matches(*msg, homeKeys.details):
-		m.viewingTorrentDetails = true
+		if t, ok := m.client.Torrent(m.selected); ok && t.Info() != nil {
+			m.viewingTorrentDetails = true
+		}
 	case key.Matches(*msg, homeKeys.down), key.Matches(*msg, homeKeys.up):
 		torrents := m.client.Torrents()
 		if len(torrents) == 0 {
