@@ -14,13 +14,14 @@ import (
 )
 
 type model struct {
-	width, height int
-	client        *torrent.Client
-	torrentMeta   map[metainfo.Hash]time.Time
-	selected      metainfo.Hash
-	help          help.Model
-	err           error
-	addPrompt     modelAddPrompt
+	width, height         int
+	client                *torrent.Client
+	torrentMeta           map[metainfo.Hash]time.Time
+	selected              metainfo.Hash
+	help                  help.Model
+	err                   error
+	addPrompt             modelAddPrompt
+	viewingTorrentDetails bool
 }
 
 type modelAddPrompt struct {

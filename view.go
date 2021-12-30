@@ -47,6 +47,33 @@ func (m model) View() string {
 				gloss.WithWhitespaceForeground(gloss.Color("#383838")),
 			),
 		)
+	} else if torrent, ok := m.client.Torrent(m.selected); m.viewingTorrentDetails && ok {
+		info := torrent.Info()
+		files := torrent.Files()
+		var icon string
+		if info.IsDir() {
+			icon = ""
+		} else {
+			icon = ""
+		}
+
+		body.WriteString(torrent.Name() + "\n\n")
+		body.WriteString(
+			fmt.Sprintf(
+				"%s  %d files, %s\n",
+				icon,
+				len(files),
+				humanize.Bytes(uint64(torrent.Length())),
+			),
+		)
+
+		content := body.String()
+		help := m.help.View(homeKeys)
+		padding := m.height - gloss.Height(content) - gloss.Height(help)
+		if padding < 0 {
+			padding = 0
+		}
+		return fullscreen.Render(content + strings.Repeat("\n", padding) + help)
 	} else if m.err != nil {
 		body.WriteString(title.Render("Error") + "\n\n")
 		body.WriteString(m.err.Error())
