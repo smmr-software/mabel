@@ -59,6 +59,11 @@ func torrentDetailView(m *model, t *torrent.Torrent) string {
 		Width(m.width).
 		Height(m.height).
 		Inherit(borderWindow)
+	tooltip := gloss.NewStyle().Foreground(gloss.AdaptiveColor{
+		Light: "#B2B2B2",
+		Dark:  "#4A4A4A",
+	})
+
 	info := t.Info()
 	files := t.Files()
 
@@ -99,12 +104,20 @@ func torrentDetailView(m *model, t *torrent.Torrent) string {
 	body.WriteString(prog.ViewAs(percent))
 
 	content := body.String()
-	help := m.help.View(homeKeys)
-	padding := m.height - gloss.Height(content) - gloss.Height(help)
+	help := tooltip.Render("press any key to return home")
+	padding := ((m.height - gloss.Height(content)) / 2) - gloss.Height(help)
 	if padding < 0 {
 		padding = 0
 	}
-	return fullscreen.Render(content + strings.Repeat("\n", padding) + help)
+	body.WriteString(strings.Repeat("\n", padding) + help + "\n")
+
+	return fullscreen.Render(
+		gloss.Place(
+			m.width, m.height,
+			gloss.Center, gloss.Bottom,
+			body.String(),
+		),
+	)
 }
 
 func errorView(m *model) string {
