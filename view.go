@@ -48,12 +48,12 @@ func (m model) View() string {
 				gloss.WithWhitespaceForeground(gloss.Color("#383838")),
 			),
 		)
-	} else if torrent, ok := m.client.Torrent(m.selected); m.viewingTorrentDetails && ok {
-		info := torrent.Info()
-		files := torrent.Files()
+	} else if t, ok := m.client.Torrent(m.selected); m.viewingTorrentDetails && ok {
+		info := t.Info()
+		files := t.Files()
 
-		done := torrent.BytesCompleted()
-		total := torrent.Length()
+		done := t.BytesCompleted()
+		total := t.Length()
 		percent := float64(done) / float64(total)
 		prog := progress.NewModel(progress.WithDefaultGradient(), progress.WithoutPercentage())
 
@@ -69,14 +69,14 @@ func (m model) View() string {
 			filesDesc += "s"
 		}
 
-		body.WriteString(torrent.Name() + "\n\n\n")
+		body.WriteString(t.Name() + "\n\n\n")
 		body.WriteString(
 			fmt.Sprintf(
 				"%s  %d %s, %s\n\n",
 				icon,
 				len(files),
 				filesDesc,
-				humanize.Bytes(uint64(torrent.Length())),
+				humanize.Bytes(uint64(t.Length())),
 			),
 		)
 		body.WriteString(
