@@ -65,6 +65,7 @@ func torrentDetailView(m *model, t *torrent.Torrent) string {
 	})
 
 	info := t.Info()
+	stats := t.Stats()
 	files := t.Files()
 
 	done := t.BytesCompleted()
@@ -86,19 +87,21 @@ func torrentDetailView(m *model, t *torrent.Torrent) string {
 	body.WriteString(t.Name() + "\n\n\n")
 	body.WriteString(
 		fmt.Sprintf(
-			"%s  %d %s, %s\n\n",
+			"%s  %d %s | %d/%d peers\n\n",
 			icon,
 			len(files),
 			filesDesc,
-			humanize.Bytes(uint64(t.Length())),
+			stats.ActivePeers,
+			stats.TotalPeers,
 		),
 	)
 	body.WriteString(
 		fmt.Sprintf(
-			"%s/%s (%d%%)\n\n",
+			"%s/%s (%d%%) ↓ | %s ↑\n\n",
 			humanize.Bytes(uint64(done)),
 			humanize.Bytes(uint64(total)),
 			uint64(percent*100),
+			humanize.Bytes(uint64(stats.BytesWritten.Int64())),
 		),
 	)
 	body.WriteString(prog.ViewAs(percent))
