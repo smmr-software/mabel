@@ -52,8 +52,10 @@ func (m model) View() string {
 		info := torrent.Info()
 		files := torrent.Files()
 
-		prog := progress.NewModel(progress.WithDefaultGradient())
-		percent := float64(torrent.BytesCompleted()) / float64(torrent.Length())
+		done := torrent.BytesCompleted()
+		total := torrent.Length()
+		percent := float64(done) / float64(total)
+		prog := progress.NewModel(progress.WithDefaultGradient(), progress.WithoutPercentage())
 
 		var icon string
 		if info.IsDir() {
@@ -62,13 +64,27 @@ func (m model) View() string {
 			icon = ""
 		}
 
-		body.WriteString(torrent.Name() + "\n\n")
+		filesDesc := "file"
+		if len(files) > 1 {
+			filesDesc += "s"
+		}
+
+		body.WriteString(torrent.Name() + "\n\n\n")
 		body.WriteString(
 			fmt.Sprintf(
-				"%s  %d files, %s\n",
+				"%s  %d %s, %s\n\n",
 				icon,
 				len(files),
+				filesDesc,
 				humanize.Bytes(uint64(torrent.Length())),
+			),
+		)
+		body.WriteString(
+			fmt.Sprintf(
+				"%s/%s (%0.2f%%)\n\n",
+				humanize.Bytes(uint64(done)),
+				humanize.Bytes(uint64(total)),
+				percent,
 			),
 		)
 		body.WriteString(prog.ViewAs(percent))
