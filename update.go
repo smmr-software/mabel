@@ -51,6 +51,9 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		} else if m.err != nil {
 			m.err = nil
 			return m, nil
+		} else if m.viewingTorrentDetails {
+			m.viewingTorrentDetails = false
+			return m, nil
 		} else {
 			return defaultKeyPress(&m, &msg)
 		}
@@ -164,7 +167,6 @@ func defaultKeyPress(m *model, msg *tea.KeyMsg) (tea.Model, tea.Cmd) {
 			}
 		}
 	case key.Matches(*msg, homeKeys.deselect):
-		m.viewingTorrentDetails = false
 		m.selected = metainfo.Hash{}
 	}
 	return m, nil
