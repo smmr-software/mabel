@@ -57,11 +57,9 @@ func (m model) View() string {
 		percent := float64(done) / float64(total)
 		prog := progress.NewModel(progress.WithDefaultGradient(), progress.WithoutPercentage())
 
-		var icon string
+		icon := ""
 		if info.IsDir() {
 			icon = ""
-		} else {
-			icon = ""
 		}
 
 		filesDesc := "file"
