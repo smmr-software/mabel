@@ -70,6 +70,7 @@ func torrentDetailView(m *model, t *torrent.Torrent) string {
 
 	done := t.BytesCompleted()
 	total := t.Length()
+	upload := stats.BytesWritten.Int64()
 	percent := float64(done) / float64(total)
 	prog := progress.NewModel(progress.WithDefaultGradient(), progress.WithoutPercentage())
 
@@ -81,6 +82,11 @@ func torrentDetailView(m *model, t *torrent.Torrent) string {
 	filesDesc := "file"
 	if len(files) > 1 {
 		filesDesc += "s"
+	}
+
+	ratioDesc := "N/A"
+	if done != 0 {
+		ratioDesc = fmt.Sprintf("%0.2f", float64(upload)/float64(done))
 	}
 
 	var body strings.Builder
@@ -97,11 +103,12 @@ func torrentDetailView(m *model, t *torrent.Torrent) string {
 	)
 	body.WriteString(
 		fmt.Sprintf(
-			"%s/%s (%d%%) ↓ | %s ↑\n\n",
+			"%s/%s (%d%%) ↓ | %s ↑ | %s ratio\n\n",
 			humanize.Bytes(uint64(done)),
 			humanize.Bytes(uint64(total)),
 			uint64(percent*100),
-			humanize.Bytes(uint64(stats.BytesWritten.Int64())),
+			humanize.Bytes(uint64(upload)),
+			ratioDesc,
 		),
 	)
 	body.WriteString(prog.ViewAs(percent))
