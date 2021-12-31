@@ -95,10 +95,10 @@ func torrentDetailView(m *model, t *torrent.Torrent) string {
 	)
 	body.WriteString(
 		fmt.Sprintf(
-			"%s/%s (%0.2f%%)\n\n",
+			"%s/%s (%d%%)\n\n",
 			humanize.Bytes(uint64(done)),
 			humanize.Bytes(uint64(total)),
-			percent,
+			uint64(percent*100),
 		),
 	)
 	body.WriteString(prog.ViewAs(percent))
