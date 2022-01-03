@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"sort"
 	"strings"
+	"time"
 
 	"github.com/anacrolix/torrent"
 	"github.com/charmbracelet/bubbles/progress"
@@ -63,10 +64,12 @@ func torrentDetailView(m *model, t *torrent.Torrent) string {
 		Light: "#B2B2B2",
 		Dark:  "#4A4A4A",
 	})
+	bold := gloss.NewStyle().Bold(true)
 
 	info := t.Info()
 	stats := t.Stats()
 	files := t.Files()
+	hash := t.InfoHash()
 
 	done := t.BytesCompleted()
 	total := t.Length()
@@ -89,11 +92,26 @@ func torrentDetailView(m *model, t *torrent.Torrent) string {
 		ratioDesc = fmt.Sprintf("%0.2f", float64(upload)/float64(done))
 	}
 
+	created := ""
+	if tm := m.torrentMeta[hash].created; !tm.IsZero() && tm != time.Now() {
+		created = fmt.Sprintf("\n\nCreated on %s", tm.Format("02 Jan 2006"))
+	}
+	with := "\n\n"
+	if prog := m.torrentMeta[hash].program; prog != "" && prog != "go.torrent" {
+		with = fmt.Sprintf(" with %s\n\n", prog)
+	}
+	comment := ""
+	if com := m.torrentMeta[hash].comment; com != "" && com != "dynamic metainfo from client" {
+		comment = fmt.Sprintf("%s\n\n", com)
+	}
+
 	var body strings.Builder
-	body.WriteString(t.Name() + "\n\n\n")
+	body.WriteString(bold.Render(t.Name()) + "\n\n")
+	body.WriteString(fmt.Sprintf("%s%s%s", created, with, comment))
+	body.WriteString(prog.ViewAs(percent))
 	body.WriteString(
 		fmt.Sprintf(
-			"%s  %d %s | %d/%d peers\n\n",
+			"\n\n%s  %d %s | %d/%d peers\n\n",
 			icon,
 			len(files),
 			filesDesc,
@@ -111,7 +129,6 @@ func torrentDetailView(m *model, t *torrent.Torrent) string {
 			ratioDesc,
 		),
 	)
-	body.WriteString(prog.ViewAs(percent))
 
 	content := body.String()
 	help := tooltip.Render("press any key to return home")
@@ -173,8 +190,8 @@ func mainView(m *model) string {
 					firstHash  = torrents[i].InfoHash()
 					secondHash = torrents[j].InfoHash()
 
-					firstTime  = m.torrentMeta[firstHash]
-					secondTime = m.torrentMeta[secondHash]
+					firstTime  = m.torrentMeta[firstHash].added
+					secondTime = m.torrentMeta[secondHash].added
 				)
 
 				return firstTime.Before(secondTime)

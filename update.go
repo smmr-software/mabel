@@ -125,8 +125,8 @@ func defaultKeyPress(m *model, msg *tea.KeyMsg) (tea.Model, tea.Cmd) {
 					firstHash  = torrents[i].InfoHash()
 					secondHash = torrents[j].InfoHash()
 
-					firstTime  = m.torrentMeta[firstHash]
-					secondTime = m.torrentMeta[secondHash]
+					firstTime  = m.torrentMeta[firstHash].added
+					secondTime = m.torrentMeta[secondHash].added
 				)
 
 				return firstTime.Before(secondTime)

@@ -16,7 +16,7 @@ import (
 type model struct {
 	width, height         int
 	client                *torrent.Client
-	torrentMeta           map[metainfo.Hash]time.Time
+	torrentMeta           map[metainfo.Hash]torrentMetadata
 	selected              metainfo.Hash
 	help                  help.Model
 	err                   error
@@ -29,6 +29,13 @@ type modelAddPrompt struct {
 	dir     bool
 	torrent textinput.Model
 	saveDir textinput.Model
+}
+
+type torrentMetadata struct {
+	added   time.Time
+	created time.Time
+	comment string
+	program string
 }
 
 func initialAddPrompt() modelAddPrompt {
@@ -81,7 +88,7 @@ func initialModel() (model, error) {
 	}
 	m := model{
 		client:      client,
-		torrentMeta: make(map[metainfo.Hash]time.Time),
+		torrentMeta: make(map[metainfo.Hash]torrentMetadata),
 		help:        help.NewModel(),
 		addPrompt:   initialAddPrompt(),
 	}
