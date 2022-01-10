@@ -6,7 +6,7 @@ require (
 	github.com/anacrolix/log v0.10.0
 	github.com/anacrolix/torrent v1.40.0
 	github.com/charmbracelet/bubbles v0.9.0
-	github.com/charmbracelet/bubbletea v0.19.2
+	github.com/charmbracelet/bubbletea v0.19.3
 	github.com/charmbracelet/lipgloss v0.4.0
 	github.com/dustin/go-humanize v1.0.0
 	github.com/mitchellh/go-homedir v1.1.0
