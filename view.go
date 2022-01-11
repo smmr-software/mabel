@@ -129,6 +129,14 @@ func torrentDetailView(m *model, t *torrent.Torrent) string {
 			ratioDesc,
 		),
 	)
+	if len(files) > 1 {
+		body.WriteString(
+			fmt.Sprintf(
+				"\n\nContent\n%s",
+				fileView(&files, &m.width),
+			),
+		)
+	}
 
 	content := body.String()
 	help := tooltip.Render("press any key to return home")
