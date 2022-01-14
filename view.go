@@ -133,7 +133,7 @@ func torrentDetailView(m *model, t *torrent.Torrent) string {
 		body.WriteString(
 			fmt.Sprintf(
 				"\n\nContent\n%s",
-				fileView(&files, &m.width),
+				fileView(&files, &m.width, &m.height),
 			),
 		)
 	}
