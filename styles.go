@@ -7,7 +7,7 @@ var (
 	borderWindow = gloss.NewStyle().
 			Align(gloss.Center).
 			BorderStyle(border).
-			BorderForeground(gloss.Color("86"))
+			BorderForeground(gloss.Color("#5FFFD7"))
 	title = gloss.NewStyle().
 		Bold(true).
 		Underline(true).
