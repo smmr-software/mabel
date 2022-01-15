@@ -13,7 +13,7 @@ func fileView(files *[]*torrent.File, w *int, h *int) string {
 	width := *w / 3
 	height := *h / 4
 	box := gloss.NewStyle().
-		BorderForeground(gloss.Color("86")).
+		BorderForeground(gloss.Color("#5FFFD7")).
 		Border(border).
 		Width(width).
 		Height(height)
