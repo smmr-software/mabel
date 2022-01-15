@@ -60,10 +60,6 @@ func torrentDetailView(m *model, t *torrent.Torrent) string {
 		Width(m.width).
 		Height(m.height).
 		Inherit(borderWindow)
-	tooltip := gloss.NewStyle().Foreground(gloss.AdaptiveColor{
-		Light: "#B2B2B2",
-		Dark:  "#4A4A4A",
-	})
 	bold := gloss.NewStyle().Bold(true)
 
 	info := t.Info()
@@ -164,9 +160,13 @@ func errorView(m *model) string {
 		Width(m.width / 3).
 		Height(m.height / 3).
 		Inherit(borderWindow)
+	header := gloss.NewStyle().
+		Bold(true).
+		Underline(true).
+		Foreground(gloss.Color("#FFF"))
 
 	var body strings.Builder
-	body.WriteString(title.Render("Error") + "\n\n")
+	body.WriteString(header.Render("Error") + "\n\n")
 	body.WriteString(m.err.Error())
 
 	return fullscreen.Render(
