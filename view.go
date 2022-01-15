@@ -152,29 +152,45 @@ func torrentDetailView(m *model, t *torrent.Torrent) string {
 }
 
 func errorView(m *model) string {
+	width := m.width / 3
+	height := m.height / 4
+	padding := m.height / 16
 	fullscreen := gloss.NewStyle().
 		Width(m.width).
 		Height(m.height).
-		Inherit(borderWindow)
-	popup := gloss.NewStyle().
-		Width(m.width / 3).
-		Height(m.height / 3).
-		Inherit(borderWindow)
-	header := gloss.NewStyle().
-		Bold(true).
-		Underline(true).
-		Foreground(gloss.Color("#FFF"))
+		Inherit(borderWindow).
+		BorderForeground(errorColor)
+	popupWindow := gloss.NewStyle().
+		Width(width).
+		Height(height).
+		Padding(0, padding).
+		Inherit(borderWindow).
+		BorderForeground(errorColor)
+	header := gloss.NewStyle().Bold(true)
 
-	var body strings.Builder
-	body.WriteString(header.Render("Error") + "\n\n")
-	body.WriteString(m.err.Error())
+	popup := popupWindow.Render(gloss.Place(
+		width-padding*2, height,
+		gloss.Center, gloss.Center,
+		header.Render("Error")+"\n"+m.err.Error(),
+	))
+	help := tooltip.Render("press any key to return home")
+	spacer := ((m.height - gloss.Height(popup)) / 2) - gloss.Height(help)
+	if spacer < 0 {
+		spacer = 0
+	}
 
 	return fullscreen.Render(
 		gloss.Place(
 			m.width, m.height,
 			gloss.Center, gloss.Center,
-			popup.Render(body.String()),
-			gloss.WithWhitespaceChars("⑀"),
+			fmt.Sprintf(
+				"%s%s%s%s\n",
+				strings.Repeat("\n", spacer+gloss.Height(help)),
+				popup,
+				strings.Repeat("\n", spacer),
+				help,
+			),
+			gloss.WithWhitespaceChars("⌇"),
 			gloss.WithWhitespaceForeground(gloss.Color("#383838")),
 		),
 	)
