@@ -3,13 +3,13 @@ package main
 import (
 	"os"
 	"strings"
-	"time"
 
 	"github.com/anacrolix/log"
 	"github.com/anacrolix/torrent"
 	"github.com/anacrolix/torrent/metainfo"
 	"github.com/anacrolix/torrent/storage"
 	"github.com/charmbracelet/bubbles/help"
+	"github.com/charmbracelet/bubbles/list"
 	"github.com/charmbracelet/bubbles/textinput"
 )
 
@@ -17,7 +17,7 @@ type model struct {
 	width, height         int
 	client                *torrent.Client
 	clientConfig          *torrent.ClientConfig
-	torrentMeta           map[metainfo.Hash]torrentMetadata
+	list                  list.Model
 	selected              metainfo.Hash
 	help                  help.Model
 	err                   error
@@ -31,13 +31,6 @@ type modelAddPrompt struct {
 	dir     bool
 	torrent textinput.Model
 	saveDir textinput.Model
-}
-
-type torrentMetadata struct {
-	added   time.Time
-	created time.Time
-	comment string
-	program string
 }
 
 type portStartupFailure struct {
@@ -81,6 +74,14 @@ func genMabelConfig() *torrent.ClientConfig {
 	return config
 }
 
+func genList() list.Model {
+	list := list.NewModel(make([]list.Item, 0), itemDelegate{}, 0, 0)
+	list.SetShowTitle(false)
+	list.SetShowStatusBar(false)
+	list.SetFilteringEnabled(false)
+	return list
+}
+
 func initialModel() (model, error) {
 	config := genMabelConfig()
 	client, err := torrent.NewClient(config)
@@ -88,7 +89,7 @@ func initialModel() (model, error) {
 	m := model{
 		client:             client,
 		clientConfig:       config,
-		torrentMeta:        make(map[metainfo.Hash]torrentMetadata),
+		list:               genList(),
 		help:               help.New(),
 		addPrompt:          initialAddPrompt(),
 		portStartupFailure: initialPortStartupFailure(),

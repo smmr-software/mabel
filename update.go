@@ -41,7 +41,9 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		m.width = width
 		m.help.Width = width
+		m.list.SetWidth(width)
 		m.height = height
+		m.list.SetHeight(height)
 		return m, nil
 	case tea.KeyMsg:
 		switch {

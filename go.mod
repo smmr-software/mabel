@@ -68,6 +68,7 @@ require (
 	github.com/remyoudompheng/bigfft v0.0.0-20200410134404-eec4a21b6bb0 // indirect
 	github.com/rivo/uniseg v0.2.0 // indirect
 	github.com/rs/dnscache v0.0.0-20210201191234-295bba877686 // indirect
+	github.com/sahilm/fuzzy v0.1.0 // indirect
 	go.etcd.io/bbolt v1.3.6 // indirect
 	golang.org/x/crypto v0.0.0-20210813211128-0a44fdfbc16e // indirect
 	golang.org/x/net v0.0.0-20210813160813-60bc85c4be6d // indirect
