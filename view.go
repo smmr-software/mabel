@@ -71,7 +71,7 @@ func torrentDetailView(m *model, t *torrent.Torrent) string {
 	total := t.Length()
 	upload := stats.BytesWritten.Int64()
 	percent := float64(done) / float64(total)
-	prog := progress.NewModel(progress.WithDefaultGradient(), progress.WithoutPercentage())
+	prog := progress.New(progress.WithDefaultGradient(), progress.WithoutPercentage())
 
 	icon := ""
 	if info.IsDir() {

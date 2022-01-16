@@ -38,7 +38,7 @@ type torrentMetadata struct {
 }
 
 func initialAddPrompt() modelAddPrompt {
-	input := textinput.NewModel()
+	input := textinput.New()
 	input.Width = 32
 
 	s := modelAddPrompt{
@@ -78,7 +78,7 @@ func initialModel() (model, error) {
 		m := model{
 			client:      client,
 			torrentMeta: make(map[metainfo.Hash]torrentMetadata),
-			help:        help.NewModel(),
+			help:        help.New(),
 			addPrompt:   initialAddPrompt(),
 		}
 		return m, nil
