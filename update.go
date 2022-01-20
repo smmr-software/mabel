@@ -43,18 +43,19 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.height = height
 		return m, nil
 	case tea.KeyMsg:
-		if msg.Type == tea.KeyCtrlC {
+		switch {
+		case msg.Type == tea.KeyCtrlC:
 			m.client.Close()
 			return m, tea.Quit
-		} else if m.addPrompt.enabled {
+		case m.addPrompt.enabled:
 			return addPromptKeyPress(&m, &msg)
-		} else if m.err != nil {
+		case m.err != nil:
 			m.err = nil
 			return m, nil
-		} else if m.viewingTorrentDetails {
+		case m.viewingTorrentDetails:
 			m.viewingTorrentDetails = false
 			return m, nil
-		} else {
+		default:
 			return defaultKeyPress(&m, &msg)
 		}
 	case tickMsg:
