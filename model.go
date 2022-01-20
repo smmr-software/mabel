@@ -22,7 +22,7 @@ type model struct {
 	err                   error
 	addPrompt             modelAddPrompt
 	viewingTorrentDetails bool
-	portStartupFailure    bool
+	portStartupFailure    portStartupFailure
 }
 
 type modelAddPrompt struct {
@@ -39,6 +39,11 @@ type torrentMetadata struct {
 	program string
 }
 
+type portStartupFailure struct {
+	enabled bool
+	port    textinput.Model
+}
+
 func initialAddPrompt() modelAddPrompt {
 	input := textinput.New()
 	input.Width = 32
@@ -50,6 +55,13 @@ func initialAddPrompt() modelAddPrompt {
 		saveDir: input,
 	}
 	return s
+}
+
+func initialPortStartupFailure() portStartupFailure {
+	input := textinput.New()
+	input.Width = 32
+
+	return portStartupFailure{port: input}
 }
 
 func initialModel() (model, error) {
@@ -74,7 +86,7 @@ func initialModel() (model, error) {
 	if err != nil {
 		switch {
 		case strings.HasPrefix(err.Error(), "subsequent listen"):
-			m.portStartupFailure = true
+			m.portStartupFailure.enabled = true
 		default:
 			return model{}, err
 		}

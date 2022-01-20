@@ -13,7 +13,9 @@ import (
 )
 
 func (m model) View() string {
-	if m.addPrompt.enabled {
+	if m.portStartupFailure.enabled {
+		return portStartupFailureView(&m)
+	} else if m.addPrompt.enabled {
 		return addPromptView(&m)
 	} else if m.err != nil {
 		return errorView(&m)
@@ -22,6 +24,26 @@ func (m model) View() string {
 	} else {
 		return mainView(&m)
 	}
+}
+
+func portStartupFailureView(m *model) string {
+	fullscreen := gloss.NewStyle().
+		Width(m.width).
+		Height(m.height).
+		Inherit(borderWindow)
+
+	var body strings.Builder
+	body.WriteString("Port Binding Failure\n\n")
+	body.WriteString("please provide an unused port number for the client to bind with\n")
+	body.WriteString(borderWindow.Render(m.portStartupFailure.port.View()))
+
+	return fullscreen.Render(
+		gloss.Place(
+			m.width, m.height,
+			gloss.Center, gloss.Center,
+			body.String(),
+		),
+	)
 }
 
 func addPromptView(m *model) string {
