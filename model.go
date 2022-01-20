@@ -2,6 +2,7 @@ package main
 
 import (
 	"os"
+	"strings"
 	"time"
 
 	"github.com/anacrolix/log"
@@ -21,6 +22,7 @@ type model struct {
 	err                   error
 	addPrompt             modelAddPrompt
 	viewingTorrentDetails bool
+	portStartupFailure    bool
 }
 
 type modelAddPrompt struct {
@@ -62,15 +64,20 @@ func initialModel() (model, error) {
 		config.DefaultStorage = storage.NewMMapWithCompletion("", metadataStorage)
 	}
 
-	if client, err := torrent.NewClient(config); err != nil {
-		return model{}, err
-	} else {
-		m := model{
-			client:      client,
-			torrentMeta: make(map[metainfo.Hash]torrentMetadata),
-			help:        help.New(),
-			addPrompt:   initialAddPrompt(),
-		}
-		return m, nil
+	client, err := torrent.NewClient(config)
+	m := model{
+		client:      client,
+		torrentMeta: make(map[metainfo.Hash]torrentMetadata),
+		help:        help.New(),
+		addPrompt:   initialAddPrompt(),
 	}
+	if err != nil {
+		switch {
+		case strings.HasPrefix(err.Error(), "subsequent listen"):
+			m.portStartupFailure = true
+		default:
+			return model{}, err
+		}
+	}
+	return m, nil
 }
