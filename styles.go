@@ -3,6 +3,8 @@ package main
 import gloss "github.com/charmbracelet/lipgloss"
 
 var (
+	bold = gloss.NewStyle().Bold(true)
+
 	mainColor  = gloss.Color("#5FFFD7")
 	errorColor = gloss.Color("#FF5E87")
 	tooltip    = gloss.NewStyle().Foreground(gloss.AdaptiveColor{

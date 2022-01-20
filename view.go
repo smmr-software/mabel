@@ -127,7 +127,6 @@ func torrentDetailView(m *model, t *torrent.Torrent) string {
 		Width(m.width).
 		Height(m.height).
 		Inherit(borderWindow)
-	bold := gloss.NewStyle().Bold(true)
 
 	info := t.Info()
 	stats := t.Stats()
