@@ -15,10 +15,10 @@ import (
 func (m model) View() string {
 	if m.addPrompt.enabled {
 		return addPromptView(&m)
-	} else if t, ok := m.client.Torrent(m.selected); m.viewingTorrentDetails && ok {
-		return torrentDetailView(&m, t)
 	} else if m.err != nil {
 		return errorView(&m)
+	} else if t, ok := m.client.Torrent(m.selected); m.viewingTorrentDetails && ok {
+		return torrentDetailView(&m, t)
 	} else {
 		return mainView(&m)
 	}
@@ -50,6 +50,51 @@ func addPromptView(m *model) string {
 			gloss.Center, gloss.Bottom,
 			body.String(),
 			gloss.WithWhitespaceChars("⑀"),
+			gloss.WithWhitespaceForeground(gloss.Color("#383838")),
+		),
+	)
+}
+
+func errorView(m *model) string {
+	width := m.width / 3
+	height := m.height / 4
+	padding := m.height / 16
+	fullscreen := gloss.NewStyle().
+		Width(m.width).
+		Height(m.height).
+		Inherit(borderWindow).
+		BorderForeground(errorColor)
+	popupWindow := gloss.NewStyle().
+		Width(width).
+		Height(height).
+		Padding(0, padding).
+		Inherit(borderWindow).
+		BorderForeground(errorColor)
+	header := gloss.NewStyle().Bold(true)
+
+	popup := popupWindow.Render(gloss.Place(
+		width-padding*2, height,
+		gloss.Center, gloss.Center,
+		header.Render("Error")+"\n"+m.err.Error(),
+	))
+	help := tooltip.Render("press any key to return home")
+	spacer := ((m.height - gloss.Height(popup)) / 2) - gloss.Height(help)
+	if spacer < 0 {
+		spacer = 0
+	}
+
+	return fullscreen.Render(
+		gloss.Place(
+			m.width, m.height,
+			gloss.Center, gloss.Center,
+			fmt.Sprintf(
+				"%s%s%s%s\n",
+				strings.Repeat("\n", spacer+gloss.Height(help)),
+				popup,
+				strings.Repeat("\n", spacer),
+				help,
+			),
+			gloss.WithWhitespaceChars("⌇"),
 			gloss.WithWhitespaceForeground(gloss.Color("#383838")),
 		),
 	)
@@ -147,51 +192,6 @@ func torrentDetailView(m *model, t *torrent.Torrent) string {
 			m.width, m.height,
 			gloss.Center, gloss.Bottom,
 			body.String(),
-		),
-	)
-}
-
-func errorView(m *model) string {
-	width := m.width / 3
-	height := m.height / 4
-	padding := m.height / 16
-	fullscreen := gloss.NewStyle().
-		Width(m.width).
-		Height(m.height).
-		Inherit(borderWindow).
-		BorderForeground(errorColor)
-	popupWindow := gloss.NewStyle().
-		Width(width).
-		Height(height).
-		Padding(0, padding).
-		Inherit(borderWindow).
-		BorderForeground(errorColor)
-	header := gloss.NewStyle().Bold(true)
-
-	popup := popupWindow.Render(gloss.Place(
-		width-padding*2, height,
-		gloss.Center, gloss.Center,
-		header.Render("Error")+"\n"+m.err.Error(),
-	))
-	help := tooltip.Render("press any key to return home")
-	spacer := ((m.height - gloss.Height(popup)) / 2) - gloss.Height(help)
-	if spacer < 0 {
-		spacer = 0
-	}
-
-	return fullscreen.Render(
-		gloss.Place(
-			m.width, m.height,
-			gloss.Center, gloss.Center,
-			fmt.Sprintf(
-				"%s%s%s%s\n",
-				strings.Repeat("\n", spacer+gloss.Height(help)),
-				popup,
-				strings.Repeat("\n", spacer),
-				help,
-			),
-			gloss.WithWhitespaceChars("⌇"),
-			gloss.WithWhitespaceForeground(gloss.Color("#383838")),
 		),
 	)
 }
