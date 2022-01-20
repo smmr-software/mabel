@@ -50,16 +50,6 @@ func initialAddPrompt() modelAddPrompt {
 	return s
 }
 
-func iteratePorts(conf *torrent.ClientConfig) *torrent.Client {
-	for search := 0; search < 5; search++ {
-		conf.ListenPort += 1
-		if client, err := torrent.NewClient(conf); err == nil {
-			return client
-		}
-	}
-	return nil
-}
-
 func initialModel() (model, error) {
 	config := torrent.NewDefaultClientConfig()
 	config.Logger = log.Discard
