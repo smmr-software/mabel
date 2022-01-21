@@ -85,11 +85,12 @@ func initialModel() (model, error) {
 	client, err := torrent.NewClient(config)
 
 	m := model{
-		client:       client,
-		clientConfig: config,
-		torrentMeta:  make(map[metainfo.Hash]torrentMetadata),
-		help:         help.New(),
-		addPrompt:    initialAddPrompt(),
+		client:             client,
+		clientConfig:       config,
+		torrentMeta:        make(map[metainfo.Hash]torrentMetadata),
+		help:               help.New(),
+		addPrompt:          initialAddPrompt(),
+		portStartupFailure: initialPortStartupFailure(),
 	}
 
 	if err != nil {
