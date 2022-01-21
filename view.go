@@ -13,12 +13,12 @@ import (
 )
 
 func (m model) View() string {
-	if m.portStartupFailure.enabled {
+	if m.err != nil {
+		return errorView(&m)
+	} else if m.portStartupFailure.enabled {
 		return portStartupFailureView(&m)
 	} else if m.addPrompt.enabled {
 		return addPromptView(&m)
-	} else if m.err != nil {
-		return errorView(&m)
 	} else if t, ok := m.client.Torrent(m.selected); m.viewingTorrentDetails && ok {
 		return torrentDetailView(&m, t)
 	} else {

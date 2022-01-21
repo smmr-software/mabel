@@ -50,13 +50,13 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.client.Close()
 			}
 			return m, tea.Quit
+		case m.err != nil:
+			m.err = nil
+			return m, nil
 		case m.portStartupFailure.enabled:
 			return portStartupFailureKeyPress(&m, &msg)
 		case m.addPrompt.enabled:
 			return addPromptKeyPress(&m, &msg)
-		case m.err != nil:
-			m.err = nil
-			return m, nil
 		case m.viewingTorrentDetails:
 			m.viewingTorrentDetails = false
 			return m, nil
