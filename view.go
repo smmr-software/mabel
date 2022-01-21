@@ -34,7 +34,7 @@ func portStartupFailureView(m *model) string {
 
 	var body strings.Builder
 	body.WriteString(bold.Render("Port Binding Failure"))
-	body.WriteString("\n\nplease provide an unused port number for the client to bind with\n")
+	body.WriteString("\nplease provide an unused port number for the client to bind with\n\n")
 	body.WriteString(borderWindow.Render(m.portStartupFailure.port.View()))
 
 	return fullscreen.Render(
