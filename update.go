@@ -94,9 +94,10 @@ func portStartupFailureKeyPress(m *model, msg *tea.KeyMsg) (tea.Model, tea.Cmd) 
 
 		m.client = client
 		m.clientConfig = config
-	}
+		m.portStartupFailure.enabled = false
 
-	return m, nil
+		return m, nil
+	}
 }
 
 func addPromptKeyPress(m *model, msg *tea.KeyMsg) (tea.Model, tea.Cmd) {
