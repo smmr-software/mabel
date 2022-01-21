@@ -61,6 +61,7 @@ func initialAddPrompt() modelAddPrompt {
 func initialPortStartupFailure() portStartupFailure {
 	input := textinput.New()
 	input.Width = 32
+	input.Focus()
 
 	return portStartupFailure{port: input}
 }
