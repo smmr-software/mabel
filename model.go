@@ -16,6 +16,7 @@ import (
 type model struct {
 	width, height         int
 	client                *torrent.Client
+	clientConfig          *torrent.ClientConfig
 	torrentMeta           map[metainfo.Hash]torrentMetadata
 	selected              metainfo.Hash
 	help                  help.Model
@@ -64,7 +65,7 @@ func initialPortStartupFailure() portStartupFailure {
 	return portStartupFailure{port: input}
 }
 
-func initialModel() (model, error) {
+func genMabelConfig() *torrent.ClientConfig {
 	config := torrent.NewDefaultClientConfig()
 	config.Logger = log.Discard
 	config.Seed = true
@@ -76,16 +77,25 @@ func initialModel() (model, error) {
 		config.DefaultStorage = storage.NewMMapWithCompletion("", metadataStorage)
 	}
 
+	return config
+}
+
+func initialModel() (model, error) {
+	config := genMabelConfig()
 	client, err := torrent.NewClient(config)
+
 	m := model{
-		client:      client,
-		torrentMeta: make(map[metainfo.Hash]torrentMetadata),
-		help:        help.New(),
-		addPrompt:   initialAddPrompt(),
+		client:       client,
+		clientConfig: config,
+		torrentMeta:  make(map[metainfo.Hash]torrentMetadata),
+		help:         help.New(),
+		addPrompt:    initialAddPrompt(),
 	}
+
 	if err != nil {
+		msg := err.Error()
 		switch {
-		case strings.HasPrefix(err.Error(), "subsequent listen"):
+		case strings.HasPrefix(msg, "subsequent listen"), strings.HasPrefix(msg, "first listen"):
 			m.portStartupFailure.enabled = true
 		default:
 			return model{}, err

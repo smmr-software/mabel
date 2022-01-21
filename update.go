@@ -2,6 +2,7 @@ package main
 
 import (
 	"sort"
+	"strconv"
 	"time"
 
 	torrent "github.com/anacrolix/torrent"
@@ -45,8 +46,12 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.KeyMsg:
 		switch {
 		case msg.Type == tea.KeyCtrlC:
-			m.client.Close()
+			if m.client != nil {
+				m.client.Close()
+			}
 			return m, tea.Quit
+		case m.portStartupFailure.enabled:
+			return portStartupFailureKeyPress(&m, &msg)
 		case m.addPrompt.enabled:
 			return addPromptKeyPress(&m, &msg)
 		case m.err != nil:
@@ -66,6 +71,32 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	default:
 		return m, nil
 	}
+}
+
+func portStartupFailureKeyPress(m *model, msg *tea.KeyMsg) (tea.Model, tea.Cmd) {
+	switch msg.String() {
+	case "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "backspace":
+		var cmd tea.Cmd
+		m.portStartupFailure.port, cmd = m.portStartupFailure.port.Update(*msg)
+		return m, cmd
+	default:
+		port, err := strconv.Atoi(m.portStartupFailure.port.Value())
+		if err != nil {
+			return m, reportError(err)
+		}
+
+		config := genMabelConfig()
+		config.ListenPort = port
+		client, err := torrent.NewClient(config)
+		if err != nil {
+			return m, reportError(err)
+		}
+
+		m.client = client
+		m.clientConfig = config
+	}
+
+	return m, nil
 }
 
 func addPromptKeyPress(m *model, msg *tea.KeyMsg) (tea.Model, tea.Cmd) {
