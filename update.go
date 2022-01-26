@@ -5,7 +5,6 @@ import (
 	"time"
 
 	torrent "github.com/anacrolix/torrent"
-	"github.com/anacrolix/torrent/metainfo"
 	"github.com/charmbracelet/bubbles/key"
 	tea "github.com/charmbracelet/bubbletea"
 	gloss "github.com/charmbracelet/lipgloss"
@@ -144,7 +143,7 @@ func defaultKeyPress(m *model, msg *tea.KeyMsg) (tea.Model, tea.Cmd) {
 		m.addPrompt.torrent.Focus()
 		m.addPrompt.enabled = true
 	case key.Matches(*msg, homeKeys.details):
-		if t, ok := m.client.Torrent(m.selected); ok && t.Info() != nil {
+		if t := m.list.SelectedItem().(item); t.self.Info() != nil {
 			m.viewingTorrentDetails = true
 		}
 	case key.Matches(*msg, homeKeys.down, homeKeys.up):
@@ -152,15 +151,12 @@ func defaultKeyPress(m *model, msg *tea.KeyMsg) (tea.Model, tea.Cmd) {
 		m.list, cmd = m.list.Update(msg)
 		return m, cmd
 	case key.Matches(*msg, homeKeys.delete):
-		zero := metainfo.Hash{}
-		if m.selected != zero {
-			t, b := m.client.Torrent(m.selected)
-			if b {
-				t.Drop()
-			}
+		zero := item{}
+		if t := m.list.SelectedItem().(item); t != zero {
+			t.self.Drop()
 		}
 	case key.Matches(*msg, homeKeys.deselect):
-		m.selected = metainfo.Hash{}
+		m.list.ResetSelected()
 	}
 	return m, nil
 }

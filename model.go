@@ -6,7 +6,6 @@ import (
 
 	"github.com/anacrolix/log"
 	"github.com/anacrolix/torrent"
-	"github.com/anacrolix/torrent/metainfo"
 	"github.com/anacrolix/torrent/storage"
 	"github.com/charmbracelet/bubbles/help"
 	"github.com/charmbracelet/bubbles/list"
@@ -18,7 +17,6 @@ type model struct {
 	client                *torrent.Client
 	clientConfig          *torrent.ClientConfig
 	list                  list.Model
-	selected              metainfo.Hash
 	help                  help.Model
 	err                   error
 	addPrompt             modelAddPrompt

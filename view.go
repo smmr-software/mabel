@@ -18,8 +18,8 @@ func (m model) View() string {
 		return portStartupFailureView(&m)
 	} else if m.addPrompt.enabled {
 		return addPromptView(&m)
-	} else if t, ok := m.client.Torrent(m.selected); m.viewingTorrentDetails && ok {
-		return torrentDetailView(&m, t)
+	} else if m.viewingTorrentDetails {
+		return torrentDetailView(&m)
 	} else {
 		return mainView(&m)
 	}
@@ -121,16 +121,18 @@ func errorView(m *model) string {
 	)
 }
 
-func torrentDetailView(m *model, t *torrent.Torrent) string {
+func torrentDetailView(m *model) string {
 	fullscreen := gloss.NewStyle().
 		Width(m.width).
 		Height(m.height).
 		Inherit(borderWindow)
 
+	selected := m.list.SelectedItem().(item)
+	t := selected.self
+
 	info := t.Info()
 	stats := t.Stats()
 	files := t.Files()
-	selected := m.list.SelectedItem().(item)
 
 	done := t.BytesCompleted()
 	total := t.Length()
