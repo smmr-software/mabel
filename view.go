@@ -5,7 +5,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/anacrolix/torrent"
 	"github.com/charmbracelet/bubbles/progress"
 	gloss "github.com/charmbracelet/lipgloss"
 	"github.com/dustin/go-humanize"
