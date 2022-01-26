@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"sort"
 	"strings"
 	"time"
 
@@ -131,7 +130,7 @@ func torrentDetailView(m *model, t *torrent.Torrent) string {
 	info := t.Info()
 	stats := t.Stats()
 	files := t.Files()
-	hash := t.InfoHash()
+	selected := m.list.SelectedItem().(item)
 
 	done := t.BytesCompleted()
 	total := t.Length()
@@ -155,15 +154,15 @@ func torrentDetailView(m *model, t *torrent.Torrent) string {
 	}
 
 	created := ""
-	if tm := m.torrentMeta[hash].created; !tm.IsZero() && tm != time.Now() {
+	if tm := selected.created; !tm.IsZero() && tm != time.Now() {
 		created = fmt.Sprintf("\n\nCreated on %s", tm.Format("02 Jan 2006"))
 	}
 	with := "\n\n"
-	if prog := m.torrentMeta[hash].program; prog != "" && prog != "go.torrent" {
+	if prog := selected.program; prog != "" && prog != "go.torrent" {
 		with = fmt.Sprintf(" with %s\n\n", prog)
 	}
 	comment := ""
-	if com := m.torrentMeta[hash].comment; com != "" && com != "dynamic metainfo from client" {
+	if com := selected.comment; com != "" && com != "dynamic metainfo from client" {
 		comment = fmt.Sprintf("%s\n\n", com)
 	}
 
@@ -228,67 +227,7 @@ func mainView(m *model) string {
 
 	var body strings.Builder
 	if torrents := m.client.Torrents(); len(torrents) > 0 {
-		sort.Slice(
-			torrents,
-			func(i, j int) bool {
-				var (
-					firstHash  = torrents[i].InfoHash()
-					secondHash = torrents[j].InfoHash()
-
-					firstTime  = m.torrentMeta[firstHash].added
-					secondTime = m.torrentMeta[secondHash].added
-				)
-
-				return firstTime.Before(secondTime)
-			},
-		)
-		for _, t := range torrents {
-			selected := ""
-			name := t.Name()
-			stats := t.Stats()
-			info := t.Info()
-
-			if m.selected == t.InfoHash() {
-				selected = "* "
-			}
-
-			var meta string
-			if info == nil {
-				meta = "getting torrent info..."
-			} else {
-				var download string
-				if t.BytesMissing() != 0 {
-					download = fmt.Sprintf(
-						"%s/%s ↓",
-						humanize.Bytes(uint64(t.BytesCompleted())),
-						humanize.Bytes(uint64(t.Length())),
-					)
-				} else {
-					download = "done!"
-				}
-				meta = fmt.Sprintf(
-					"%s | %s ↑ | %d/%d peers",
-					download,
-					humanize.Bytes(uint64(stats.BytesWritten.Int64())),
-					stats.ActivePeers,
-					stats.TotalPeers,
-				)
-			}
-
-			spacerWidth := int(float64(m.width)*0.9) - gloss.Width(selected) - gloss.Width(name) - gloss.Width(meta)
-
-			body.WriteString(
-				entry.Render(
-					gloss.JoinHorizontal(
-						gloss.Center,
-						selected,
-						t.Name(),
-						gloss.NewStyle().Width(spacerWidth).Render(""),
-						meta,
-					),
-				) + "\n",
-			)
-		}
+		body.WriteString(m.list.View())
 	} else {
 		body.WriteString(entry.Render("You have no torrents!"))
 	}
