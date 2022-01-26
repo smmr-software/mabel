@@ -39,9 +39,9 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		m.width = width
 		m.help.Width = width
-		m.list.SetWidth(width)
+		m.list.SetWidth(int(float64(width) * 0.9))
 		m.height = height
-		m.list.SetHeight(height)
+		m.list.SetHeight(int(float64(height) * 0.9))
 		return m, nil
 	case tea.KeyMsg:
 		switch {
