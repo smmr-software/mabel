@@ -3,11 +3,13 @@ package main
 import (
 	"fmt"
 	"io"
+	"strings"
 	"time"
 
 	"github.com/anacrolix/torrent"
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
+	gloss "github.com/charmbracelet/lipgloss"
 	"github.com/dustin/go-humanize"
 )
 
@@ -57,9 +59,31 @@ func (d itemDelegate) Height() int                               { return 2 }
 func (d itemDelegate) Spacing() int                              { return 0 }
 func (d itemDelegate) Update(msg tea.Msg, m *list.Model) tea.Cmd { return nil }
 func (d itemDelegate) Render(w io.Writer, m list.Model, index int, listItem list.Item) {
-	i, ok := listItem.(item)
-	if !ok {
-		return
+	i := listItem.(item)
+	entry := gloss.NewStyle().
+		Width(m.Width()).
+		Border(gloss.NormalBorder(), false, false, true)
+
+	selected := ""
+	if index == m.Index() {
+		selected = "* "
 	}
-	fmt.Fprintf(w, fmt.Sprintf("%s %s", i.Title(), i.Description()))
+
+	name := i.Title()
+	meta := i.Description()
+
+	spacer := m.Width() - gloss.Width(selected) - gloss.Width(name) - gloss.Width(meta)
+
+	fmt.Fprintf(
+		w,
+		entry.Render(
+			gloss.JoinHorizontal(
+				gloss.Center,
+				selected,
+				name,
+				strings.Repeat(" ", spacer),
+				meta,
+			),
+		),
+	)
 }
