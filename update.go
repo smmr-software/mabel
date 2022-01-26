@@ -1,7 +1,6 @@
 package main
 
 import (
-	"sort"
 	"strconv"
 	"time"
 
@@ -149,50 +148,9 @@ func defaultKeyPress(m *model, msg *tea.KeyMsg) (tea.Model, tea.Cmd) {
 			m.viewingTorrentDetails = true
 		}
 	case key.Matches(*msg, homeKeys.down, homeKeys.up):
-		torrents := m.client.Torrents()
-		if len(torrents) == 0 {
-			return m, nil
-		}
-		sort.Slice(
-			torrents,
-			func(i, j int) bool {
-				var (
-					firstHash  = torrents[i].InfoHash()
-					secondHash = torrents[j].InfoHash()
-
-					firstTime  = m.torrentMeta[firstHash].added
-					secondTime = m.torrentMeta[secondHash].added
-				)
-
-				return firstTime.Before(secondTime)
-			},
-		)
-
-		zero := metainfo.Hash{}
-		if m.selected == zero {
-			m.selected = torrents[0].InfoHash()
-		} else {
-			var index int
-			for i := range torrents {
-				if torrents[i].InfoHash() == m.selected {
-					if key.Matches(*msg, homeKeys.down) {
-						index = i + 1
-					} else {
-						index = i - 1
-					}
-					break
-				}
-			}
-
-			if key.Matches(*msg, homeKeys.down) && index == len(torrents) {
-				m.selected = torrents[0].InfoHash()
-			} else if key.Matches(*msg, homeKeys.up) && index < 0 {
-				m.selected = torrents[len(torrents)-1].InfoHash()
-			} else {
-				m.selected = torrents[index].InfoHash()
-			}
-		}
-		return m, func() tea.Msg { return selectedTorrentChanged{} }
+		var cmd tea.Cmd
+		m.list, cmd = m.list.Update(msg)
+		return m, cmd
 	case key.Matches(*msg, homeKeys.delete):
 		zero := metainfo.Hash{}
 		if m.selected != zero {
