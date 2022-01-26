@@ -77,6 +77,7 @@ func genList() list.Model {
 	list.SetShowTitle(false)
 	list.SetShowStatusBar(false)
 	list.SetFilteringEnabled(false)
+	list.SetShowHelp(false)
 	return list
 }
 
