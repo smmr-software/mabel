@@ -53,7 +53,15 @@ func addMagnetLink(m *model, input *string, dir *storage.ClientImpl) (tea.Model,
 			m.addPrompt = initialAddPrompt()
 			return m, reportError(err)
 		} else {
-			m.torrentMeta[t.InfoHash()] = torrentMetadata{added: time.Now()}
+			m.list.SetItems(
+				append(
+					m.list.Items(),
+					item{
+						self:  t,
+						added: time.Now(),
+					},
+				),
+			)
 			m.addPrompt = initialAddPrompt()
 			return m, downloadTorrent(t)
 		}
@@ -63,7 +71,15 @@ func addMagnetLink(m *model, input *string, dir *storage.ClientImpl) (tea.Model,
 func addInfoHash(m *model, input *string, dir *storage.ClientImpl) (tea.Model, tea.Cmd) {
 	hash := metainfo.NewHashFromHex(strings.TrimPrefix(*input, "infohash:"))
 	t, _ := m.client.AddTorrentInfoHashWithStorage(hash, *dir)
-	m.torrentMeta[t.InfoHash()] = torrentMetadata{added: time.Now()}
+	m.list.SetItems(
+		append(
+			m.list.Items(),
+			item{
+				self:  t,
+				added: time.Now(),
+			},
+		),
+	)
 	m.addPrompt = initialAddPrompt()
 	return m, downloadTorrent(t)
 }
@@ -83,12 +99,18 @@ func addFromFile(m *model, input *string, dir *storage.ClientImpl) (tea.Model, t
 				m.addPrompt = initialAddPrompt()
 				return m, reportError(err)
 			} else {
-				m.torrentMeta[t.InfoHash()] = torrentMetadata{
-					added:   time.Now(),
-					created: time.Unix(meta.CreationDate, 0),
-					comment: meta.Comment,
-					program: meta.CreatedBy,
-				}
+				m.list.SetItems(
+					append(
+						m.list.Items(),
+						item{
+							self:    t,
+							added:   time.Now(),
+							created: time.Unix(meta.CreationDate, 0),
+							comment: meta.Comment,
+							program: meta.CreatedBy,
+						},
+					),
+				)
 				m.addPrompt = initialAddPrompt()
 				return m, downloadTorrent(t)
 			}
