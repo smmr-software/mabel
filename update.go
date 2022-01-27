@@ -146,10 +146,10 @@ func defaultKeyPress(m *model, msg *tea.KeyMsg) (tea.Model, tea.Cmd) {
 		if t := m.list.SelectedItem().(item); t.self.Info() != nil {
 			m.viewingTorrentDetails = true
 		}
-	case key.Matches(*msg, homeKeys.down):
-		m.list.CursorDown()
 	case key.Matches(*msg, homeKeys.up):
 		m.list.CursorUp()
+	case key.Matches(*msg, homeKeys.down):
+		m.list.CursorDown()
 	case key.Matches(*msg, homeKeys.delete):
 		zero := item{}
 		if t := m.list.SelectedItem().(item); t != zero {
