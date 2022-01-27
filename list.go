@@ -69,27 +69,9 @@ func (d itemDelegate) Render(w io.Writer, m list.Model, index int, listItem list
 		selected = "* "
 	}
 
-	title := i.Title()
 	meta := i.Description()
-
 	spacer := m.Width() - gloss.Width(selected) - gloss.Width(meta)
-	name := []rune(title)
-	initial := len(name)
-	for spacer-gloss.Width(string(name)) < 5 {
-		if index := len(name) - 1; index > 0 {
-			name = name[:index]
-		} else {
-			break
-		}
-	}
-	if initial > len(name) {
-		name[len(name)-1] = '…'
-	}
-
-	spacer -= gloss.Width(string(name))
-	if spacer < 0 {
-		spacer = 0
-	}
+	name := truncateForMinimumSpacing(i.Title(), &spacer, 5)
 
 	fmt.Fprintf(
 		w,

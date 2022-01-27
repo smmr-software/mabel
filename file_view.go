@@ -46,23 +46,7 @@ func fileView(files *[]*torrent.File, w *int, h *int) string {
 
 		padding := width - gloss.Width(download) - 2
 
-		name := []rune(f.DisplayPath())
-		initial := len(name)
-		for padding-gloss.Width(string(name)) < 5 {
-			if index := len(name) - 1; index > 0 {
-				name = name[:index]
-			} else {
-				break
-			}
-		}
-		if initial > len(name) {
-			name[len(name)-1] = '…'
-		}
-
-		padding -= gloss.Width(string(name))
-		if padding < 0 {
-			padding = 0
-		}
+		name := truncateForMinimumSpacing(f.DisplayPath(), &padding, 5)
 
 		newline := "\n"
 		if i == len(*files)-1 {
