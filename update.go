@@ -14,7 +14,6 @@ const interval = 500 * time.Millisecond
 
 type tickMsg time.Time
 type torrentDownloadStarted struct{}
-type selectedTorrentChanged struct{}
 type mabelError error
 
 func downloadTorrent(t *torrent.Torrent) tea.Cmd {
