@@ -3,6 +3,7 @@ module github.com/smmr-software/mabel
 go 1.17
 
 require (
+	github.com/adrg/xdg v0.4.0
 	github.com/anacrolix/log v0.10.0
 	github.com/anacrolix/torrent v1.40.0
 	github.com/charmbracelet/bubbles v0.10.2
@@ -73,7 +74,7 @@ require (
 	golang.org/x/crypto v0.0.0-20210813211128-0a44fdfbc16e // indirect
 	golang.org/x/net v0.0.0-20210813160813-60bc85c4be6d // indirect
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
-	golang.org/x/sys v0.0.0-20211023085530-d6a326fbbf70 // indirect
+	golang.org/x/sys v0.0.0-20211025201205-69cdffdb9359 // indirect
 	golang.org/x/term v0.0.0-20210422114643-f5beecf764ed // indirect
 	golang.org/x/time v0.0.0-20210723032227-1f47c861a9ac // indirect
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect

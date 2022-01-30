@@ -4,6 +4,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/adrg/xdg"
 	"github.com/anacrolix/log"
 	"github.com/anacrolix/torrent"
 	"github.com/anacrolix/torrent/storage"
@@ -37,14 +38,17 @@ type portStartupFailure struct {
 }
 
 func initialAddPrompt() modelAddPrompt {
-	input := textinput.New()
-	input.Width = 32
+	torrent := textinput.New()
+	torrent.Width = 32
+	saveDir := torrent
+	saveDir.SetValue(xdg.UserDirs.Download)
+	saveDir.Blur()
 
 	s := modelAddPrompt{
 		enabled: false,
 		dir:     false,
-		torrent: input,
-		saveDir: input,
+		torrent: torrent,
+		saveDir: saveDir,
 	}
 	return s
 }
