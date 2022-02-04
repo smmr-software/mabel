@@ -10,7 +10,7 @@ var (
 	tooltip    = gloss.NewStyle().Foreground(gloss.AdaptiveColor{
 		Light: "#B2B2B2",
 		Dark:  "#4A4A4A",
-	})
+	}).Padding(1, 2)
 
 	border       = gloss.RoundedBorder()
 	borderWindow = gloss.NewStyle().
