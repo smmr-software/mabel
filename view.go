@@ -49,6 +49,8 @@ func addPromptView(m *model) string {
 		Width(m.width).
 		Height(m.height).
 		Inherit(borderWindow)
+	padding := gloss.NewStyle().
+		Padding(1, 2)
 
 	var body strings.Builder
 	body.WriteString("Add Torrent\n")
@@ -57,12 +59,12 @@ func addPromptView(m *model) string {
 	body.WriteString(borderWindow.Render(m.addPrompt.saveDir.View()))
 
 	content := body.String()
-	help := m.help.View(addPromptKeys)
-	padding := ((m.height - gloss.Height(content)) / 2) - gloss.Height(help)
-	if padding < 0 {
-		padding = 0
+	help := padding.Render(m.help.View(addPromptKeys))
+	spacer := ((m.height - gloss.Height(content)) / 2) - gloss.Height(help)
+	if spacer < 0 {
+		spacer = 0
 	}
-	body.WriteString(strings.Repeat("\n", padding) + help + "\n")
+	body.WriteString(strings.Repeat("\n", spacer) + help + "\n")
 
 	return fullscreen.Render(
 		gloss.Place(
