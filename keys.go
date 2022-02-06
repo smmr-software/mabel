@@ -41,7 +41,7 @@ var homeKeys = homeKeyMap{
 	),
 	delete: key.NewBinding(
 		key.WithKeys("d", "backspace"),
-		key.WithHelp("d/⌦", "delete"),
+		key.WithHelp("d/⌦ ", "delete"),
 	),
 	deselect: key.NewBinding(
 		key.WithKeys("esc"),
@@ -85,7 +85,7 @@ var addPromptKeys = addPromptKeyMap{
 	),
 	back: key.NewBinding(
 		key.WithKeys("shift+tab"),
-		key.WithHelp("⇧↹", "previous"),
+		key.WithHelp("⇧ ↹", "previous"),
 	),
 	forward: key.NewBinding(
 		key.WithKeys("enter", "tab"),
