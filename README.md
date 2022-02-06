@@ -9,6 +9,10 @@ community, including:
 - [charmbracelet/bubbletea]
 - [anacrolix/torrent]
 
+## Prerequisites
+
+- A [Nerd Font] installed and enabled in your terminal.
+
 ## License
 
 [GPLv3](COPYING).
@@ -19,4 +23,5 @@ A [SMMR Software] creation.
 
 [charmbracelet/bubbletea]: https://github.com/charmbracelet/bubbletea
 [anacrolix/torrent]: https://github.com/anacrolix/torrent
+[Nerd Font]: https://www.nerdfonts.com
 [SMMR Software]: https://smmr.software/
