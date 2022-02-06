@@ -50,7 +50,7 @@ func addPromptView(m *model) string {
 		Height(m.height).
 		Inherit(borderWindow)
 	padding := gloss.NewStyle().
-		Padding(1, 2)
+		Padding(0, 2)
 
 	var body strings.Builder
 	body.WriteString("Add Torrent\n")
