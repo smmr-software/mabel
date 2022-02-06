@@ -116,7 +116,7 @@ func errorView(m *model) string {
 				strings.Repeat("\n", spacer),
 				help,
 			),
-			gloss.WithWhitespaceChars("⌇"),
+			gloss.WithWhitespaceChars("⑀"),
 			gloss.WithWhitespaceForeground(gloss.Color("#383838")),
 		),
 	)
