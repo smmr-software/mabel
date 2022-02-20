@@ -63,7 +63,8 @@ func initialPortStartupFailure() portStartupFailure {
 
 func genMabelConfig() *torrent.ClientConfig {
 	config := torrent.NewDefaultClientConfig()
-	config.Logger = log.Discard
+	config.Logger = log.Default
+	config.Logger.Handlers = []log.Handler{log.DiscardHandler}
 	config.Seed = true
 
 	metadataDirectory := os.TempDir()
