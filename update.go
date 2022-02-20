@@ -150,6 +150,10 @@ func defaultKeyPress(m *model, msg *tea.KeyMsg) (tea.Model, tea.Cmd) {
 	case key.Matches(*msg, homeKeys.down):
 		m.list.CursorDown()
 	case key.Matches(*msg, homeKeys.delete):
+		if len(m.list.Items()) == 0 {
+			return m, nil
+		}
+
 		zero := item{}
 		if t := m.list.SelectedItem().(item); t != zero {
 			t.self.Drop()
