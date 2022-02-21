@@ -49,39 +49,47 @@ func addMagnetLink(m *model, input *string, dir *storage.ClientImpl) (tea.Model,
 		return m, reportError(err)
 	} else {
 		spec.Storage = *dir
-		if t, _, err := m.client.AddTorrentSpec(spec); err != nil {
+		if t, nw, err := m.client.AddTorrentSpec(spec); err != nil {
 			m.addPrompt = initialAddPrompt()
 			return m, reportError(err)
 		} else {
-			m.list.SetItems(
-				append(
-					m.list.Items(),
-					item{
-						self:  t,
-						added: time.Now(),
-					},
-				),
-			)
+			var cmd tea.Cmd
+			if nw {
+				m.list.SetItems(
+					append(
+						m.list.Items(),
+						item{
+							self:  t,
+							added: time.Now(),
+						},
+					),
+				)
+				cmd = downloadTorrent(t)
+			}
 			m.addPrompt = initialAddPrompt()
-			return m, downloadTorrent(t)
+			return m, cmd
 		}
 	}
 }
 
 func addInfoHash(m *model, input *string, dir *storage.ClientImpl) (tea.Model, tea.Cmd) {
 	hash := metainfo.NewHashFromHex(strings.TrimPrefix(*input, "infohash:"))
-	t, _ := m.client.AddTorrentInfoHashWithStorage(hash, *dir)
-	m.list.SetItems(
-		append(
-			m.list.Items(),
-			item{
-				self:  t,
-				added: time.Now(),
-			},
-		),
-	)
+	t, nw := m.client.AddTorrentInfoHashWithStorage(hash, *dir)
+	var cmd tea.Cmd
+	if nw {
+		m.list.SetItems(
+			append(
+				m.list.Items(),
+				item{
+					self:  t,
+					added: time.Now(),
+				},
+			),
+		)
+		cmd = downloadTorrent(t)
+	}
 	m.addPrompt = initialAddPrompt()
-	return m, downloadTorrent(t)
+	return m, cmd
 }
 
 func addFromFile(m *model, input *string, dir *storage.ClientImpl) (tea.Model, tea.Cmd) {
@@ -95,24 +103,28 @@ func addFromFile(m *model, input *string, dir *storage.ClientImpl) (tea.Model, t
 		} else {
 			spec := torrent.TorrentSpecFromMetaInfo(meta)
 			spec.Storage = *dir
-			if t, _, err := m.client.AddTorrentSpec(spec); err != nil {
+			if t, nw, err := m.client.AddTorrentSpec(spec); err != nil {
 				m.addPrompt = initialAddPrompt()
 				return m, reportError(err)
 			} else {
-				m.list.SetItems(
-					append(
-						m.list.Items(),
-						item{
-							self:    t,
-							added:   time.Now(),
-							created: time.Unix(meta.CreationDate, 0),
-							comment: meta.Comment,
-							program: meta.CreatedBy,
-						},
-					),
-				)
+				var cmd tea.Cmd
+				if nw {
+					m.list.SetItems(
+						append(
+							m.list.Items(),
+							item{
+								self:    t,
+								added:   time.Now(),
+								created: time.Unix(meta.CreationDate, 0),
+								comment: meta.Comment,
+								program: meta.CreatedBy,
+							},
+						),
+					)
+					cmd = downloadTorrent(t)
+				}
 				m.addPrompt = initialAddPrompt()
-				return m, downloadTorrent(t)
+				return m, cmd
 			}
 		}
 	}
