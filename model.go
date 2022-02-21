@@ -17,12 +17,12 @@ type model struct {
 	width, height         int
 	client                *torrent.Client
 	clientConfig          *torrent.ClientConfig
-	list                  list.Model
-	help                  help.Model
+	list                  *list.Model
+	help                  *help.Model
 	err                   error
-	addPrompt             modelAddPrompt
+	addPrompt             *modelAddPrompt
 	viewingTorrentDetails bool
-	portStartupFailure    portStartupFailure
+	portStartupFailure    *portStartupFailure
 }
 
 type modelAddPrompt struct {
@@ -37,7 +37,7 @@ type portStartupFailure struct {
 	port    textinput.Model
 }
 
-func initialAddPrompt() modelAddPrompt {
+func initialAddPrompt() *modelAddPrompt {
 	torrent := textinput.New()
 	torrent.Width = 32
 	saveDir := torrent
@@ -50,15 +50,16 @@ func initialAddPrompt() modelAddPrompt {
 		torrent: torrent,
 		saveDir: saveDir,
 	}
-	return s
+	return &s
 }
 
-func initialPortStartupFailure() portStartupFailure {
+func initialPortStartupFailure() *portStartupFailure {
 	input := textinput.New()
 	input.Width = 32
 	input.Focus()
 
-	return portStartupFailure{port: input}
+	port := portStartupFailure{port: input}
+	return &port
 }
 
 func genMabelConfig() *torrent.ClientConfig {
@@ -77,24 +78,25 @@ func genMabelConfig() *torrent.ClientConfig {
 	return config
 }
 
-func genList() list.Model {
+func genList() *list.Model {
 	list := list.NewModel(make([]list.Item, 0), itemDelegate{}, 0, 0)
 	list.SetShowTitle(false)
 	list.SetShowStatusBar(false)
 	list.SetFilteringEnabled(false)
 	list.SetShowHelp(false)
-	return list
+	return &list
 }
 
 func initialModel() (model, error) {
 	config := genMabelConfig()
 	client, err := torrent.NewClient(config)
+	hlp := help.New()
 
 	m := model{
 		client:             client,
 		clientConfig:       config,
 		list:               genList(),
-		help:               help.New(),
+		help:               &hlp,
 		addPrompt:          initialAddPrompt(),
 		portStartupFailure: initialPortStartupFailure(),
 	}
