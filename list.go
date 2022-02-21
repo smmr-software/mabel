@@ -28,29 +28,28 @@ func (i item) Description() string {
 	info := t.Info()
 	stats := t.Stats()
 
-	var meta string
 	if info == nil {
-		meta = "getting torrent info..."
-	} else {
-		var download string
-		if t.BytesMissing() != 0 {
-			download = fmt.Sprintf(
-				"%s/%s ↓",
-				humanize.Bytes(uint64(t.BytesCompleted())),
-				humanize.Bytes(uint64(t.Length())),
-			)
-		} else {
-			download = "done!"
-		}
-		meta = fmt.Sprintf(
-			"%s | %s ↑ | %d/%d peers",
-			download,
-			humanize.Bytes(uint64(stats.BytesWritten.Int64())),
-			stats.ActivePeers,
-			stats.TotalPeers,
-		)
+		return "getting torrent info..."
 	}
-	return meta
+
+	var download string
+	if t.BytesMissing() != 0 {
+		download = fmt.Sprintf(
+			"%s/%s ↓",
+			humanize.Bytes(uint64(t.BytesCompleted())),
+			humanize.Bytes(uint64(t.Length())),
+		)
+	} else {
+		download = "done!"
+	}
+
+	return fmt.Sprintf(
+		"%s | %s ↑ | %d/%d peers",
+		download,
+		humanize.Bytes(uint64(stats.BytesWritten.Int64())),
+		stats.ActivePeers,
+		stats.TotalPeers,
+	)
 }
 
 type itemDelegate struct{}

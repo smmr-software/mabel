@@ -44,32 +44,34 @@ func getStorage(dir *string) storage.ClientImpl {
 }
 
 func addMagnetLink(m *model, input *string, dir *storage.ClientImpl) (tea.Model, tea.Cmd) {
-	if spec, err := torrent.TorrentSpecFromMagnetUri(*input); err != nil {
+	spec, err := torrent.TorrentSpecFromMagnetUri(*input)
+	if err != nil {
 		m.addPrompt = initialAddPrompt()
 		return m, reportError(err)
-	} else {
-		spec.Storage = *dir
-		if t, nw, err := m.client.AddTorrentSpec(spec); err != nil {
-			m.addPrompt = initialAddPrompt()
-			return m, reportError(err)
-		} else {
-			var cmd tea.Cmd
-			if nw {
-				m.list.SetItems(
-					append(
-						m.list.Items(),
-						item{
-							self:  t,
-							added: time.Now(),
-						},
-					),
-				)
-				cmd = downloadTorrent(t)
-			}
-			m.addPrompt = initialAddPrompt()
-			return m, cmd
-		}
 	}
+	spec.Storage = *dir
+
+	t, nw, err := m.client.AddTorrentSpec(spec)
+	if err != nil {
+		m.addPrompt = initialAddPrompt()
+		return m, reportError(err)
+	}
+
+	var cmd tea.Cmd
+	if nw {
+		m.list.SetItems(
+			append(
+				m.list.Items(),
+				item{
+					self:  t,
+					added: time.Now(),
+				},
+			),
+		)
+		cmd = downloadTorrent(t)
+	}
+	m.addPrompt = initialAddPrompt()
+	return m, cmd
 }
 
 func addInfoHash(m *model, input *string, dir *storage.ClientImpl) (tea.Model, tea.Cmd) {
@@ -93,39 +95,43 @@ func addInfoHash(m *model, input *string, dir *storage.ClientImpl) (tea.Model, t
 }
 
 func addFromFile(m *model, input *string, dir *storage.ClientImpl) (tea.Model, tea.Cmd) {
-	if path, err := home.Expand(*input); err != nil {
+	path, err := home.Expand(*input)
+	if err != nil {
 		m.addPrompt = initialAddPrompt()
 		return m, reportError(err)
-	} else {
-		if meta, err := metainfo.LoadFromFile(path); err != nil {
-			m.addPrompt = initialAddPrompt()
-			return m, reportError(err)
-		} else {
-			spec := torrent.TorrentSpecFromMetaInfo(meta)
-			spec.Storage = *dir
-			if t, nw, err := m.client.AddTorrentSpec(spec); err != nil {
-				m.addPrompt = initialAddPrompt()
-				return m, reportError(err)
-			} else {
-				var cmd tea.Cmd
-				if nw {
-					m.list.SetItems(
-						append(
-							m.list.Items(),
-							item{
-								self:    t,
-								added:   time.Now(),
-								created: time.Unix(meta.CreationDate, 0),
-								comment: meta.Comment,
-								program: meta.CreatedBy,
-							},
-						),
-					)
-					cmd = downloadTorrent(t)
-				}
-				m.addPrompt = initialAddPrompt()
-				return m, cmd
-			}
-		}
 	}
+
+	meta, err := metainfo.LoadFromFile(path)
+	if err != nil {
+		m.addPrompt = initialAddPrompt()
+		return m, reportError(err)
+	}
+
+	spec := torrent.TorrentSpecFromMetaInfo(meta)
+	spec.Storage = *dir
+
+	t, nw, err := m.client.AddTorrentSpec(spec)
+	if err != nil {
+		m.addPrompt = initialAddPrompt()
+		return m, reportError(err)
+	}
+
+	var cmd tea.Cmd
+	if nw {
+		m.list.SetItems(
+			append(
+				m.list.Items(),
+				item{
+					self:    t,
+					added:   time.Now(),
+					created: time.Unix(meta.CreationDate, 0),
+					comment: meta.Comment,
+					program: meta.CreatedBy,
+				},
+			),
+		)
+		cmd = downloadTorrent(t)
+	}
+	m.addPrompt = initialAddPrompt()
+	return m, cmd
 }
