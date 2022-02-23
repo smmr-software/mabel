@@ -58,30 +58,28 @@ func (d itemDelegate) Height() int                               { return 2 }
 func (d itemDelegate) Spacing() int                              { return 0 }
 func (d itemDelegate) Update(msg tea.Msg, m *list.Model) tea.Cmd { return nil }
 func (d itemDelegate) Render(w io.Writer, m list.Model, index int, listItem list.Item) {
-	i := listItem.(item)
-	entry := gloss.NewStyle().
-		Width(m.Width()).
-		Border(gloss.NormalBorder(), false, false, true)
+	var (
+		i = listItem.(item)
 
-	selected := ""
+		leftMargin = 2
+
+		entry = gloss.NewStyle().Width(m.Width()).PaddingLeft(leftMargin)
+		title = gloss.NewStyle().Foreground(primaryBlue)
+		desc  = gloss.NewStyle().Foreground(lightBlue)
+
+		meta   = i.Description()
+		spacer = m.Width() - gloss.Width(meta) - leftMargin
+		name   = string(truncateForMinimumSpacing(i.Title(), &spacer, 5))
+	)
+
 	if index == m.Index() {
-		selected = "* "
+		entry = entry.
+			Border(gloss.NormalBorder(), false, false, false, true).
+			BorderForeground(darkBlue).
+			PaddingLeft(1)
+		name = title.Render(name)
+		meta = desc.Render(meta)
 	}
 
-	meta := i.Description()
-	spacer := m.Width() - gloss.Width(selected) - gloss.Width(meta)
-	name := truncateForMinimumSpacing(i.Title(), &spacer, 5)
-
-	fmt.Fprintf(
-		w,
-		entry.Render(
-			gloss.JoinHorizontal(
-				gloss.Center,
-				selected,
-				string(name),
-				strings.Repeat(" ", spacer),
-				meta,
-			),
-		),
-	)
+	fmt.Fprintf(w, "\n"+entry.Render(name+strings.Repeat(" ", spacer)+meta))
 }

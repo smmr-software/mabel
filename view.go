@@ -85,13 +85,13 @@ func errorView(m *model) string {
 		Width(m.width).
 		Height(m.height).
 		Inherit(borderWindow).
-		BorderForeground(errorColor)
+		BorderForeground(errorRed)
 	popupWindow := gloss.NewStyle().
 		Width(width).
 		Height(height).
 		Padding(0, padding).
 		Inherit(borderWindow).
-		BorderForeground(errorColor)
+		BorderForeground(errorRed)
 	header := gloss.NewStyle().Bold(true)
 
 	popup := popupWindow.Render(gloss.Place(
