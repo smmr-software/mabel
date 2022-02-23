@@ -142,7 +142,7 @@ func defaultKeyPress(m *model, msg *tea.KeyMsg) (tea.Model, tea.Cmd) {
 		m.addPrompt.torrent.Focus()
 		m.addPrompt.enabled = true
 	case key.Matches(*msg, homeKeys.details):
-		if t := m.list.SelectedItem().(item); t.self.Info() != nil {
+		if t, ok := m.list.SelectedItem().(item); ok && t.self.Info() != nil {
 			m.viewingTorrentDetails = true
 		}
 	case key.Matches(*msg, homeKeys.up):
@@ -150,12 +150,8 @@ func defaultKeyPress(m *model, msg *tea.KeyMsg) (tea.Model, tea.Cmd) {
 	case key.Matches(*msg, homeKeys.down):
 		m.list.CursorDown()
 	case key.Matches(*msg, homeKeys.delete):
-		if len(m.list.Items()) == 0 {
-			return m, nil
-		}
-
 		zero := item{}
-		if t := m.list.SelectedItem().(item); t != zero {
+		if t, ok := m.list.SelectedItem().(item); ok && t != zero {
 			t.self.Drop()
 			m.list.RemoveItem(m.list.Index())
 		}
