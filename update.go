@@ -155,6 +155,9 @@ func defaultKeyPress(m *model, msg *tea.KeyMsg) (tea.Model, tea.Cmd) {
 			t.self.Drop()
 			m.list.RemoveItem(m.list.Index())
 		}
+		if m.list.Index() == len(m.list.Items()) {
+			m.list.CursorUp()
+		}
 	case key.Matches(*msg, homeKeys.deselect):
 		m.list.ResetSelected()
 	}
