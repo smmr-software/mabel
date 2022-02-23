@@ -149,6 +149,10 @@ func defaultKeyPress(m *model, msg *tea.KeyMsg) (tea.Model, tea.Cmd) {
 		m.list.CursorUp()
 	case key.Matches(*msg, homeKeys.down):
 		m.list.CursorDown()
+	case key.Matches(*msg, homeKeys.next):
+		m.list.Paginator.NextPage()
+	case key.Matches(*msg, homeKeys.prev):
+		m.list.Paginator.PrevPage()
 	case key.Matches(*msg, homeKeys.delete):
 		zero := item{}
 		if t, ok := m.list.SelectedItem().(item); ok && t != zero {

@@ -5,6 +5,8 @@ import "github.com/charmbracelet/bubbles/key"
 type homeKeyMap struct {
 	up       key.Binding
 	down     key.Binding
+	next     key.Binding
+	prev     key.Binding
 	add      key.Binding
 	delete   key.Binding
 	details  key.Binding
@@ -20,6 +22,7 @@ func (k homeKeyMap) ShortHelp() []key.Binding {
 func (k homeKeyMap) FullHelp() [][]key.Binding {
 	return [][]key.Binding{
 		{k.up, k.down},
+		{k.next, k.prev},
 		{k.add, k.delete},
 		{k.details, k.deselect},
 		{k.help, k.quit},
@@ -34,6 +37,14 @@ var homeKeys = homeKeyMap{
 	down: key.NewBinding(
 		key.WithKeys("j", "down"),
 		key.WithHelp("j/↓", "down"),
+	),
+	next: key.NewBinding(
+		key.WithKeys("l", "right"),
+		key.WithHelp("l/→", "next page"),
+	),
+	prev: key.NewBinding(
+		key.WithKeys("h", "left"),
+		key.WithHelp("h/←", "prev page"),
 	),
 	add: key.NewBinding(
 		key.WithKeys("a"),
