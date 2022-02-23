@@ -79,7 +79,7 @@ func genMabelConfig() *torrent.ClientConfig {
 }
 
 func genList() *list.Model {
-	list := list.NewModel(make([]list.Item, 0), itemDelegate{}, 0, 0)
+	list := list.New(make([]list.Item, 0), itemDelegate{}, 0, 0)
 	list.SetShowTitle(false)
 	list.SetShowStatusBar(false)
 	list.SetFilteringEnabled(false)
