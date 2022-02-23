@@ -220,27 +220,35 @@ func torrentDetailView(m *model) string {
 }
 
 func mainView(m *model) string {
-	entry := gloss.NewStyle().
-		Width(int(float64(m.width)*0.9)).
-		Border(gloss.NormalBorder(), false, false, true)
 	fullscreen := gloss.NewStyle().
 		Width(m.width).
 		Height(m.height).
 		Inherit(borderWindow)
 
-	var body strings.Builder
+	var content string
 	if torrents := m.client.Torrents(); len(torrents) > 0 {
-		body.WriteString(m.list.View())
+		content = m.list.View()
 	} else {
-		body.WriteString(entry.Render("You have no torrents!"))
+		content = "You have no torrents!"
 	}
-	body.WriteString("\n")
 
-	content := body.String()
 	help := m.help.View(homeKeys)
-	padding := m.height - gloss.Height(content) - gloss.Height(help)
+	padding := ((m.height - gloss.Height(content)) / 2) - gloss.Height(help)
 	if padding < 0 {
 		padding = 0
 	}
-	return fullscreen.Render(content + strings.Repeat("\n", padding) + help)
+
+	return fullscreen.Render(
+		gloss.Place(
+			m.width, m.height,
+			gloss.Center, gloss.Center,
+			fmt.Sprintf(
+				"%s%s%s%s\n",
+				strings.Repeat("\n", padding+gloss.Height(help)),
+				content,
+				strings.Repeat("\n", padding),
+				help,
+			),
+		),
+	)
 }
