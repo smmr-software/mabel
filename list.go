@@ -61,14 +61,15 @@ func (d itemDelegate) Render(w io.Writer, m list.Model, index int, listItem list
 	var (
 		i = listItem.(item)
 
-		leftMargin = 2
+		leftPadding = 2
+		topMargin   = 1
 
-		entry = gloss.NewStyle().Width(m.Width()).PaddingLeft(leftMargin)
+		entry = gloss.NewStyle().Width(m.Width()).PaddingLeft(leftPadding).MarginTop(topMargin)
 		title = gloss.NewStyle().Foreground(primaryBlue)
 		desc  = gloss.NewStyle().Foreground(lightBlue)
 
 		meta   = i.Description()
-		spacer = m.Width() - gloss.Width(meta) - leftMargin
+		spacer = m.Width() - gloss.Width(meta) - leftPadding
 		name   = string(truncateForMinimumSpacing(i.Title(), &spacer, 5))
 	)
 
@@ -81,5 +82,5 @@ func (d itemDelegate) Render(w io.Writer, m list.Model, index int, listItem list
 		meta = desc.Render(meta)
 	}
 
-	fmt.Fprintf(w, "\n"+entry.Render(name+strings.Repeat(" ", spacer)+meta))
+	fmt.Fprintf(w, entry.Render(name+strings.Repeat(" ", spacer)+meta))
 }
