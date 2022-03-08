@@ -49,8 +49,6 @@ func addPromptView(m *model) string {
 		Width(m.width).
 		Height(m.height).
 		Inherit(borderWindow)
-	padding := gloss.NewStyle().
-		Padding(0, 2)
 
 	var body strings.Builder
 	body.WriteString("Add Torrent\n")
@@ -58,68 +56,52 @@ func addPromptView(m *model) string {
 	body.WriteString("\n\nSave Directory (Optional)\n")
 	body.WriteString(borderWindow.Render(m.addPrompt.saveDir.View()))
 
-	content := body.String()
-	help := padding.Render(m.help.View(addPromptKeys))
-	spacer := ((m.height - gloss.Height(content)) / 2) - gloss.Height(help)
-	if spacer < 0 {
-		spacer = 0
-	}
-	body.WriteString(strings.Repeat("\n", spacer) + help + "\n")
+	help := m.help.View(addPromptKeys)
+	height := m.height - gloss.Height(help) - 1
 
-	return fullscreen.Render(
-		gloss.Place(
-			m.width, m.height,
-			gloss.Center, gloss.Bottom,
-			body.String(),
-			gloss.WithWhitespaceChars("⑀"),
-			gloss.WithWhitespaceForeground(gloss.Color("#383838")),
-		),
+	content := gloss.Place(
+		m.width, height,
+		gloss.Center, gloss.Center,
+		body.String(),
 	)
+
+	return fullscreen.Render(content + help + "\n")
 }
 
 func errorView(m *model) string {
-	width := m.width / 3
-	height := m.height / 4
+	popupWidth := m.width / 3
+	popupHeight := m.height / 4
 	padding := m.height / 16
+
 	fullscreen := gloss.NewStyle().
 		Width(m.width).
 		Height(m.height).
 		Inherit(borderWindow).
 		BorderForeground(errorRed)
 	popupWindow := gloss.NewStyle().
-		Width(width).
-		Height(height).
+		Width(popupWidth).
+		Height(popupHeight).
 		Padding(0, padding).
 		Inherit(borderWindow).
 		BorderForeground(errorRed)
 	header := gloss.NewStyle().Bold(true)
 
 	popup := popupWindow.Render(gloss.Place(
-		width-padding*2, height,
+		popupWidth-padding*2, popupHeight,
 		gloss.Center, gloss.Center,
 		header.Render("Error")+"\n"+m.err.Error(),
 	))
-	help := tooltip.Render("press any key to return home")
-	spacer := ((m.height - gloss.Height(popup)) / 2) - gloss.Height(help)
-	if spacer < 0 {
-		spacer = 0
-	}
 
-	return fullscreen.Render(
-		gloss.Place(
-			m.width, m.height,
-			gloss.Center, gloss.Center,
-			fmt.Sprintf(
-				"%s%s%s%s\n",
-				strings.Repeat("\n", spacer+gloss.Height(help)),
-				popup,
-				strings.Repeat("\n", spacer),
-				help,
-			),
-			gloss.WithWhitespaceChars("⑀"),
-			gloss.WithWhitespaceForeground(gloss.Color("#383838")),
-		),
+	help := tooltip.Render("press any key to return home")
+	height := m.height - gloss.Height(help) - 1
+
+	content := gloss.Place(
+		m.width, height,
+		gloss.Center, gloss.Center,
+		popup,
 	)
+
+	return fullscreen.Render(content + help + "\n")
 }
 
 func torrentDetailView(m *model) string {
@@ -202,21 +184,16 @@ func torrentDetailView(m *model) string {
 		)
 	}
 
-	content := body.String()
 	help := tooltip.Render("press any key to return home")
-	padding := ((m.height - gloss.Height(content)) / 2) - gloss.Height(help)
-	if padding < 0 {
-		padding = 0
-	}
-	body.WriteString(strings.Repeat("\n", padding) + help + "\n")
+	height := m.height - gloss.Height(help) - 1
 
-	return fullscreen.Render(
-		gloss.Place(
-			m.width, m.height,
-			gloss.Center, gloss.Bottom,
-			body.String(),
-		),
+	content := gloss.Place(
+		m.width, height,
+		gloss.Center, gloss.Center,
+		body.String(),
 	)
+
+	return fullscreen.Render(content + help + "\n")
 }
 
 func mainView(m *model) string {
@@ -233,22 +210,13 @@ func mainView(m *model) string {
 	}
 
 	help := m.help.View(homeKeys)
-	padding := ((m.height - gloss.Height(content)) / 2) - gloss.Height(help)
-	if padding < 0 {
-		padding = 0
-	}
+	height := m.height - gloss.Height(help) - 1
 
-	return fullscreen.Render(
-		gloss.Place(
-			m.width, m.height,
-			gloss.Center, gloss.Center,
-			fmt.Sprintf(
-				"%s%s%s%s\n",
-				strings.Repeat("\n", padding+gloss.Height(help)),
-				content,
-				strings.Repeat("\n", padding),
-				help,
-			),
-		),
+	content = gloss.Place(
+		m.width, height,
+		gloss.Center, gloss.Center,
+		content,
 	)
+
+	return fullscreen.Render(content + help + "\n")
 }
