@@ -7,7 +7,6 @@ import (
 	torrent "github.com/anacrolix/torrent"
 	"github.com/charmbracelet/bubbles/key"
 	tea "github.com/charmbracelet/bubbletea"
-	gloss "github.com/charmbracelet/lipgloss"
 )
 
 const interval = 500 * time.Millisecond
@@ -33,8 +32,8 @@ func reportError(err error) tea.Cmd {
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
-		width := msg.Width - gloss.Width(border.Right+border.Left)
-		height := msg.Height - gloss.Width(border.Bottom+border.Top)
+		width := msg.Width - borderWindow.GetHorizontalBorderSize()
+		height := msg.Height - borderWindow.GetHorizontalBorderSize()
 
 		m.width = width
 		m.help.Width = width
