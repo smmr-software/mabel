@@ -6,6 +6,8 @@ import (
 
 	"github.com/anacrolix/torrent"
 	gloss "github.com/charmbracelet/lipgloss"
+
+	"github.com/acarl005/stripansi"
 	"github.com/dustin/go-humanize"
 )
 
@@ -46,7 +48,10 @@ func fileView(files *[]*torrent.File, w *int, h *int) string {
 
 		padding := width - gloss.Width(download) - 2
 
-		name := truncateForMinimumSpacing(f.DisplayPath(), &padding, 5)
+		name := truncateForMinimumSpacing(
+			stripansi.Strip(f.DisplayPath()),
+			&padding, 5,
+		)
 
 		newline := "\n"
 		if i == len(*files)-1 {
@@ -56,10 +61,8 @@ func fileView(files *[]*torrent.File, w *int, h *int) string {
 		list.WriteString(
 			fmt.Sprintf(
 				" %s%s%s %s",
-				string(name),
-				strings.Repeat(" ", padding),
-				download,
-				newline,
+				name, strings.Repeat(" ", padding),
+				download, newline,
 			),
 		)
 	}

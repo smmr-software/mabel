@@ -5,6 +5,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/acarl005/stripansi"
 	torrent "github.com/anacrolix/torrent"
 	"github.com/anacrolix/torrent/metainfo"
 	"github.com/anacrolix/torrent/storage"
@@ -125,8 +126,8 @@ func addFromFile(m *model, input *string, dir *storage.ClientImpl) (tea.Model, t
 					self:    t,
 					added:   time.Now(),
 					created: time.Unix(meta.CreationDate, 0),
-					comment: meta.Comment,
-					program: meta.CreatedBy,
+					comment: stripansi.Strip(meta.Comment),
+					program: stripansi.Strip(meta.CreatedBy),
 				},
 			),
 		)

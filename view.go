@@ -5,6 +5,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/acarl005/stripansi"
 	"github.com/charmbracelet/bubbles/progress"
 	gloss "github.com/charmbracelet/lipgloss"
 	"github.com/dustin/go-humanize"
@@ -152,15 +153,13 @@ func torrentDetailView(m *model) string {
 	}
 
 	var body strings.Builder
-	body.WriteString(bold.Render(t.Name()) + "\n\n")
+	body.WriteString(bold.Render(stripansi.Strip(t.Name())) + "\n\n")
 	body.WriteString(fmt.Sprintf("%s%s%s", created, with, comment))
 	body.WriteString(prog.ViewAs(percent))
 	body.WriteString(
 		fmt.Sprintf(
 			"\n\n%s  %d %s | %d/%d peers\n\n",
-			icon,
-			len(files),
-			filesDesc,
+			icon, len(files), filesDesc,
 			stats.ActivePeers,
 			stats.TotalPeers,
 		),
