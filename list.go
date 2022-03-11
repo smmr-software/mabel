@@ -6,6 +6,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/acarl005/stripansi"
 	"github.com/anacrolix/torrent"
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
@@ -22,7 +23,7 @@ type item struct {
 }
 
 func (i item) FilterValue() string { return "" }
-func (i item) Title() string       { return i.self.Name() }
+func (i item) Title() string       { return stripansi.Strip(i.self.Name()) }
 func (i item) Description() string {
 	t := i.self
 	info := t.Info()
@@ -70,7 +71,7 @@ func (d itemDelegate) Render(w io.Writer, m list.Model, index int, listItem list
 
 		meta   = i.Description()
 		spacer = m.Width() - gloss.Width(meta) - leftPadding
-		name   = string(truncateForMinimumSpacing(i.Title(), &spacer, 5))
+		name   = truncateForMinimumSpacing(i.Title(), &spacer, 5)
 	)
 
 	if index == m.Index() {
