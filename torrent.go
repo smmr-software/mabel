@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"strings"
 	"time"
@@ -31,8 +32,30 @@ func getSaveLocation(dir string) string {
 	if d, err := home.Expand(dir); err != nil {
 		return ""
 	} else {
+		cacheSaveDir(d)
 		return d
 	}
+}
+
+func cacheSaveDir(dir string) {
+	cache, err := os.UserCacheDir()
+	if err != nil {
+		return
+	}
+	cache += "/mabel"
+
+	err = os.Mkdir(cache, os.ModePerm)
+	if err != nil && err.Error() != fmt.Sprintf("mkdir %s: file exists", cache) {
+		return
+	}
+
+	file, err := os.Create(cache + "/lastDownloadDir")
+	if err != nil {
+		return
+	}
+	defer file.Close()
+
+	file.WriteString(dir)
 }
 
 func getStorage(dir *string) storage.ClientImpl {

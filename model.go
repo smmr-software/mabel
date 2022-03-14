@@ -41,7 +41,16 @@ func initialAddPrompt() *modelAddPrompt {
 	torrent := textinput.New()
 	torrent.Width = 32
 	saveDir := torrent
-	saveDir.SetValue(xdg.UserDirs.Download)
+
+	cache, _ := os.UserCacheDir()
+	cache += "/mabel/lastDownloadDir"
+	bytes, err := os.ReadFile(cache)
+	if err != nil {
+		saveDir.SetValue(xdg.UserDirs.Download)
+	} else {
+		saveDir.SetValue(string(bytes))
+	}
+
 	saveDir.Blur()
 
 	s := modelAddPrompt{
