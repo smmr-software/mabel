@@ -4,6 +4,8 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/smmr-software/mabel/internal/shared"
+
 	torrent "github.com/anacrolix/torrent"
 	"github.com/charmbracelet/bubbles/key"
 	tea "github.com/charmbracelet/bubbletea"
@@ -12,16 +14,7 @@ import (
 const interval = 500 * time.Millisecond
 
 type tickMsg time.Time
-type torrentDownloadStarted struct{}
 type mabelError error
-
-func downloadTorrent(t *torrent.Torrent) tea.Cmd {
-	return func() tea.Msg {
-		<-t.GotInfo()
-		t.DownloadAll()
-		return torrentDownloadStarted{}
-	}
-}
 
 func reportError(err error) tea.Cmd {
 	return func() tea.Msg {
@@ -105,7 +98,24 @@ func addPromptKeyPress(m *model, msg *tea.KeyMsg) (tea.Model, tea.Cmd) {
 		return m, nil
 	case key.Matches(*msg, addPromptKeys.forward):
 		if m.addPrompt.dir {
-			return addTorrent(m)
+			input := m.addPrompt.torrent.Value()
+			dir := m.addPrompt.saveDir.Value()
+
+			m.addPrompt = initialAddPrompt()
+
+			cmd, nw, itm, err := shared.AddTorrent(&input, &dir, m.client)
+			if err != nil {
+				return m, reportError(err)
+			} else if nw {
+				m.list.SetItems(
+					append(
+						m.list.Items(),
+						Item(itm),
+					),
+				)
+			}
+
+			return m, cmd
 		} else {
 			m.addPrompt.torrent.Blur()
 			m.addPrompt.saveDir.Focus()
@@ -141,7 +151,7 @@ func defaultKeyPress(m *model, msg *tea.KeyMsg) (tea.Model, tea.Cmd) {
 		m.addPrompt.torrent.Focus()
 		m.addPrompt.enabled = true
 	case key.Matches(*msg, homeKeys.details):
-		if t, ok := m.list.SelectedItem().(item); ok && t.self.Info() != nil {
+		if t, ok := m.list.SelectedItem().(Item); ok && t.Self.Info() != nil {
 			m.viewingTorrentDetails = true
 		}
 	case key.Matches(*msg, homeKeys.up):
@@ -153,9 +163,9 @@ func defaultKeyPress(m *model, msg *tea.KeyMsg) (tea.Model, tea.Cmd) {
 	case key.Matches(*msg, homeKeys.prev):
 		m.list.Paginator.PrevPage()
 	case key.Matches(*msg, homeKeys.delete):
-		zero := item{}
-		if t, ok := m.list.SelectedItem().(item); ok && t != zero {
-			t.self.Drop()
+		zero := Item{}
+		if t, ok := m.list.SelectedItem().(Item); ok && t != zero {
+			t.Self.Drop()
 			m.list.RemoveItem(m.list.Index())
 		}
 		if m.list.Index() == len(m.list.Items()) {

@@ -111,8 +111,8 @@ func torrentDetailView(m *model) string {
 		Height(m.height).
 		Inherit(borderWindow)
 
-	selected := m.list.SelectedItem().(item)
-	t := selected.self
+	selected := m.list.SelectedItem().(Item)
+	t := selected.Self
 
 	info := t.Info()
 	stats := t.Stats()
@@ -137,15 +137,15 @@ func torrentDetailView(m *model) string {
 	}
 
 	created := ""
-	if tm := selected.created; !tm.IsZero() && tm != time.Now() {
+	if tm := selected.Created; !tm.IsZero() && tm != time.Now() {
 		created = fmt.Sprintf("\n\nCreated on %s", tm.Format("02 Jan 2006"))
 	}
 	with := "\n\n"
-	if prog := selected.program; prog != "" && prog != "go.torrent" {
+	if prog := selected.Program; prog != "" && prog != "go.torrent" {
 		with = fmt.Sprintf(" with %s\n\n", prog)
 	}
 	comment := ""
-	if com := selected.comment; com != "" && com != "dynamic metainfo from client" {
+	if com := selected.Comment; com != "" && com != "dynamic metainfo from client" {
 		comment = fmt.Sprintf("%s\n\n", com)
 	}
 

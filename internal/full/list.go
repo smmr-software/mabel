@@ -15,18 +15,18 @@ import (
 	gloss "github.com/charmbracelet/lipgloss"
 )
 
-type item struct {
-	self    *torrent.Torrent
-	added   time.Time
-	created time.Time
-	comment string
-	program string
+type Item struct {
+	Self    *torrent.Torrent
+	Added   time.Time
+	Created time.Time
+	Comment string
+	Program string
 }
 
-func (i item) FilterValue() string { return "" }
-func (i item) Title() string       { return stripansi.Strip(i.self.Name()) }
-func (i item) Description() string {
-	t := i.self
+func (i Item) FilterValue() string { return "" }
+func (i Item) Title() string       { return stripansi.Strip(i.Self.Name()) }
+func (i Item) Description() string {
+	t := i.Self
 	info := t.Info()
 
 	if info == nil {
@@ -54,7 +54,7 @@ func (d itemDelegate) Spacing() int                              { return 0 }
 func (d itemDelegate) Update(msg tea.Msg, m *list.Model) tea.Cmd { return nil }
 func (d itemDelegate) Render(w io.Writer, m list.Model, index int, listItem list.Item) {
 	var (
-		i = listItem.(item)
+		i = listItem.(Item)
 
 		leftPadding = 2
 		topMargin   = 1
