@@ -5,10 +5,10 @@ import (
 	"strings"
 	"time"
 
+	"github.com/smmr-software/mabel/internal/shared"
+
 	"github.com/acarl005/stripansi"
-	"github.com/charmbracelet/bubbles/progress"
 	gloss "github.com/charmbracelet/lipgloss"
-	"github.com/dustin/go-humanize"
 )
 
 func (m model) View() string {
@@ -119,10 +119,7 @@ func torrentDetailView(m *model) string {
 	files := t.Files()
 
 	done := t.BytesCompleted()
-	total := t.Length()
 	upload := stats.BytesWritten.Int64()
-	percent := float64(done) / float64(total)
-	prog := progress.New(progress.WithDefaultGradient(), progress.WithoutPercentage())
 
 	icon := ""
 	if info.IsDir() {
@@ -155,22 +152,19 @@ func torrentDetailView(m *model) string {
 	var body strings.Builder
 	body.WriteString(bold.Render(stripansi.Strip(t.Name())) + "\n\n")
 	body.WriteString(fmt.Sprintf("%s%s%s", created, with, comment))
-	body.WriteString(prog.ViewAs(percent))
+	body.WriteString(shared.ProgressBar(t, nil))
 	body.WriteString(
 		fmt.Sprintf(
-			"\n\n%s  %d %s | %d/%d peers\n\n",
+			"\n\n%s  %d %s | %s\n\n",
 			icon, len(files), filesDesc,
-			stats.ActivePeers,
-			stats.TotalPeers,
+			shared.PeerStats(t),
 		),
 	)
 	body.WriteString(
 		fmt.Sprintf(
-			"%s/%s (%d%%) ↓ | %s ↑ | %s ratio\n\n",
-			humanize.Bytes(uint64(done)),
-			humanize.Bytes(uint64(total)),
-			uint64(percent*100),
-			humanize.Bytes(uint64(upload)),
+			"%s | %s | %s ratio\n\n",
+			shared.DownloadStats(t, true),
+			shared.UploadStats(t),
 			ratioDesc,
 		),
 	)

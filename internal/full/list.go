@@ -6,12 +6,13 @@ import (
 	"strings"
 	"time"
 
+	"github.com/smmr-software/mabel/internal/shared"
+
 	"github.com/acarl005/stripansi"
 	"github.com/anacrolix/torrent"
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 	gloss "github.com/charmbracelet/lipgloss"
-	"github.com/dustin/go-humanize"
 )
 
 type item struct {
@@ -27,7 +28,6 @@ func (i item) Title() string       { return stripansi.Strip(i.self.Name()) }
 func (i item) Description() string {
 	t := i.self
 	info := t.Info()
-	stats := t.Stats()
 
 	if info == nil {
 		return "getting torrent info..."
@@ -35,21 +35,15 @@ func (i item) Description() string {
 
 	var download string
 	if t.BytesMissing() != 0 {
-		download = fmt.Sprintf(
-			"%s/%s ↓",
-			humanize.Bytes(uint64(t.BytesCompleted())),
-			humanize.Bytes(uint64(t.Length())),
-		)
+		download = shared.DownloadStats(t, false)
 	} else {
 		download = "done!"
 	}
 
 	return fmt.Sprintf(
-		"%s | %s ↑ | %d/%d peers",
-		download,
-		humanize.Bytes(uint64(stats.BytesWritten.Int64())),
-		stats.ActivePeers,
-		stats.TotalPeers,
+		"%s | %s | %s", download,
+		shared.UploadStats(t),
+		shared.PeerStats(t),
 	)
 }
 
@@ -71,7 +65,7 @@ func (d itemDelegate) Render(w io.Writer, m list.Model, index int, listItem list
 
 		meta   = i.Description()
 		spacer = m.Width() - gloss.Width(meta) - leftPadding
-		name   = truncateForMinimumSpacing(i.Title(), &spacer, 5)
+		name   = shared.TruncateForMinimumSpacing(i.Title(), &spacer, 5)
 	)
 
 	if index == m.Index() {

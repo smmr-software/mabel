@@ -3,6 +3,7 @@ module github.com/smmr-software/mabel
 go 1.17
 
 require (
+	github.com/acarl005/stripansi v0.0.0-20180116102854-5a71ef0e047d
 	github.com/adrg/xdg v0.4.0
 	github.com/anacrolix/log v0.13.1
 	github.com/anacrolix/torrent v1.41.0
@@ -15,7 +16,6 @@ require (
 
 require (
 	github.com/RoaringBitmap/roaring v0.9.4 // indirect
-	github.com/acarl005/stripansi v0.0.0-20180116102854-5a71ef0e047d // indirect
 	github.com/anacrolix/chansync v0.3.0 // indirect
 	github.com/anacrolix/dht/v2 v2.16.1 // indirect
 	github.com/anacrolix/envpprof v1.2.1 // indirect
