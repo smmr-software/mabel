@@ -1,4 +1,4 @@
-package main
+package full
 
 import gloss "github.com/charmbracelet/lipgloss"
 
