@@ -8,8 +8,6 @@ import (
 
 	"github.com/smmr-software/mabel/internal/shared"
 
-	"github.com/adrg/xdg"
-
 	"github.com/anacrolix/log"
 	"github.com/anacrolix/torrent"
 	"github.com/anacrolix/torrent/storage"
@@ -115,9 +113,8 @@ func (m model) View() string {
 	return fmt.Sprintf("%s\n%s\n", name+strings.Repeat(" ", spacer)+meta, bar)
 }
 
-func Execute(t *string) {
-	dir := xdg.UserDirs.Download
-	model, err := initialModel(t, &dir)
+func Execute(t, dir *string) {
+	model, err := initialModel(t, dir)
 	if err != nil {
 		log.Fatal(err)
 	}
