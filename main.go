@@ -16,6 +16,7 @@ import (
 func main() {
 	var (
 		download = flag.StringP("download", "d", xdg.UserDirs.Download, "Set the default directory for downloaded torrents.")
+		port     = flag.UintP("port", "p", 42069, "Set the port number to which the client will bind.")
 		help     = flag.BoolP("help", "h", false, "Print this help message.")
 	)
 	flag.Parse()
@@ -34,6 +35,8 @@ func main() {
 		menu.WriteString(yellow.Render("OPTIONS:"))
 		menu.WriteString("\n    " + green.Render("-d") + ", " + green.Render("--download"))
 		menu.WriteString("\n        Set the torrent download directory. Defaults to $XDG_DOWNLOAD_DIR.")
+		menu.WriteString("\n    " + green.Render("-p") + ", " + green.Render("--port"))
+		menu.WriteString("\n        Set the port number to which the client will bind. Defaults to 42069.")
 		menu.WriteString("\n    " + green.Render("-h") + ", " + green.Render("--help"))
 		menu.WriteString("\n        Print this help message.\n\n")
 		menu.WriteString(yellow.Render("ARGS:"))
@@ -45,7 +48,7 @@ func main() {
 
 		fmt.Println(menu.String())
 	} else if len(args) == 1 {
-		mini.Execute(&args[0], download)
+		mini.Execute(&args[0], download, port)
 	} else {
 		full.Execute()
 	}

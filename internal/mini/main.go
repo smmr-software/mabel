@@ -25,11 +25,12 @@ type model struct {
 	client           *torrent.Client
 }
 
-func genMabelConfig() *torrent.ClientConfig {
+func genMabelConfig(port *uint) *torrent.ClientConfig {
 	config := torrent.NewDefaultClientConfig()
 	config.Logger = log.Default
 	config.Logger.Handlers = []log.Handler{log.DiscardHandler}
 	config.Seed = true
+	config.ListenPort = int(*port)
 
 	metadataDirectory := os.TempDir()
 	if metadataStorage, err := storage.NewDefaultPieceCompletionForDir(metadataDirectory); err != nil {
@@ -41,8 +42,8 @@ func genMabelConfig() *torrent.ClientConfig {
 	return config
 }
 
-func initialModel(t, dir *string) (model, error) {
-	client, err := torrent.NewClient(genMabelConfig())
+func initialModel(t, dir *string, port *uint) (model, error) {
+	client, err := torrent.NewClient(genMabelConfig(port))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -113,8 +114,8 @@ func (m model) View() string {
 	return fmt.Sprintf("%s\n%s\n", name+strings.Repeat(" ", spacer)+meta, bar)
 }
 
-func Execute(t, dir *string) {
-	model, err := initialModel(t, dir)
+func Execute(t, dir *string, port *uint) {
+	model, err := initialModel(t, dir, port)
 	if err != nil {
 		log.Fatal(err)
 	}
