@@ -1,4 +1,4 @@
-package shared
+package stats
 
 import (
 	"fmt"
@@ -6,7 +6,7 @@ import (
 	"github.com/anacrolix/torrent"
 )
 
-func PeerStats(t *torrent.Torrent) string {
+func Peers(t *torrent.Torrent) string {
 	stats := t.Stats()
 
 	return fmt.Sprintf(

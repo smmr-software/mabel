@@ -5,7 +5,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/smmr-software/mabel/internal/shared"
+	"github.com/smmr-software/mabel/internal/stats"
 
 	"github.com/acarl005/stripansi"
 	gloss "github.com/charmbracelet/lipgloss"
@@ -115,11 +115,11 @@ func torrentDetailView(m *model) string {
 	t := selected.Self
 
 	info := t.Info()
-	stats := t.Stats()
+	stts := t.Stats()
 	files := t.Files()
 
 	done := t.BytesCompleted()
-	upload := stats.BytesWritten.Int64()
+	upload := stts.BytesWritten.Int64()
 
 	icon := ""
 	if info.IsDir() {
@@ -152,19 +152,19 @@ func torrentDetailView(m *model) string {
 	var body strings.Builder
 	body.WriteString(bold.Render(stripansi.Strip(t.Name())) + "\n\n")
 	body.WriteString(fmt.Sprintf("%s%s%s", created, with, comment))
-	body.WriteString(shared.ProgressBar(t, nil))
+	body.WriteString(stats.ProgressBar(t, nil))
 	body.WriteString(
 		fmt.Sprintf(
 			"\n\n%s  %d %s | %s\n\n",
 			icon, len(files), filesDesc,
-			shared.PeerStats(t),
+			stats.Peers(t),
 		),
 	)
 	body.WriteString(
 		fmt.Sprintf(
 			"%s | %s | %s ratio\n\n",
-			shared.DownloadStats(t, true),
-			shared.UploadStats(t),
+			stats.Download(t, true),
+			stats.Upload(t),
 			ratioDesc,
 		),
 	)

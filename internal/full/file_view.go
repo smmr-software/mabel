@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/smmr-software/mabel/internal/shared"
+	"github.com/smmr-software/mabel/internal/utils"
 
 	"github.com/anacrolix/torrent"
 	gloss "github.com/charmbracelet/lipgloss"
@@ -50,7 +50,7 @@ func fileView(files *[]*torrent.File, w *int, h *int) string {
 
 		padding := width - gloss.Width(download) - 2
 
-		name := shared.TruncateForMinimumSpacing(
+		name := utils.TruncateForMinimumSpacing(
 			stripansi.Strip(f.DisplayPath()),
 			&padding, 5,
 		)

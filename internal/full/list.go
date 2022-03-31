@@ -6,7 +6,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/smmr-software/mabel/internal/shared"
+	"github.com/smmr-software/mabel/internal/stats"
+	"github.com/smmr-software/mabel/internal/utils"
 
 	"github.com/acarl005/stripansi"
 	"github.com/anacrolix/torrent"
@@ -35,15 +36,15 @@ func (i Item) Description() string {
 
 	var download string
 	if t.BytesMissing() != 0 {
-		download = shared.DownloadStats(t, false)
+		download = stats.Download(t, false)
 	} else {
 		download = "done!"
 	}
 
 	return fmt.Sprintf(
 		"%s | %s | %s", download,
-		shared.UploadStats(t),
-		shared.PeerStats(t),
+		stats.Upload(t),
+		stats.Peers(t),
 	)
 }
 
@@ -65,7 +66,7 @@ func (d itemDelegate) Render(w io.Writer, m list.Model, index int, listItem list
 
 		meta   = i.Description()
 		spacer = m.Width() - gloss.Width(meta) - leftPadding
-		name   = shared.TruncateForMinimumSpacing(i.Title(), &spacer, 5)
+		name   = utils.TruncateForMinimumSpacing(i.Title(), &spacer, 5)
 	)
 
 	if index == m.Index() {

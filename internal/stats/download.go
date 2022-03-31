@@ -1,4 +1,4 @@
-package shared
+package stats
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 	"github.com/dustin/go-humanize"
 )
 
-func DownloadStats(t *torrent.Torrent, showPercent bool) string {
+func Download(t *torrent.Torrent, showPercent bool) string {
 	var (
 		done    = t.BytesCompleted()
 		total   = t.Length()

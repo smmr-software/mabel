@@ -6,7 +6,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/smmr-software/mabel/internal/shared"
+	"github.com/smmr-software/mabel/internal/stats"
+	trrnt "github.com/smmr-software/mabel/internal/torrent"
+	"github.com/smmr-software/mabel/internal/utils"
 
 	"github.com/anacrolix/log"
 	"github.com/anacrolix/torrent"
@@ -62,7 +64,7 @@ func tick() tea.Cmd {
 }
 
 func (m model) Init() tea.Cmd {
-	cmd, _, _, err := shared.AddTorrent(m.torrent, m.saveDir, m.client)
+	cmd, _, _, err := trrnt.AddTorrent(m.torrent, m.saveDir, m.client)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -80,7 +82,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			m.client.Close()
 			return m, tea.Quit
 		}
-	case shared.TorrentDownloadStarted, tickMsg:
+	case trrnt.TorrentDownloadStarted, tickMsg:
 		return m, tick()
 	}
 	return m, nil
@@ -95,9 +97,9 @@ func (m model) View() string {
 	if info == nil {
 		meta = "getting torrent info..."
 	} else {
-		download = shared.DownloadStats(t, true)
-		upload = shared.UploadStats(t)
-		peers = shared.PeerStats(t)
+		download = stats.Download(t, true)
+		upload = stats.Upload(t)
+		peers = stats.Peers(t)
 		meta = fmt.Sprintf(
 			"%s | %s | %s",
 			download,
@@ -105,11 +107,11 @@ func (m model) View() string {
 			peers,
 		)
 
-		bar = shared.ProgressBar(t, &m.width)
+		bar = stats.ProgressBar(t, &m.width)
 	}
 
 	spacer := m.width - gloss.Width(meta)
-	name := shared.TruncateForMinimumSpacing(t.Name(), &spacer, 5)
+	name := utils.TruncateForMinimumSpacing(t.Name(), &spacer, 5)
 
 	return fmt.Sprintf("%s\n%s\n", name+strings.Repeat(" ", spacer)+meta, bar)
 }

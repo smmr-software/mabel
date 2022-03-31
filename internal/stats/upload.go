@@ -1,4 +1,4 @@
-package shared
+package stats
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 	"github.com/dustin/go-humanize"
 )
 
-func UploadStats(t *torrent.Torrent) string {
+func Upload(t *torrent.Torrent) string {
 	var (
 		stats  = t.Stats()
 		upload = stats.BytesWritten.Int64()

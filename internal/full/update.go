@@ -4,7 +4,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/smmr-software/mabel/internal/shared"
+	trrnt "github.com/smmr-software/mabel/internal/torrent"
 
 	torrent "github.com/anacrolix/torrent"
 	"github.com/charmbracelet/bubbles/key"
@@ -103,7 +103,7 @@ func addPromptKeyPress(m *model, msg *tea.KeyMsg) (tea.Model, tea.Cmd) {
 
 			m.addPrompt = initialAddPrompt()
 
-			cmd, nw, itm, err := shared.AddTorrent(&input, &dir, m.client)
+			cmd, nw, itm, err := trrnt.AddTorrent(&input, &dir, m.client)
 			if err != nil {
 				return m, reportError(err)
 			} else if nw {
