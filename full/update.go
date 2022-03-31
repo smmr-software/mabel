@@ -4,6 +4,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/smmr-software/mabel/internal/list"
 	"github.com/smmr-software/mabel/internal/styles"
 	trrnt "github.com/smmr-software/mabel/internal/torrent"
 
@@ -111,7 +112,7 @@ func addPromptKeyPress(m *model, msg *tea.KeyMsg) (tea.Model, tea.Cmd) {
 				m.list.SetItems(
 					append(
 						m.list.Items(),
-						Item(itm),
+						list.Item(itm),
 					),
 				)
 			}
@@ -152,7 +153,7 @@ func defaultKeyPress(m *model, msg *tea.KeyMsg) (tea.Model, tea.Cmd) {
 		m.addPrompt.torrent.Focus()
 		m.addPrompt.enabled = true
 	case key.Matches(*msg, homeKeys.details):
-		if t, ok := m.list.SelectedItem().(Item); ok && t.Self.Info() != nil {
+		if t, ok := m.list.SelectedItem().(list.Item); ok && t.Self.Info() != nil {
 			m.viewingTorrentDetails = true
 		}
 	case key.Matches(*msg, homeKeys.up):
@@ -164,8 +165,8 @@ func defaultKeyPress(m *model, msg *tea.KeyMsg) (tea.Model, tea.Cmd) {
 	case key.Matches(*msg, homeKeys.prev):
 		m.list.Paginator.PrevPage()
 	case key.Matches(*msg, homeKeys.delete):
-		zero := Item{}
-		if t, ok := m.list.SelectedItem().(Item); ok && t != zero {
+		zero := list.Item{}
+		if t, ok := m.list.SelectedItem().(list.Item); ok && t != zero {
 			t.Self.Drop()
 			m.list.RemoveItem(m.list.Index())
 		}

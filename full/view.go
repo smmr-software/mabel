@@ -5,6 +5,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/smmr-software/mabel/internal/list"
 	"github.com/smmr-software/mabel/internal/stats"
 	"github.com/smmr-software/mabel/internal/styles"
 
@@ -112,7 +113,7 @@ func torrentDetailView(m *model) string {
 		Height(m.height).
 		Inherit(styles.BorderWindow)
 
-	selected := m.list.SelectedItem().(Item)
+	selected := m.list.SelectedItem().(list.Item)
 	t := selected.Self
 
 	info := t.Info()

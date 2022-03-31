@@ -1,4 +1,4 @@
-package full
+package list
 
 import (
 	"fmt"
@@ -49,12 +49,12 @@ func (i Item) Description() string {
 	)
 }
 
-type itemDelegate struct{}
+type ItemDelegate struct{}
 
-func (d itemDelegate) Height() int                               { return 2 }
-func (d itemDelegate) Spacing() int                              { return 0 }
-func (d itemDelegate) Update(msg tea.Msg, m *list.Model) tea.Cmd { return nil }
-func (d itemDelegate) Render(w io.Writer, m list.Model, index int, listItem list.Item) {
+func (d ItemDelegate) Height() int                               { return 2 }
+func (d ItemDelegate) Spacing() int                              { return 0 }
+func (d ItemDelegate) Update(msg tea.Msg, m *list.Model) tea.Cmd { return nil }
+func (d ItemDelegate) Render(w io.Writer, m list.Model, index int, listItem list.Item) {
 	var (
 		i = listItem.(Item)
 

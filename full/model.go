@@ -4,12 +4,16 @@ import (
 	"os"
 	"strings"
 
+	"github.com/smmr-software/mabel/internal/list"
+
 	"github.com/adrg/xdg"
+
 	"github.com/anacrolix/log"
 	"github.com/anacrolix/torrent"
 	"github.com/anacrolix/torrent/storage"
+
 	"github.com/charmbracelet/bubbles/help"
-	"github.com/charmbracelet/bubbles/list"
+	clist "github.com/charmbracelet/bubbles/list"
 	"github.com/charmbracelet/bubbles/textinput"
 )
 
@@ -17,7 +21,7 @@ type model struct {
 	width, height         int
 	client                *torrent.Client
 	clientConfig          *torrent.ClientConfig
-	list                  *list.Model
+	list                  *clist.Model
 	help                  *help.Model
 	err                   error
 	addPrompt             *modelAddPrompt
@@ -87,8 +91,8 @@ func genMabelConfig() *torrent.ClientConfig {
 	return config
 }
 
-func genList() *list.Model {
-	list := list.New(make([]list.Item, 0), itemDelegate{}, 0, 0)
+func genList() *clist.Model {
+	list := clist.New(make([]clist.Item, 0), list.ItemDelegate{}, 0, 0)
 	list.SetShowTitle(false)
 	list.SetShowStatusBar(false)
 	list.SetFilteringEnabled(false)
