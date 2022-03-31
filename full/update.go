@@ -109,12 +109,7 @@ func addPromptKeyPress(m *model, msg *tea.KeyMsg) (tea.Model, tea.Cmd) {
 			if err != nil {
 				return m, reportError(err)
 			} else if nw {
-				m.list.SetItems(
-					append(
-						m.list.Items(),
-						list.Item(itm),
-					),
-				)
+				m.list.SetItems(append(m.list.Items(), itm))
 			}
 
 			return m, cmd

@@ -5,6 +5,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/smmr-software/mabel/internal/list"
+
 	"github.com/anacrolix/torrent"
 	"github.com/anacrolix/torrent/metainfo"
 	"github.com/anacrolix/torrent/storage"
@@ -16,19 +18,12 @@ import (
 )
 
 type TorrentDownloadStarted struct{}
-type Item struct {
-	Self    *torrent.Torrent
-	Added   time.Time
-	Created time.Time
-	Comment string
-	Program string
-}
 
 var magnetPrefix = "magnet:"
 var infohashPrefix = "infohash:"
 var hashLength = 40
 
-func AddTorrent(t, dir *string, client *torrent.Client) (tea.Cmd, bool, Item, error) {
+func AddTorrent(t, dir *string, client *torrent.Client) (tea.Cmd, bool, list.Item, error) {
 	store := getStorage(dir)
 	if strings.HasPrefix(*t, magnetPrefix) {
 		return addMagnetLink(t, &store, client)
@@ -56,22 +51,22 @@ func getStorage(dir *string) storage.ClientImpl {
 	}
 }
 
-func addMagnetLink(input *string, dir *storage.ClientImpl, client *torrent.Client) (tea.Cmd, bool, Item, error) {
+func addMagnetLink(input *string, dir *storage.ClientImpl, client *torrent.Client) (tea.Cmd, bool, list.Item, error) {
 	spec, err := torrent.TorrentSpecFromMagnetUri(*input)
 	if err != nil {
-		return nil, false, Item{}, err
+		return nil, false, list.Item{}, err
 	}
 	spec.Storage = *dir
 
 	t, nw, err := client.AddTorrentSpec(spec)
 	if err != nil {
-		return nil, false, Item{}, err
+		return nil, false, list.Item{}, err
 	}
 
-	return DownloadTorrent(t), nw, Item{Self: t, Added: time.Now()}, nil
+	return DownloadTorrent(t), nw, list.Item{Self: t, Added: time.Now()}, nil
 }
 
-func addInfoHash(input *string, dir *storage.ClientImpl, client *torrent.Client) (tea.Cmd, bool, Item, error) {
+func addInfoHash(input *string, dir *storage.ClientImpl, client *torrent.Client) (tea.Cmd, bool, list.Item, error) {
 	if strings.HasPrefix(*input, infohashPrefix) {
 		*input = strings.TrimPrefix(*input, infohashPrefix)
 	}
@@ -79,18 +74,18 @@ func addInfoHash(input *string, dir *storage.ClientImpl, client *torrent.Client)
 	hash := metainfo.NewHashFromHex(*input)
 	t, nw := client.AddTorrentInfoHashWithStorage(hash, *dir)
 
-	return DownloadTorrent(t), nw, Item{Self: t, Added: time.Now()}, nil
+	return DownloadTorrent(t), nw, list.Item{Self: t, Added: time.Now()}, nil
 }
 
-func addFromFile(input *string, dir *storage.ClientImpl, client *torrent.Client) (tea.Cmd, bool, Item, error) {
+func addFromFile(input *string, dir *storage.ClientImpl, client *torrent.Client) (tea.Cmd, bool, list.Item, error) {
 	path, err := home.Expand(*input)
 	if err != nil {
-		return nil, false, Item{}, err
+		return nil, false, list.Item{}, err
 	}
 
 	meta, err := metainfo.LoadFromFile(path)
 	if err != nil {
-		return nil, false, Item{}, err
+		return nil, false, list.Item{}, err
 	}
 
 	spec := torrent.TorrentSpecFromMetaInfo(meta)
@@ -98,11 +93,11 @@ func addFromFile(input *string, dir *storage.ClientImpl, client *torrent.Client)
 
 	t, nw, err := client.AddTorrentSpec(spec)
 	if err != nil {
-		return nil, false, Item{}, err
+		return nil, false, list.Item{}, err
 	}
 
 	return DownloadTorrent(t), nw,
-		Item{
+		list.Item{
 			Self:    t,
 			Added:   time.Now(),
 			Created: time.Unix(meta.CreationDate, 0),
