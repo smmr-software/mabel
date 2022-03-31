@@ -4,6 +4,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/smmr-software/mabel/internal/styles"
 	trrnt "github.com/smmr-software/mabel/internal/torrent"
 
 	torrent "github.com/anacrolix/torrent"
@@ -25,8 +26,8 @@ func reportError(err error) tea.Cmd {
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
-		width := msg.Width - borderWindow.GetHorizontalBorderSize()
-		height := msg.Height - borderWindow.GetHorizontalBorderSize()
+		width := msg.Width - styles.BorderWindow.GetHorizontalBorderSize()
+		height := msg.Height - styles.BorderWindow.GetHorizontalBorderSize()
 
 		m.width = width
 		m.help.Width = width

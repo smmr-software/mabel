@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/smmr-software/mabel/internal/styles"
 	"github.com/smmr-software/mabel/internal/utils"
 
 	"github.com/anacrolix/torrent"
@@ -19,7 +20,7 @@ func fileView(files *[]*torrent.File, w *int, h *int) string {
 	box := gloss.NewStyle().
 		Width(width).
 		Height(height).
-		Inherit(borderWindow).
+		Inherit(styles.BorderWindow).
 		UnsetAlign()
 	if len(*files) < height {
 		box.UnsetHeight()

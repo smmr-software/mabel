@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/smmr-software/mabel/internal/stats"
+	"github.com/smmr-software/mabel/internal/styles"
 
 	"github.com/acarl005/stripansi"
 	gloss "github.com/charmbracelet/lipgloss"
@@ -29,12 +30,12 @@ func portStartupFailureView(m *model) string {
 	fullscreen := gloss.NewStyle().
 		Width(m.width).
 		Height(m.height).
-		Inherit(borderWindow)
+		Inherit(styles.BorderWindow)
 
 	var body strings.Builder
-	body.WriteString(bold.Render("Port Binding Failure"))
+	body.WriteString(styles.Bold.Render("Port Binding Failure"))
 	body.WriteString("\nplease provide an unused port number for the client to bind with\n\n")
-	body.WriteString(borderWindow.Render(m.portStartupFailure.port.View()))
+	body.WriteString(styles.BorderWindow.Render(m.portStartupFailure.port.View()))
 
 	return fullscreen.Render(
 		gloss.Place(
@@ -49,13 +50,13 @@ func addPromptView(m *model) string {
 	fullscreen := gloss.NewStyle().
 		Width(m.width).
 		Height(m.height).
-		Inherit(borderWindow)
+		Inherit(styles.BorderWindow)
 
 	var body strings.Builder
 	body.WriteString("Add Torrent\n")
-	body.WriteString(borderWindow.Render(m.addPrompt.torrent.View()))
+	body.WriteString(styles.BorderWindow.Render(m.addPrompt.torrent.View()))
 	body.WriteString("\n\nSave Directory (Optional)\n")
-	body.WriteString(borderWindow.Render(m.addPrompt.saveDir.View()))
+	body.WriteString(styles.BorderWindow.Render(m.addPrompt.saveDir.View()))
 
 	help := m.help.View(addPromptKeys)
 	height := m.height - gloss.Height(help) - 1
@@ -77,14 +78,14 @@ func errorView(m *model) string {
 	fullscreen := gloss.NewStyle().
 		Width(m.width).
 		Height(m.height).
-		Inherit(borderWindow).
-		BorderForeground(errorRed)
+		Inherit(styles.BorderWindow).
+		BorderForeground(styles.ErrorRed)
 	popupWindow := gloss.NewStyle().
 		Width(popupWidth).
 		Height(popupHeight).
 		Padding(0, padding).
-		Inherit(borderWindow).
-		BorderForeground(errorRed)
+		Inherit(styles.BorderWindow).
+		BorderForeground(styles.ErrorRed)
 	header := gloss.NewStyle().Bold(true)
 
 	popup := popupWindow.Render(gloss.Place(
@@ -93,7 +94,7 @@ func errorView(m *model) string {
 		header.Render("Error")+"\n"+m.err.Error(),
 	))
 
-	help := tooltip.Render("press any key to return home")
+	help := styles.Tooltip.Render("press any key to return home")
 	height := m.height - gloss.Height(help) - 1
 
 	content := gloss.Place(
@@ -109,7 +110,7 @@ func torrentDetailView(m *model) string {
 	fullscreen := gloss.NewStyle().
 		Width(m.width).
 		Height(m.height).
-		Inherit(borderWindow)
+		Inherit(styles.BorderWindow)
 
 	selected := m.list.SelectedItem().(Item)
 	t := selected.Self
@@ -150,7 +151,7 @@ func torrentDetailView(m *model) string {
 	}
 
 	var body strings.Builder
-	body.WriteString(bold.Render(stripansi.Strip(t.Name())) + "\n\n")
+	body.WriteString(styles.Bold.Render(stripansi.Strip(t.Name())) + "\n\n")
 	body.WriteString(fmt.Sprintf("%s%s%s", created, with, comment))
 	body.WriteString(stats.ProgressBar(t, nil))
 	body.WriteString(
@@ -177,7 +178,7 @@ func torrentDetailView(m *model) string {
 		)
 	}
 
-	help := tooltip.Render("press any key to return home")
+	help := styles.Tooltip.Render("press any key to return home")
 	height := m.height - gloss.Height(help) - 1
 
 	content := gloss.Place(
@@ -193,7 +194,7 @@ func mainView(m *model) string {
 	fullscreen := gloss.NewStyle().
 		Width(m.width).
 		Height(m.height).
-		Inherit(borderWindow)
+		Inherit(styles.BorderWindow)
 
 	var content string
 	if torrents := m.client.Torrents(); len(torrents) > 0 {

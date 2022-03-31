@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/smmr-software/mabel/internal/stats"
+	"github.com/smmr-software/mabel/internal/styles"
 	"github.com/smmr-software/mabel/internal/utils"
 
 	"github.com/acarl005/stripansi"
@@ -61,8 +62,8 @@ func (d itemDelegate) Render(w io.Writer, m list.Model, index int, listItem list
 		topMargin   = 1
 
 		entry = gloss.NewStyle().Width(m.Width()).PaddingLeft(leftPadding).MarginTop(topMargin)
-		title = gloss.NewStyle().Foreground(primaryBlue)
-		desc  = gloss.NewStyle().Foreground(lightBlue)
+		title = gloss.NewStyle().Foreground(styles.PrimaryBlue)
+		desc  = gloss.NewStyle().Foreground(styles.LightBlue)
 
 		meta   = i.Description()
 		spacer = m.Width() - gloss.Width(meta) - leftPadding
@@ -72,7 +73,7 @@ func (d itemDelegate) Render(w io.Writer, m list.Model, index int, listItem list
 	if index == m.Index() {
 		entry = entry.
 			Border(gloss.NormalBorder(), false, false, false, true).
-			BorderForeground(darkBlue).
+			BorderForeground(styles.DarkBlue).
 			PaddingLeft(1)
 		name = title.Render(name)
 		meta = desc.Render(meta)
