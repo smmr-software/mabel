@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/smmr-software/mabel/internal/full"
-	"github.com/smmr-software/mabel/internal/mini"
+	"github.com/smmr-software/mabel/full"
+	"github.com/smmr-software/mabel/mini"
 
 	"github.com/adrg/xdg"
 	flag "github.com/spf13/pflag"
