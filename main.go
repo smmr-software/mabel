@@ -50,6 +50,6 @@ func main() {
 	} else if len(args) == 1 {
 		mini.Execute(&args[0], download, port)
 	} else {
-		full.Execute()
+		full.Execute(&args, download, port)
 	}
 }

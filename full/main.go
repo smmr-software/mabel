@@ -10,8 +10,8 @@ func (m model) Init() tea.Cmd {
 	return tick()
 }
 
-func Execute() {
-	model, err := initialModel()
+func Execute(torrents *[]string, dir *string, port *uint) {
+	model, err := initialModel(torrents, dir, port)
 	if err != nil {
 		log.Fatal(err)
 	}

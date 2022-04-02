@@ -6,8 +6,6 @@ import (
 
 	"github.com/smmr-software/mabel/internal/list"
 
-	"github.com/adrg/xdg"
-
 	"github.com/anacrolix/log"
 	"github.com/anacrolix/torrent"
 	"github.com/anacrolix/torrent/storage"
@@ -18,15 +16,20 @@ import (
 )
 
 type model struct {
-	width, height         int
-	client                *torrent.Client
-	clientConfig          *torrent.ClientConfig
-	list                  *clist.Model
-	help                  *help.Model
-	err                   error
+	width, height   int
+	startupTorrents *[]string
+
+	client       *torrent.Client
+	clientConfig *torrent.ClientConfig
+
+	list *clist.Model
+	help *help.Model
+
 	addPrompt             *modelAddPrompt
-	viewingTorrentDetails bool
 	portStartupFailure    *portStartupFailure
+	viewingTorrentDetails bool
+
+	err error
 }
 
 type modelAddPrompt struct {
@@ -41,20 +44,12 @@ type portStartupFailure struct {
 	port    textinput.Model
 }
 
-func initialAddPrompt() *modelAddPrompt {
+func initialAddPrompt(dir *string) *modelAddPrompt {
 	torrent := textinput.New()
 	torrent.Width = 32
 	saveDir := torrent
 
-	cache, _ := os.UserCacheDir()
-	cache += "/mabel/lastDownloadDir"
-	bytes, err := os.ReadFile(cache)
-	if err != nil {
-		saveDir.SetValue(xdg.UserDirs.Download)
-	} else {
-		saveDir.SetValue(string(bytes))
-	}
-
+	saveDir.SetValue(*dir)
 	saveDir.Blur()
 
 	s := modelAddPrompt{
@@ -75,11 +70,12 @@ func initialPortStartupFailure() *portStartupFailure {
 	return &port
 }
 
-func genMabelConfig() *torrent.ClientConfig {
+func genMabelConfig(port *uint) *torrent.ClientConfig {
 	config := torrent.NewDefaultClientConfig()
 	config.Logger = log.Default
 	config.Logger.Handlers = []log.Handler{log.DiscardHandler}
 	config.Seed = true
+	config.ListenPort = int(*port)
 
 	metadataDirectory := os.TempDir()
 	if metadataStorage, err := storage.NewDefaultPieceCompletionForDir(metadataDirectory); err != nil {
@@ -100,17 +96,21 @@ func genList() *clist.Model {
 	return &list
 }
 
-func initialModel() (model, error) {
-	config := genMabelConfig()
+func initialModel(torrents *[]string, dir *string, port *uint) (model, error) {
+	config := genMabelConfig(port)
 	client, err := torrent.NewClient(config)
 	hlp := help.New()
 
 	m := model{
-		client:             client,
-		clientConfig:       config,
-		list:               genList(),
-		help:               &hlp,
-		addPrompt:          initialAddPrompt(),
+		startupTorrents: torrents,
+
+		client:       client,
+		clientConfig: config,
+
+		list: genList(),
+		help: &hlp,
+
+		addPrompt:          initialAddPrompt(dir),
 		portStartupFailure: initialPortStartupFailure(),
 	}
 
