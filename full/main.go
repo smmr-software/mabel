@@ -3,11 +3,19 @@ package full
 import (
 	"log"
 
+	"github.com/smmr-software/mabel/internal/torrent"
+
 	tea "github.com/charmbracelet/bubbletea"
 )
 
 func (m model) Init() tea.Cmd {
-	return tick()
+	return tea.Batch(
+		torrent.AddTorrents(
+			m.startupTorrents,
+			m.dir, m.client, m.list,
+		),
+		tick(),
+	)
 }
 
 func Execute(torrents *[]string, dir *string, port *uint) {

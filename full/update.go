@@ -73,13 +73,13 @@ func portStartupFailureKeyPress(m *model, msg *tea.KeyMsg) (tea.Model, tea.Cmd) 
 		m.portStartupFailure.port, cmd = m.portStartupFailure.port.Update(*msg)
 		return m, cmd
 	default:
-		port, err := strconv.Atoi(m.portStartupFailure.port.Value())
+		prt, err := strconv.Atoi(m.portStartupFailure.port.Value())
 		if err != nil {
 			return m, reportError(err)
 		}
+		port := uint(prt)
 
-		config := genMabelConfig()
-		config.ListenPort = port
+		config := genMabelConfig(&port)
 		client, err := torrent.NewClient(config)
 		if err != nil {
 			return m, reportError(err)
@@ -96,14 +96,14 @@ func portStartupFailureKeyPress(m *model, msg *tea.KeyMsg) (tea.Model, tea.Cmd) 
 func addPromptKeyPress(m *model, msg *tea.KeyMsg) (tea.Model, tea.Cmd) {
 	switch {
 	case key.Matches(*msg, addPromptKeys.quit):
-		m.addPrompt = initialAddPrompt()
+		m.addPrompt = initialAddPrompt(m.dir)
 		return m, nil
 	case key.Matches(*msg, addPromptKeys.forward):
 		if m.addPrompt.dir {
 			input := m.addPrompt.torrent.Value()
 			dir := m.addPrompt.saveDir.Value()
 
-			m.addPrompt = initialAddPrompt()
+			m.addPrompt = initialAddPrompt(m.dir)
 
 			cmd, err := trrnt.AddTorrent(&input, &dir, m.client, m.list)
 			if err != nil {

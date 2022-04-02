@@ -17,11 +17,11 @@ var magnetPrefix = "magnet:"
 var infohashPrefix = "infohash:"
 var hashLength = 40
 
-func AddTorrents(t *[]*string, dir *string, client *torrent.Client, l *list.Model) tea.Cmd {
+func AddTorrents(t *[]string, dir *string, client *torrent.Client, l *list.Model) tea.Cmd {
 	cmds := make([]tea.Cmd, 0)
 
 	for _, v := range *t {
-		cmd, err := AddTorrent(v, dir, client, l)
+		cmd, err := AddTorrent(&v, dir, client, l)
 		if err != nil {
 			cmds = append(cmds, cmd)
 		}

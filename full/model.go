@@ -18,6 +18,7 @@ import (
 type model struct {
 	width, height   int
 	startupTorrents *[]string
+	dir             *string
 
 	client       *torrent.Client
 	clientConfig *torrent.ClientConfig
@@ -103,6 +104,7 @@ func initialModel(torrents *[]string, dir *string, port *uint) (model, error) {
 
 	m := model{
 		startupTorrents: torrents,
+		dir:             dir,
 
 		client:       client,
 		clientConfig: config,
