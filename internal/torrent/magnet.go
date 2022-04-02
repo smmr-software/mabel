@@ -8,20 +8,28 @@ import (
 	"github.com/anacrolix/torrent"
 	"github.com/anacrolix/torrent/storage"
 
+	clist "github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 )
 
-func addMagnetLink(input *string, dir *storage.ClientImpl, client *torrent.Client) (tea.Cmd, bool, list.Item, error) {
+func addMagnetLink(input *string, dir *storage.ClientImpl, client *torrent.Client, l *clist.Model) (tea.Cmd, error) {
 	spec, err := torrent.TorrentSpecFromMagnetUri(*input)
 	if err != nil {
-		return nil, false, list.Item{}, err
+		return nil, err
 	}
 	spec.Storage = *dir
 
 	t, nw, err := client.AddTorrentSpec(spec)
 	if err != nil {
-		return nil, false, list.Item{}, err
+		return nil, err
+	} else if l != nil && nw {
+		l.SetItems(
+			append(
+				l.Items(),
+				list.Item{Self: t, Added: time.Now()},
+			),
+		)
 	}
 
-	return downloadTorrent(t), nw, list.Item{Self: t, Added: time.Now()}, nil
+	return downloadTorrent(t), nil
 }

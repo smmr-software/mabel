@@ -4,11 +4,10 @@ import (
 	"os"
 	"strings"
 
-	"github.com/smmr-software/mabel/internal/list"
-
 	"github.com/anacrolix/torrent"
 	"github.com/anacrolix/torrent/storage"
 
+	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 )
 
@@ -18,14 +17,14 @@ var magnetPrefix = "magnet:"
 var infohashPrefix = "infohash:"
 var hashLength = 40
 
-func AddTorrent(t, dir *string, client *torrent.Client) (tea.Cmd, bool, list.Item, error) {
+func AddTorrent(t, dir *string, client *torrent.Client, l *list.Model) (tea.Cmd, error) {
 	store := getStorage(dir)
 	if strings.HasPrefix(*t, magnetPrefix) {
-		return addMagnetLink(t, &store, client)
+		return addMagnetLink(t, &store, client, l)
 	} else if strings.HasPrefix(*t, infohashPrefix) || len(*t) == hashLength {
-		return addInfoHash(t, &store, client)
+		return addInfoHash(t, &store, client, l)
 	} else {
-		return addFromFile(t, &store, client)
+		return addFromFile(t, &store, client, l)
 	}
 }
 

@@ -12,18 +12,19 @@ import (
 	"github.com/acarl005/stripansi"
 	home "github.com/mitchellh/go-homedir"
 
+	clist "github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 )
 
-func addFromFile(input *string, dir *storage.ClientImpl, client *torrent.Client) (tea.Cmd, bool, list.Item, error) {
+func addFromFile(input *string, dir *storage.ClientImpl, client *torrent.Client, l *clist.Model) (tea.Cmd, error) {
 	path, err := home.Expand(*input)
 	if err != nil {
-		return nil, false, list.Item{}, err
+		return nil, err
 	}
 
 	meta, err := metainfo.LoadFromFile(path)
 	if err != nil {
-		return nil, false, list.Item{}, err
+		return nil, err
 	}
 
 	spec := torrent.TorrentSpecFromMetaInfo(meta)
@@ -31,15 +32,21 @@ func addFromFile(input *string, dir *storage.ClientImpl, client *torrent.Client)
 
 	t, nw, err := client.AddTorrentSpec(spec)
 	if err != nil {
-		return nil, false, list.Item{}, err
+		return nil, err
+	} else if l != nil && nw {
+		l.SetItems(
+			append(
+				l.Items(),
+				list.Item{
+					Self:    t,
+					Added:   time.Now(),
+					Created: time.Unix(meta.CreationDate, 0),
+					Comment: stripansi.Strip(meta.Comment),
+					Program: stripansi.Strip(meta.CreatedBy),
+				},
+			),
+		)
 	}
 
-	return downloadTorrent(t), nw,
-		list.Item{
-			Self:    t,
-			Added:   time.Now(),
-			Created: time.Unix(meta.CreationDate, 0),
-			Comment: stripansi.Strip(meta.Comment),
-			Program: stripansi.Strip(meta.CreatedBy),
-		}, nil
+	return downloadTorrent(t), nil
 }

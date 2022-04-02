@@ -10,16 +10,25 @@ import (
 	"github.com/anacrolix/torrent/metainfo"
 	"github.com/anacrolix/torrent/storage"
 
+	clist "github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 )
 
-func addInfoHash(input *string, dir *storage.ClientImpl, client *torrent.Client) (tea.Cmd, bool, list.Item, error) {
+func addInfoHash(input *string, dir *storage.ClientImpl, client *torrent.Client, l *clist.Model) (tea.Cmd, error) {
 	if strings.HasPrefix(*input, infohashPrefix) {
 		*input = strings.TrimPrefix(*input, infohashPrefix)
 	}
 
 	hash := metainfo.NewHashFromHex(*input)
 	t, nw := client.AddTorrentInfoHashWithStorage(hash, *dir)
+	if l != nil && nw {
+		l.SetItems(
+			append(
+				l.Items(),
+				list.Item{Self: t, Added: time.Now()},
+			),
+		)
+	}
 
-	return downloadTorrent(t), nw, list.Item{Self: t, Added: time.Now()}, nil
+	return downloadTorrent(t), nil
 }

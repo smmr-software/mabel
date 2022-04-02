@@ -64,7 +64,7 @@ func tick() tea.Cmd {
 }
 
 func (m model) Init() tea.Cmd {
-	cmd, _, _, err := trrnt.AddTorrent(m.torrent, m.saveDir, m.client)
+	cmd, err := trrnt.AddTorrent(m.torrent, m.saveDir, m.client, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
