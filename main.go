@@ -47,7 +47,20 @@ func main() {
 		menu.WriteString("\n        torrents added.")
 
 		fmt.Println(menu.String())
-	} else if len(args) == 1 {
+		return
+	}
+
+	conf := getConfig()
+	downloadFlag := flag.Lookup("download")
+	portFlag := flag.Lookup("port")
+	if !downloadFlag.Changed && conf.Download != "" {
+		flag.Set("download", conf.Download)
+	}
+	if !portFlag.Changed && conf.Port != 0 {
+		flag.Set("port", fmt.Sprint(conf.Port))
+	}
+
+	if flag.NArg() == 1 {
 		mini.Execute(&args[0], download, port)
 	} else {
 		full.Execute(&args, download, port)

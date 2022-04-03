@@ -3,6 +3,7 @@ module github.com/smmr-software/mabel
 go 1.17
 
 require (
+	github.com/BurntSushi/toml v0.3.1
 	github.com/acarl005/stripansi v0.0.0-20180116102854-5a71ef0e047d
 	github.com/adrg/xdg v0.4.0
 	github.com/anacrolix/log v0.13.1
