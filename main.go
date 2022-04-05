@@ -13,11 +13,18 @@ import (
 	gloss "github.com/charmbracelet/lipgloss"
 )
 
+var (
+	version = "v0.0.0"
+	commit  = "unknown"
+	builtBy = "unknown"
+)
+
 func main() {
 	var (
 		download = flag.StringP("download", "d", xdg.UserDirs.Download, "Set the default directory for downloaded torrents.")
 		port     = flag.UintP("port", "p", 42069, "Set the port number to which the client will bind.")
 		help     = flag.BoolP("help", "h", false, "Print this help message.")
+		vrsn     = flag.BoolP("version", "v", false, "Print version information.")
 	)
 	flag.Parse()
 	args := flag.Args()
@@ -38,7 +45,9 @@ func main() {
 		menu.WriteString("\n    " + green.Render("-p") + ", " + green.Render("--port"))
 		menu.WriteString("\n        Set the port number to which the client will bind. [default: " + green.Render("42069") + "]")
 		menu.WriteString("\n    " + green.Render("-h") + ", " + green.Render("--help"))
-		menu.WriteString("\n        Print this help message.\n\n")
+		menu.WriteString("\n        Print this help message.")
+		menu.WriteString("\n    " + green.Render("-v") + ", " + green.Render("--version"))
+		menu.WriteString("\n        Print version information.\n\n")
 		menu.WriteString(yellow.Render("ARGS:"))
 		menu.WriteString("\n    " + green.Render("<TORRENT>..."))
 		menu.WriteString("\n        An optional list of infohashes, magnet links, and/or torrent")
@@ -47,6 +56,12 @@ func main() {
 		menu.WriteString("\n        torrents added.")
 
 		fmt.Println(menu.String())
+		return
+	} else if *vrsn {
+		fmt.Printf(
+			"Mabel %s\nCommit: %s\nBuilt by: %s\n",
+			version, commit, builtBy,
+		)
 		return
 	}
 
