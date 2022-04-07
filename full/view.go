@@ -28,15 +28,19 @@ func (m model) View() string {
 }
 
 func portStartupFailureView(m *model) string {
+	BorderWindow := gloss.NewStyle().
+		Align(gloss.Center).
+		BorderStyle(styles.Border).
+		BorderForeground(m.theme.Primary)
 	fullscreen := gloss.NewStyle().
 		Width(m.width).
 		Height(m.height).
-		Inherit(styles.BorderWindow)
+		Inherit(BorderWindow)
 
 	var body strings.Builder
 	body.WriteString(styles.Bold.Render("Port Binding Failure"))
 	body.WriteString("\nplease provide an unused port number for the client to bind with\n\n")
-	body.WriteString(styles.BorderWindow.Render(m.portStartupFailure.port.View()))
+	body.WriteString(BorderWindow.Render(m.portStartupFailure.port.View()))
 
 	return fullscreen.Render(
 		gloss.Place(
@@ -48,16 +52,20 @@ func portStartupFailureView(m *model) string {
 }
 
 func addPromptView(m *model) string {
+	BorderWindow := gloss.NewStyle().
+		Align(gloss.Center).
+		BorderStyle(styles.Border).
+		BorderForeground(m.theme.Primary)
 	fullscreen := gloss.NewStyle().
 		Width(m.width).
 		Height(m.height).
-		Inherit(styles.BorderWindow)
+		Inherit(BorderWindow)
 
 	var body strings.Builder
 	body.WriteString("Add Torrent\n")
-	body.WriteString(styles.BorderWindow.Render(m.addPrompt.torrent.View()))
+	body.WriteString(BorderWindow.Render(m.addPrompt.torrent.View()))
 	body.WriteString("\n\nSave Directory (Optional)\n")
-	body.WriteString(styles.BorderWindow.Render(m.addPrompt.saveDir.View()))
+	body.WriteString(BorderWindow.Render(m.addPrompt.saveDir.View()))
 
 	help := m.help.View(addPromptKeys)
 	height := m.height - gloss.Height(help) - 1
@@ -76,16 +84,20 @@ func errorView(m *model) string {
 	popupHeight := m.height / 4
 	padding := m.height / 16
 
+	BorderWindow := gloss.NewStyle().
+		Align(gloss.Center).
+		BorderStyle(styles.Border).
+		BorderForeground(m.theme.Primary)
 	fullscreen := gloss.NewStyle().
 		Width(m.width).
 		Height(m.height).
-		Inherit(styles.BorderWindow).
+		Inherit(BorderWindow).
 		BorderForeground(m.theme.Error)
 	popupWindow := gloss.NewStyle().
 		Width(popupWidth).
 		Height(popupHeight).
 		Padding(0, padding).
-		Inherit(styles.BorderWindow).
+		Inherit(BorderWindow).
 		BorderForeground(m.theme.Error)
 	header := gloss.NewStyle().Bold(true)
 
@@ -94,7 +106,7 @@ func errorView(m *model) string {
 		gloss.Center, gloss.Center,
 		header.Render("Error")+"\n"+m.err.Error(),
 	))
-	
+
 	tooltip := gloss.NewStyle().Foreground(m.theme.Tooltip).Padding(0, 2)
 	help := tooltip.Render("press any key to return home")
 	height := m.height - gloss.Height(help) - 1
@@ -109,10 +121,14 @@ func errorView(m *model) string {
 }
 
 func torrentDetailView(m *model) string {
+	BorderWindow := gloss.NewStyle().
+		Align(gloss.Center).
+		BorderStyle(styles.Border).
+		BorderForeground(m.theme.Primary)
 	fullscreen := gloss.NewStyle().
 		Width(m.width).
 		Height(m.height).
-		Inherit(styles.BorderWindow)
+		Inherit(BorderWindow)
 
 	selected := m.list.SelectedItem().(list.Item)
 	t := selected.Self
@@ -175,7 +191,7 @@ func torrentDetailView(m *model) string {
 		body.WriteString(
 			fmt.Sprintf(
 				"\n\nContent\n%s",
-				fileView(&files, &m.width, &m.height),
+				fileView(&files, &m.width, &m.height, m.theme),
 			),
 		)
 	}
@@ -194,10 +210,14 @@ func torrentDetailView(m *model) string {
 }
 
 func mainView(m *model) string {
+	BorderWindow := gloss.NewStyle().
+		Align(gloss.Center).
+		BorderStyle(styles.Border).
+		BorderForeground(m.theme.Primary)
 	fullscreen := gloss.NewStyle().
 		Width(m.width).
 		Height(m.height).
-		Inherit(styles.BorderWindow)
+		Inherit(BorderWindow)
 
 	var content string
 	if torrents := m.client.Torrents(); len(torrents) > 0 {
