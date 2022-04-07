@@ -33,10 +33,10 @@ var DefaultTheme = ColorTheme{
 	},
 }
 
-/*var PlaceholderTheme = ColorTheme{
+var PlaceholderTheme = ColorTheme{
 	Primary: gloss.AdaptiveColor{
 		Light: "#464FB6",
-		Dark:  "#5FFFD7",
+		Dark:  "#5FFFD7", 
 	},
 	Light: gloss.AdaptiveColor{
 		Light: "#9EA4D0",
@@ -54,4 +54,4 @@ var DefaultTheme = ColorTheme{
 		Light: "#4A4A4A",
 		Dark:  "B2B2B2",
 	},
-}*/
+}

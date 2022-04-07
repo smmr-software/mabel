@@ -14,13 +14,16 @@ import (
 	"github.com/dustin/go-humanize"
 )
 
-func fileView(files *[]*torrent.File, w *int, h *int) string {
+func fileView(files *[]*torrent.File, w *int, h *int, theme *styles.ColorTheme) string {
 	width := *w / 3
 	height := *h / 4
 	box := gloss.NewStyle().
 		Width(width).
 		Height(height).
-		Inherit(styles.BorderWindow).
+		Inherit(gloss.NewStyle().
+			Align(gloss.Center).
+			BorderStyle(styles.Border).
+			BorderForeground(theme.Primary)).
 		UnsetAlign()
 	if len(*files) < height {
 		box.UnsetHeight()

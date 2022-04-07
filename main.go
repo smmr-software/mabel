@@ -85,9 +85,9 @@ func main() {
 	}
 
 	realTheme := styles.DefaultTheme
-	/*if *theme == "placeholder" {
+	if *theme == "placeholder" {
 		realTheme = styles.PlaceholderTheme
-	}*/
+	}
 
 	if flag.NArg() == 1 {
 		mini.Execute(&args[0], download, port, &realTheme)
