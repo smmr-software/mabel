@@ -84,14 +84,14 @@ func main() {
 		flag.Set("theme", conf.Theme)
 	}
 
-	realtheme := styles.DefaultTheme
+	realTheme := styles.DefaultTheme
 	/*if *theme == "placeholder" {
-		realtheme = styles.PlaceholderTheme
+		realTheme = styles.PlaceholderTheme
 	}*/
 
 	if flag.NArg() == 1 {
-		mini.Execute(&args[0], download, port, &realtheme)
+		mini.Execute(&args[0], download, port, &realTheme)
 	} else {
-		full.Execute(&args, download, port, &realtheme)
+		full.Execute(&args, download, port, &realTheme)
 	}
 }

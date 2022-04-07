@@ -94,6 +94,7 @@ func errorView(m *model) string {
 		gloss.Center, gloss.Center,
 		header.Render("Error")+"\n"+m.err.Error(),
 	))
+	
 	tooltip := gloss.NewStyle().Foreground(m.theme.Tooltip).Padding(0, 2)
 	help := tooltip.Render("press any key to return home")
 	height := m.height - gloss.Height(help) - 1
