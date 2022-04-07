@@ -171,7 +171,7 @@ func torrentDetailView(m *model) string {
 	var body strings.Builder
 	body.WriteString(styles.Bold.Render(stripansi.Strip(t.Name())) + "\n\n")
 	body.WriteString(fmt.Sprintf("%s%s%s", created, with, comment))
-	body.WriteString(stats.ProgressBar(t, nil))
+	body.WriteString(stats.ProgressBar(t, nil, m.theme))
 	body.WriteString(
 		fmt.Sprintf(
 			"\n\n%s  %d %s | %s\n\n",
