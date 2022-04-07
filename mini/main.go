@@ -54,6 +54,7 @@ func initialModel(t, dir *string, port *uint, theme *styles.ColorTheme) (model, 
 	m := model{
 		torrent: t,
 		saveDir: dir,
+		theme:   theme,
 		client:  client,
 	}
 	return m, nil
@@ -109,7 +110,7 @@ func (m model) View() string {
 			peers,
 		)
 
-		bar = stats.ProgressBar(t, &m.width)
+		bar = stats.ProgressBar(t, &m.width, m.theme)
 	}
 
 	spacer := m.width - gloss.Width(meta)

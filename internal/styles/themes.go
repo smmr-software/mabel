@@ -3,11 +3,13 @@ package styles
 import gloss "github.com/charmbracelet/lipgloss"
 
 type ColorTheme struct {
-	Primary gloss.AdaptiveColor
-	Light   gloss.AdaptiveColor
-	Dark    gloss.AdaptiveColor
-	Error   gloss.AdaptiveColor
-	Tooltip gloss.AdaptiveColor
+	Primary   gloss.AdaptiveColor
+	Light     gloss.AdaptiveColor
+	Dark      gloss.AdaptiveColor
+	Error     gloss.AdaptiveColor
+	Tooltip   gloss.AdaptiveColor
+	Gradient1 gloss.AdaptiveColor
+	Gradient2 gloss.AdaptiveColor
 }
 
 var DefaultTheme = ColorTheme{
@@ -31,12 +33,20 @@ var DefaultTheme = ColorTheme{
 		Light: "#4A4A4A",
 		Dark:  "B2B2B2",
 	},
+	Gradient1: gloss.AdaptiveColor{
+		Light: "#5A56E0",
+		Dark:  "#5A56E0",
+	},
+	Gradient2: gloss.AdaptiveColor{
+		Light: "#EE6FF8",
+		Dark:  "#EE6FF8",
+	},
 }
 
 var PlaceholderTheme = ColorTheme{
 	Primary: gloss.AdaptiveColor{
 		Light: "#464FB6",
-		Dark:  "#5FFFD7", 
+		Dark:  "#5FFFD7",
 	},
 	Light: gloss.AdaptiveColor{
 		Light: "#9EA4D0",
@@ -53,5 +63,13 @@ var PlaceholderTheme = ColorTheme{
 	Tooltip: gloss.AdaptiveColor{
 		Light: "#4A4A4A",
 		Dark:  "B2B2B2",
+	},
+	Gradient1: gloss.AdaptiveColor{
+		Light: "#5A56E0",
+		Dark:  "#CC9254",
+	},
+	Gradient2: gloss.AdaptiveColor{
+		Light: "#EE6FF8",
+		Dark:  "#B854CC",
 	},
 }
