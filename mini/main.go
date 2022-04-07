@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/smmr-software/mabel/internal/stats"
+	"github.com/smmr-software/mabel/internal/styles"
 	trrnt "github.com/smmr-software/mabel/internal/torrent"
 	"github.com/smmr-software/mabel/internal/utils"
 
@@ -24,6 +25,7 @@ type tickMsg time.Time
 type model struct {
 	width            int
 	torrent, saveDir *string
+	theme            *styles.ColorTheme
 	client           *torrent.Client
 }
 
@@ -44,7 +46,7 @@ func genMabelConfig(port *uint) *torrent.ClientConfig {
 	return config
 }
 
-func initialModel(t, dir *string, port *uint) (model, error) {
+func initialModel(t, dir *string, port *uint, theme *styles.ColorTheme) (model, error) {
 	client, err := torrent.NewClient(genMabelConfig(port))
 	if err != nil {
 		log.Fatal(err)
@@ -116,8 +118,8 @@ func (m model) View() string {
 	return fmt.Sprintf("%s\n%s\n", name+strings.Repeat(" ", spacer)+meta, bar)
 }
 
-func Execute(t, dir *string, port *uint) {
-	model, err := initialModel(t, dir, port)
+func Execute(t, dir *string, port *uint, theme *styles.ColorTheme) {
+	model, err := initialModel(t, dir, port, theme)
 	if err != nil {
 		log.Fatal(err)
 	}

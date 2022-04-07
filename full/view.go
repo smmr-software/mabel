@@ -80,13 +80,13 @@ func errorView(m *model) string {
 		Width(m.width).
 		Height(m.height).
 		Inherit(styles.BorderWindow).
-		BorderForeground(styles.ErrorRed)
+		BorderForeground(m.theme.Error)
 	popupWindow := gloss.NewStyle().
 		Width(popupWidth).
 		Height(popupHeight).
 		Padding(0, padding).
 		Inherit(styles.BorderWindow).
-		BorderForeground(styles.ErrorRed)
+		BorderForeground(m.theme.Error)
 	header := gloss.NewStyle().Bold(true)
 
 	popup := popupWindow.Render(gloss.Place(
@@ -94,8 +94,8 @@ func errorView(m *model) string {
 		gloss.Center, gloss.Center,
 		header.Render("Error")+"\n"+m.err.Error(),
 	))
-
-	help := styles.Tooltip.Render("press any key to return home")
+	tooltip := gloss.NewStyle().Foreground(m.theme.Tooltip).Padding(0, 2)
+	help := tooltip.Render("press any key to return home")
 	height := m.height - gloss.Height(help) - 1
 
 	content := gloss.Place(
@@ -179,7 +179,8 @@ func torrentDetailView(m *model) string {
 		)
 	}
 
-	help := styles.Tooltip.Render("press any key to return home")
+	tooltip := gloss.NewStyle().Foreground(m.theme.Tooltip).Padding(0, 2)
+	help := tooltip.Render("press any key to return home")
 	height := m.height - gloss.Height(help) - 1
 
 	content := gloss.Place(

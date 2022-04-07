@@ -3,6 +3,7 @@ package full
 import (
 	"log"
 
+	"github.com/smmr-software/mabel/internal/styles"
 	"github.com/smmr-software/mabel/internal/torrent"
 
 	tea "github.com/charmbracelet/bubbletea"
@@ -18,8 +19,8 @@ func (m model) Init() tea.Cmd {
 	)
 }
 
-func Execute(torrents *[]string, dir *string, port *uint) {
-	model, err := initialModel(torrents, dir, port)
+func Execute(torrents *[]string, dir *string, port *uint, theme *styles.ColorTheme) {
+	model, err := initialModel(torrents, dir, port, theme)
 	if err != nil {
 		log.Fatal(err)
 	}

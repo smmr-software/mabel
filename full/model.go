@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/smmr-software/mabel/internal/list"
+	"github.com/smmr-software/mabel/internal/styles"
 
 	"github.com/anacrolix/log"
 	"github.com/anacrolix/torrent"
@@ -19,6 +20,7 @@ type model struct {
 	width, height   int
 	startupTorrents *[]string
 	dir             *string
+	theme           *styles.ColorTheme
 
 	client       *torrent.Client
 	clientConfig *torrent.ClientConfig
@@ -97,7 +99,7 @@ func genList() *clist.Model {
 	return &list
 }
 
-func initialModel(torrents *[]string, dir *string, port *uint) (model, error) {
+func initialModel(torrents *[]string, dir *string, port *uint, theme *styles.ColorTheme) (model, error) {
 	config := genMabelConfig(port)
 	client, err := torrent.NewClient(config)
 	hlp := help.New()
@@ -105,6 +107,7 @@ func initialModel(torrents *[]string, dir *string, port *uint) (model, error) {
 	m := model{
 		startupTorrents: torrents,
 		dir:             dir,
+		theme:           theme,
 
 		client:       client,
 		clientConfig: config,

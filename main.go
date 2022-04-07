@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/smmr-software/mabel/full"
+	"github.com/smmr-software/mabel/internal/styles"
 	"github.com/smmr-software/mabel/mini"
 
 	"github.com/adrg/xdg"
@@ -23,6 +24,7 @@ func main() {
 	var (
 		download = flag.StringP("download", "d", xdg.UserDirs.Download, "Set the default directory for downloaded torrents.")
 		port     = flag.UintP("port", "p", 42069, "Set the port number to which the client will bind.")
+		theme    = flag.StringP("theme", "t", "default", "Set the color theme that the client will use.")
 		help     = flag.BoolP("help", "h", false, "Print this help message.")
 		vrsn     = flag.BoolP("version", "v", false, "Print version information.")
 	)
@@ -44,6 +46,8 @@ func main() {
 		menu.WriteString("\n        Set the torrent download directory. [default: " + green.Render("$XDG_DOWNLOAD_DIR") + "]")
 		menu.WriteString("\n    " + green.Render("-p") + ", " + green.Render("--port"))
 		menu.WriteString("\n        Set the port number to which the client will bind. [default: " + green.Render("42069") + "]")
+		menu.WriteString("\n    " + green.Render("-t") + ", " + green.Render("--theme"))
+		menu.WriteString("\n        Set the color theme that the client will use. [default: " + green.Render("default") + "]")
 		menu.WriteString("\n    " + green.Render("-h") + ", " + green.Render("--help"))
 		menu.WriteString("\n        Print this help message.")
 		menu.WriteString("\n    " + green.Render("-v") + ", " + green.Render("--version"))
@@ -68,16 +72,26 @@ func main() {
 	conf := getConfig()
 	downloadFlag := flag.Lookup("download")
 	portFlag := flag.Lookup("port")
+	themeFlag := flag.Lookup("theme")
+
 	if !downloadFlag.Changed && conf.Download != "" {
 		flag.Set("download", conf.Download)
 	}
 	if !portFlag.Changed && conf.Port != 0 {
 		flag.Set("port", fmt.Sprint(conf.Port))
 	}
+	if !themeFlag.Changed && conf.Theme != "" {
+		flag.Set("theme", conf.Theme)
+	}
+
+	realtheme := styles.DefaultTheme
+	/*if *theme == "placeholder" {
+		realtheme = styles.PlaceholderTheme
+	}*/
 
 	if flag.NArg() == 1 {
-		mini.Execute(&args[0], download, port)
+		mini.Execute(&args[0], download, port, &realtheme)
 	} else {
-		full.Execute(&args, download, port)
+		full.Execute(&args, download, port, &realtheme)
 	}
 }

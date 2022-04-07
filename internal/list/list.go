@@ -23,6 +23,7 @@ type Item struct {
 	Created time.Time
 	Comment string
 	Program string
+	Theme   styles.ColorTheme
 }
 
 func (i Item) FilterValue() string { return "" }
@@ -62,8 +63,8 @@ func (d ItemDelegate) Render(w io.Writer, m list.Model, index int, listItem list
 		topMargin   = 1
 
 		entry = gloss.NewStyle().Width(m.Width()).PaddingLeft(leftPadding).MarginTop(topMargin)
-		title = gloss.NewStyle().Foreground(styles.PrimaryBlue)
-		desc  = gloss.NewStyle().Foreground(styles.LightBlue)
+		title = gloss.NewStyle().Foreground(i.Theme.Primary)
+		desc  = gloss.NewStyle().Foreground(i.Theme.Light)
 
 		meta   = i.Description()
 		spacer = m.Width() - gloss.Width(meta) - leftPadding
@@ -73,7 +74,7 @@ func (d ItemDelegate) Render(w io.Writer, m list.Model, index int, listItem list
 	if index == m.Index() {
 		entry = entry.
 			Border(gloss.NormalBorder(), false, false, false, true).
-			BorderForeground(styles.DarkBlue).
+			BorderForeground(i.Theme.Dark).
 			PaddingLeft(1)
 		name = title.Render(name)
 		meta = desc.Render(meta)

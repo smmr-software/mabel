@@ -8,6 +8,7 @@ import (
 type config struct {
 	Download string
 	Port     uint
+	Theme    string
 }
 
 func getConfig() config {
