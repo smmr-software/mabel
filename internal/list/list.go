@@ -19,11 +19,11 @@ import (
 
 type Item struct {
 	Self    *torrent.Torrent
+	Theme   *styles.ColorTheme
 	Added   time.Time
 	Created time.Time
 	Comment string
 	Program string
-	Theme   *styles.ColorTheme
 }
 
 func (i Item) FilterValue() string { return "" }

@@ -13,7 +13,8 @@ func (m model) Init() tea.Cmd {
 	return tea.Batch(
 		torrent.AddTorrents(
 			m.startupTorrents,
-			m.dir, m.client, m.list, m.theme,
+			m.dir, m.client,
+			m.list, m.theme,
 		),
 		tick(),
 	)

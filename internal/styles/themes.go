@@ -3,13 +3,13 @@ package styles
 import gloss "github.com/charmbracelet/lipgloss"
 
 type ColorTheme struct {
-	Primary   gloss.AdaptiveColor
-	Light     gloss.AdaptiveColor
-	Dark      gloss.AdaptiveColor
-	Error     gloss.AdaptiveColor
-	Tooltip   gloss.AdaptiveColor
+	Primary       gloss.AdaptiveColor
+	Light         gloss.AdaptiveColor
+	Dark          gloss.AdaptiveColor
+	Error         gloss.AdaptiveColor
+	Tooltip       gloss.AdaptiveColor
 	GradientStart gloss.AdaptiveColor
-	GradientEnd gloss.AdaptiveColor
+	GradientEnd   gloss.AdaptiveColor
 }
 
 var DefaultTheme = ColorTheme{
