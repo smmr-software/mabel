@@ -4,7 +4,7 @@ import (
 	"os"
 	"strings"
 
-	home "github.com/mitchellh/go-homedir"
+	"github.com/smmr-software/mabel/internal/styles"
 
 	"github.com/anacrolix/torrent"
 	"github.com/anacrolix/torrent/storage"
@@ -19,11 +19,11 @@ var magnetPrefix = "magnet:"
 var infohashPrefix = "infohash:"
 var hashLength = 40
 
-func AddTorrents(t *[]string, dir *string, client *torrent.Client, l *list.Model) tea.Cmd {
+func AddTorrents(t *[]string, dir *string, client *torrent.Client, l *list.Model, theme *styles.ColorTheme) tea.Cmd {
 	cmds := make([]tea.Cmd, 0)
 
 	for _, v := range *t {
-		cmd, err := AddTorrent(&v, dir, client, l)
+		cmd, err := AddTorrent(&v, dir, client, l, theme)
 		if err == nil {
 			cmds = append(cmds, cmd)
 		}
@@ -32,14 +32,14 @@ func AddTorrents(t *[]string, dir *string, client *torrent.Client, l *list.Model
 	return tea.Batch(cmds...)
 }
 
-func AddTorrent(t, dir *string, client *torrent.Client, l *list.Model) (tea.Cmd, error) {
+func AddTorrent(t, dir *string, client *torrent.Client, l *list.Model, theme *styles.ColorTheme) (tea.Cmd, error) {
 	store := getStorage(dir)
 	if strings.HasPrefix(*t, magnetPrefix) {
-		return addMagnetLink(t, &store, client, l)
+		return addMagnetLink(t, &store, client, l, theme)
 	} else if strings.HasPrefix(*t, infohashPrefix) || len(*t) == hashLength {
-		return addInfoHash(t, &store, client, l)
+		return addInfoHash(t, &store, client, l, theme)
 	} else {
-		return addFromFile(t, &store, client, l)
+		return addFromFile(t, &store, client, l, theme)
 	}
 }
 
@@ -52,12 +52,6 @@ func downloadTorrent(t *torrent.Torrent) tea.Cmd {
 }
 
 func getStorage(dir *string) storage.ClientImpl {
-	var err error
-	*dir, err = home.Expand(*dir)
-	if err != nil {
-		*dir = ""
-	}
-
 	metadataDirectory := os.TempDir()
 	if metadataStorage, err := storage.NewDefaultPieceCompletionForDir(metadataDirectory); err != nil {
 		return storage.NewMMap(*dir)

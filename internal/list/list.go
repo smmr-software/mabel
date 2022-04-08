@@ -23,7 +23,7 @@ type Item struct {
 	Created time.Time
 	Comment string
 	Program string
-	Theme   styles.ColorTheme
+	Theme   *styles.ColorTheme
 }
 
 func (i Item) FilterValue() string { return "" }

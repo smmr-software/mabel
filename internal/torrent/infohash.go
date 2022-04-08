@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/smmr-software/mabel/internal/list"
+	"github.com/smmr-software/mabel/internal/styles"
 
 	"github.com/anacrolix/torrent"
 	"github.com/anacrolix/torrent/metainfo"
@@ -14,7 +15,7 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 )
 
-func addInfoHash(input *string, dir *storage.ClientImpl, client *torrent.Client, l *clist.Model) (tea.Cmd, error) {
+func addInfoHash(input *string, dir *storage.ClientImpl, client *torrent.Client, l *clist.Model, theme *styles.ColorTheme) (tea.Cmd, error) {
 	if strings.HasPrefix(*input, infohashPrefix) {
 		*input = strings.TrimPrefix(*input, infohashPrefix)
 	}
@@ -25,7 +26,11 @@ func addInfoHash(input *string, dir *storage.ClientImpl, client *torrent.Client,
 		l.SetItems(
 			append(
 				l.Items(),
-				list.Item{Self: t, Added: time.Now()},
+				list.Item{
+					Self:  t,
+					Added: time.Now(),
+					Theme: theme,
+				},
 			),
 		)
 	}

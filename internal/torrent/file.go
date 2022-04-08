@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/smmr-software/mabel/internal/list"
+	"github.com/smmr-software/mabel/internal/styles"
 
 	"github.com/anacrolix/torrent"
 	"github.com/anacrolix/torrent/metainfo"
@@ -16,7 +17,7 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 )
 
-func addFromFile(input *string, dir *storage.ClientImpl, client *torrent.Client, l *clist.Model) (tea.Cmd, error) {
+func addFromFile(input *string, dir *storage.ClientImpl, client *torrent.Client, l *clist.Model, theme *styles.ColorTheme) (tea.Cmd, error) {
 	path, err := home.Expand(*input)
 	if err != nil {
 		return nil, err
@@ -43,6 +44,7 @@ func addFromFile(input *string, dir *storage.ClientImpl, client *torrent.Client,
 					Created: time.Unix(meta.CreationDate, 0),
 					Comment: stripansi.Strip(meta.Comment),
 					Program: stripansi.Strip(meta.CreatedBy),
+					Theme:   theme,
 				},
 			),
 		)

@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/smmr-software/mabel/internal/list"
+	"github.com/smmr-software/mabel/internal/styles"
 
 	"github.com/anacrolix/torrent"
 	"github.com/anacrolix/torrent/storage"
@@ -12,7 +13,7 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 )
 
-func addMagnetLink(input *string, dir *storage.ClientImpl, client *torrent.Client, l *clist.Model) (tea.Cmd, error) {
+func addMagnetLink(input *string, dir *storage.ClientImpl, client *torrent.Client, l *clist.Model, theme *styles.ColorTheme) (tea.Cmd, error) {
 	spec, err := torrent.TorrentSpecFromMagnetUri(*input)
 	if err != nil {
 		return nil, err
@@ -26,7 +27,11 @@ func addMagnetLink(input *string, dir *storage.ClientImpl, client *torrent.Clien
 		l.SetItems(
 			append(
 				l.Items(),
-				list.Item{Self: t, Added: time.Now()},
+				list.Item{
+					Self:  t,
+					Added: time.Now(),
+					Theme: theme,
+				},
 			),
 		)
 	}
