@@ -88,7 +88,7 @@ func main() {
 	if *theme == "placeholder" {
 		realTheme = styles.PlaceholderTheme
 	}
-
+	styles.BorderWindow = styles.BorderWindow.BorderForeground(realTheme.Primary)
 	if flag.NArg() == 1 {
 		mini.Execute(&args[0], download, port, &realTheme)
 	} else {

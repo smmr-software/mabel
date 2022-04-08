@@ -46,7 +46,7 @@ var DefaultTheme = ColorTheme{
 var PlaceholderTheme = ColorTheme{
 	Primary: gloss.AdaptiveColor{
 		Light: "#464FB6",
-		Dark:  "#5FFFD7",
+		Dark:  "#F456CA",
 	},
 	Light: gloss.AdaptiveColor{
 		Light: "#9EA4D0",

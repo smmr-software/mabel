@@ -8,6 +8,5 @@ var (
 	Border       = gloss.RoundedBorder()
 	BorderWindow = gloss.NewStyle().
 			Align(gloss.Center).
-			BorderStyle(Border).
-			BorderForeground(DefaultTheme.Primary)
+			BorderStyle(Border)
 )
