@@ -11,7 +11,6 @@ import (
 	torrent "github.com/anacrolix/torrent"
 	"github.com/charmbracelet/bubbles/key"
 	tea "github.com/charmbracelet/bubbletea"
-	gloss "github.com/charmbracelet/lipgloss"
 )
 
 const interval = 500 * time.Millisecond
@@ -28,12 +27,8 @@ func reportError(err error) tea.Cmd {
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
-		BorderWindow := gloss.NewStyle().
-			Align(gloss.Center).
-			BorderStyle(styles.Border).
-			BorderForeground(m.theme.Primary)
-		width := msg.Width - BorderWindow.GetHorizontalBorderSize()
-		height := msg.Height - BorderWindow.GetHorizontalBorderSize()
+		width := msg.Width - styles.BorderWindow.GetHorizontalBorderSize()
+		height := msg.Height - styles.BorderWindow.GetHorizontalBorderSize()
 
 		m.width = width
 		m.help.Width = width
