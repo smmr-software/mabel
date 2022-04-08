@@ -85,8 +85,8 @@ func main() {
 	}
 
 	realTheme := styles.DefaultTheme
-	if *theme == "placeholder" {
-		realTheme = styles.PlaceholderTheme
+	if *theme == "desert" {
+		realTheme = styles.DesertTheme
 	}
 	styles.BorderWindow = styles.BorderWindow.BorderForeground(realTheme.Primary)
 	
