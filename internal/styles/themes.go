@@ -61,8 +61,8 @@ var DesertTheme = ColorTheme{
 		Dark:  "#5179C5",
 	},
 	Tooltip: gloss.AdaptiveColor{
-		Light: "#4A4A4A",
-		Dark:  "#B2B2B2",
+		Light: "#564F45",
+		Dark:  "#B6A589",
 	},
 	GradientStart: gloss.AdaptiveColor{
 		Light: "#D37435",
