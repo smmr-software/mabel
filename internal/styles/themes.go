@@ -8,8 +8,8 @@ type ColorTheme struct {
 	Dark      gloss.AdaptiveColor
 	Error     gloss.AdaptiveColor
 	Tooltip   gloss.AdaptiveColor
-	Gradient1 gloss.AdaptiveColor
-	Gradient2 gloss.AdaptiveColor
+	GradientStart gloss.AdaptiveColor
+	GradientEnd gloss.AdaptiveColor
 }
 
 var DefaultTheme = ColorTheme{
@@ -33,11 +33,11 @@ var DefaultTheme = ColorTheme{
 		Light: "#4A4A4A",
 		Dark:  "B2B2B2",
 	},
-	Gradient1: gloss.AdaptiveColor{
+	GradientStart: gloss.AdaptiveColor{
 		Light: "#5A56E0",
 		Dark:  "#5A56E0",
 	},
-	Gradient2: gloss.AdaptiveColor{
+	GradientEnd: gloss.AdaptiveColor{
 		Light: "#EE6FF8",
 		Dark:  "#EE6FF8",
 	},
@@ -64,11 +64,11 @@ var PlaceholderTheme = ColorTheme{
 		Light: "#4A4A4A",
 		Dark:  "B2B2B2",
 	},
-	Gradient1: gloss.AdaptiveColor{
+	GradientStart: gloss.AdaptiveColor{
 		Light: "#5A56E0",
 		Dark:  "#CC9254",
 	},
-	Gradient2: gloss.AdaptiveColor{
+	GradientEnd: gloss.AdaptiveColor{
 		Light: "#EE6FF8",
 		Dark:  "#B854CC",
 	},

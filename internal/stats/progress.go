@@ -13,15 +13,15 @@ func ProgressBar(t *torrent.Torrent, width *int, theme *styles.ColorTheme) strin
 		done      = t.BytesCompleted()
 		total     = t.Length()
 		percent   = float64(done) / float64(total)
-		gradient1 = theme.Gradient1.Dark
-		gradient2 = theme.Gradient2.Dark
+		gradientStart = theme.GradientStart.Dark
+		gradientEnd = theme.GradientEnd.Dark
 	)
 
 	if !gloss.HasDarkBackground() {
-		gradient1 = theme.Gradient1.Light
-		gradient2 = theme.Gradient2.Light
+		gradientStart = theme.GradientStart.Light
+		gradientEnd = theme.GradientEnd.Light
 	}
-	prog := progress.New(progress.WithGradient(gradient1, gradient2), progress.WithoutPercentage())
+	prog := progress.New(progress.WithGradient(gradientStart, gradientEnd), progress.WithoutPercentage())
 
 	if width != nil {
 		prog.Width = *width
