@@ -105,7 +105,7 @@ func addPromptKeyPress(m *model, msg *tea.KeyMsg) (tea.Model, tea.Cmd) {
 
 			m.addPrompt = initialAddPrompt(m.dir)
 
-			cmd, err := trrnt.AddTorrent(&input, &dir, m.client, m.list)
+			cmd, err := trrnt.AddTorrent(&input, &dir, m.client, m.list, m.theme)
 			if err != nil {
 				return m, reportError(err)
 			}
