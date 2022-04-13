@@ -1,9 +1,9 @@
 module github.com/smmr-software/mabel
 
-go 1.17
+go 1.18
 
 require (
-	github.com/BurntSushi/toml v0.3.1
+	github.com/BurntSushi/toml v1.1.0
 	github.com/acarl005/stripansi v0.0.0-20180116102854-5a71ef0e047d
 	github.com/adrg/xdg v0.4.0
 	github.com/anacrolix/log v0.13.1
@@ -13,7 +13,7 @@ require (
 	github.com/charmbracelet/lipgloss v0.5.0
 	github.com/dustin/go-humanize v1.0.0
 	github.com/mitchellh/go-homedir v1.1.0
-	github.com/spf13/pflag v1.0.1
+	github.com/spf13/pflag v1.0.5
 )
 
 require (
