@@ -4,6 +4,8 @@ import (
 	"os"
 	"strings"
 
+	home "github.com/mitchellh/go-homedir"
+
 	"github.com/anacrolix/torrent"
 	"github.com/anacrolix/torrent/storage"
 
@@ -50,6 +52,12 @@ func downloadTorrent(t *torrent.Torrent) tea.Cmd {
 }
 
 func getStorage(dir *string) storage.ClientImpl {
+	var err error
+	*dir, err = home.Expand(*dir)
+	if err != nil {
+		*dir = ""
+	}
+
 	metadataDirectory := os.TempDir()
 	if metadataStorage, err := storage.NewDefaultPieceCompletionForDir(metadataDirectory); err != nil {
 		return storage.NewMMap(*dir)
