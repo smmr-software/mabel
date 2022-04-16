@@ -12,7 +12,7 @@ type CustomTheme struct {
 	Tooltip, GradientStart, GradientEnd string
 }
 
-func stringToTheme(s *string) *ColorTheme {
+func StringToTheme(s *string) *ColorTheme {
 	switch *s {
 	case "desert":
 		return &DesertTheme
@@ -21,8 +21,8 @@ func stringToTheme(s *string) *ColorTheme {
 	}
 }
 
-func customToTheme(c *CustomTheme) *ColorTheme {
-	theme := stringToTheme(&c.Base)
+func CustomToTheme(c *CustomTheme) *ColorTheme {
+	theme := StringToTheme(&c.Base)
 
 	if c.Primary != "" {
 		theme.Primary = gloss.AdaptiveColor{
@@ -69,7 +69,6 @@ func customToTheme(c *CustomTheme) *ColorTheme {
 
 	return theme
 }
-
 
 var DefaultTheme = ColorTheme{
 	Primary: gloss.AdaptiveColor{
