@@ -3,13 +3,8 @@ package styles
 import gloss "github.com/charmbracelet/lipgloss"
 
 type ColorTheme struct {
-	Primary       gloss.AdaptiveColor
-	Light         gloss.AdaptiveColor
-	Dark          gloss.AdaptiveColor
-	Error         gloss.AdaptiveColor
-	Tooltip       gloss.AdaptiveColor
-	GradientStart gloss.AdaptiveColor
-	GradientEnd   gloss.AdaptiveColor
+	Primary, Light, Dark, Error,
+	Tooltip, GradientStart, GradientEnd gloss.AdaptiveColor
 }
 
 var DefaultTheme = ColorTheme{
@@ -72,4 +67,67 @@ var DesertTheme = ColorTheme{
 		Light: "#E3AF8C",
 		Dark:  "#E3AF8C",
 	},
+}
+
+type CustomTheme struct {
+	Base, Primary, Light, Dark, Error,
+	Tooltip, GradientStart, GradientEnd string
+}
+
+func stringToTheme(s *string) *ColorTheme {
+	switch *s {
+	case "desert":
+		return &DesertTheme
+	default:
+		return &DefaultTheme
+	}
+}
+
+func customToTheme(c *CustomTheme) *ColorTheme {
+	theme := stringToTheme(&c.Base)
+
+	if c.Primary != "" {
+		theme.Primary = gloss.AdaptiveColor{
+			Light: c.Primary,
+			Dark:  c.Primary,
+		}
+	}
+	if c.Light != "" {
+		theme.Light = gloss.AdaptiveColor{
+			Light: c.Light,
+			Dark:  c.Light,
+		}
+	}
+	if c.Dark != "" {
+		theme.Dark = gloss.AdaptiveColor{
+			Light: c.Dark,
+			Dark:  c.Dark,
+		}
+	}
+	if c.Error != "" {
+		theme.Error = gloss.AdaptiveColor{
+			Light: c.Error,
+			Dark:  c.Error,
+		}
+	}
+	if c.Tooltip != "" {
+		theme.Tooltip = gloss.AdaptiveColor{
+			Light: c.Tooltip,
+			Dark:  c.Tooltip,
+		}
+	}
+	if c.GradientStart != "" {
+		theme.GradientStart = gloss.AdaptiveColor{
+			Light: c.GradientStart,
+			Dark:  c.GradientStart,
+		}
+	}
+	if c.GradientEnd != "" {
+		theme.GradientEnd = gloss.AdaptiveColor{
+			Light: c.GradientEnd,
+			Dark:  c.GradientEnd,
+		}
+	}
+
+	return theme
 }
