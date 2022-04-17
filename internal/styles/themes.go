@@ -18,6 +18,8 @@ func StringToTheme(s *string) *ColorTheme {
 		return &DesertTheme
 	case "purple", "lean", "drank":
 		return &PurpleTheme
+	case "8-bit", "ansi":
+		return &ANSITheme
 	default:
 		return &DefaultTheme
 	}
@@ -163,4 +165,14 @@ var PurpleTheme = ColorTheme{
 		Light: "#8C00FF",
 		Dark:  "#8C00FF",
 	},
+}
+
+var ANSITheme = ColorTheme{
+	Primary:       gloss.AdaptiveColor{Light: "4", Dark: "4"},
+	Light:         gloss.AdaptiveColor{Light: "14", Dark: "14"},
+	Dark:          gloss.AdaptiveColor{Light: "12", Dark: "12"},
+	Error:         gloss.AdaptiveColor{Light: "9", Dark: "9"},
+	Tooltip:       gloss.AdaptiveColor{Light: "8", Dark: "8"},
+	GradientStart: gloss.AdaptiveColor{Light: "#5A56E0", Dark: "#5A56E0"},
+	GradientEnd:   gloss.AdaptiveColor{Light: "#EE6FF8", Dark: "#EE6FF8"},
 }
