@@ -36,7 +36,7 @@ func getConfig() config {
 	} else if md.Type("theme") == "Hash" {
 		var hash styles.CustomTheme
 		md.PrimitiveDecode(conf.Theme, &hash)
-		theme = styles.CustomToTheme(&hash)
+		theme = hash.ToTheme()
 	}
 
 	return config{

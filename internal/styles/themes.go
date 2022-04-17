@@ -25,7 +25,7 @@ func StringToTheme(s *string) *ColorTheme {
 	}
 }
 
-func CustomToTheme(c *CustomTheme) *ColorTheme {
+func (c *CustomTheme) ToTheme() *ColorTheme {
 	theme := StringToTheme(&c.Base)
 
 	if c.Primary != "" {
