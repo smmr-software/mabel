@@ -80,19 +80,15 @@ func main() {
 	if !portFlag.Changed && conf.Port != 0 {
 		flag.Set("port", fmt.Sprint(conf.Port))
 	}
-	if !themeFlag.Changed && conf.Theme != "" {
-		flag.Set("theme", conf.Theme)
+	if themeFlag.Changed {
+		conf.Theme = styles.StringToTheme(theme)
 	}
 
-	realTheme := styles.DefaultTheme
-	if *theme == "desert" {
-		realTheme = styles.DesertTheme
-	}
-	styles.BorderWindow = styles.BorderWindow.BorderForeground(realTheme.Primary)
+	styles.BorderWindow = styles.BorderWindow.BorderForeground(conf.Theme.Primary)
 
 	if flag.NArg() == 1 {
-		mini.Execute(&args[0], download, port, &realTheme)
+		mini.Execute(&args[0], download, port, conf.Theme)
 	} else {
-		full.Execute(&args, download, port, &realTheme)
+		full.Execute(&args, download, port, conf.Theme)
 	}
 }
