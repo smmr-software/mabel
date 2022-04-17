@@ -16,6 +16,8 @@ func StringToTheme(s *string) *ColorTheme {
 	switch *s {
 	case "desert":
 		return &DesertTheme
+	case "purple", "lean", "drank":
+		return &PurpleTheme
 	default:
 		return &DefaultTheme
 	}
