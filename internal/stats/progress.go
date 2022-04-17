@@ -5,7 +5,6 @@ import (
 
 	"github.com/anacrolix/torrent"
 	"github.com/charmbracelet/bubbles/progress"
-	gloss "github.com/charmbracelet/lipgloss"
 )
 
 func ProgressBar(t *torrent.Torrent, width *int, theme *styles.ColorTheme) string {
@@ -13,20 +12,20 @@ func ProgressBar(t *torrent.Torrent, width *int, theme *styles.ColorTheme) strin
 		done    = t.BytesCompleted()
 		total   = t.Length()
 		percent = float64(done) / float64(total)
-
-		gradientStart = theme.GradientStart.Dark
-		gradientEnd   = theme.GradientEnd.Dark
 	)
 
-	if !gloss.HasDarkBackground() {
-		gradientStart = theme.GradientStart.Light
-		gradientEnd = theme.GradientEnd.Light
+	var gradient progress.Option
+	if theme.UseSolidGradient() {
+		gradient = progress.WithSolidFill(
+			styles.AdaptiveColorToString(&theme.GradientSolid))
+	} else {
+		gradient = progress.WithGradient(
+			styles.AdaptiveColorToString(&theme.GradientStart),
+			styles.AdaptiveColorToString(&theme.GradientEnd),
+		)
 	}
 
-	prog := progress.New(
-		progress.WithGradient(gradientStart, gradientEnd),
-		progress.WithoutPercentage(),
-	)
+	prog := progress.New(gradient, progress.WithoutPercentage())
 
 	if width != nil {
 		prog.Width = *width

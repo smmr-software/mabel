@@ -4,12 +4,14 @@ import gloss "github.com/charmbracelet/lipgloss"
 
 type ColorTheme struct {
 	Primary, Light, Dark, Error,
-	Tooltip, GradientStart, GradientEnd gloss.AdaptiveColor
+	Tooltip, GradientStart,
+	GradientEnd, GradientSolid gloss.AdaptiveColor
 }
 
 type CustomTheme struct {
 	Base, Primary, Light, Dark, Error,
-	Tooltip, GradientStart, GradientEnd string
+	Tooltip, GradientStart,
+	GradientEnd, GradientSolid string
 }
 
 func StringToTheme(s *string) *ColorTheme {
@@ -70,8 +72,25 @@ func (c *CustomTheme) ToTheme() *ColorTheme {
 			Dark:  c.GradientEnd,
 		}
 	}
+	if c.GradientSolid != "" {
+		theme.GradientSolid = gloss.AdaptiveColor{
+			Light: c.GradientSolid,
+			Dark:  c.GradientSolid,
+		}
+	}
 
 	return theme
+}
+
+func (t *ColorTheme) UseSolidGradient() bool {
+	return t.GradientSolid != gloss.AdaptiveColor{}
+}
+
+func AdaptiveColorToString(c *gloss.AdaptiveColor) string {
+	if gloss.HasDarkBackground() {
+		return c.Dark
+	}
+	return c.Light
 }
 
 var DefaultTheme = ColorTheme{
@@ -157,11 +176,7 @@ var PurpleTheme = ColorTheme{
 		Light: "#8C00FF",
 		Dark:  "#8C00FF",
 	},
-	GradientStart: gloss.AdaptiveColor{
-		Light: "#8C00FF",
-		Dark:  "#8C00FF",
-	},
-	GradientEnd: gloss.AdaptiveColor{
+	GradientSolid: gloss.AdaptiveColor{
 		Light: "#8C00FF",
 		Dark:  "#8C00FF",
 	},
@@ -173,6 +188,5 @@ var ANSITheme = ColorTheme{
 	Dark:          gloss.AdaptiveColor{Light: "12", Dark: "12"},
 	Error:         gloss.AdaptiveColor{Light: "9", Dark: "9"},
 	Tooltip:       gloss.AdaptiveColor{Light: "8", Dark: "8"},
-	GradientStart: gloss.AdaptiveColor{Light: "#5A56E0", Dark: "#5A56E0"},
-	GradientEnd:   gloss.AdaptiveColor{Light: "#EE6FF8", Dark: "#EE6FF8"},
+	GradientSolid: gloss.AdaptiveColor{Light: "5", Dark: "5"},
 }
