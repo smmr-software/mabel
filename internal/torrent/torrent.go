@@ -24,7 +24,7 @@ func AddTorrents(t *[]string, dir *string, client *torrent.Client, l *list.Model
 
 	for _, v := range *t {
 		cmd, err := AddTorrent(&v, dir, client, l)
-		if err != nil {
+		if err == nil {
 			cmds = append(cmds, cmd)
 		}
 	}
