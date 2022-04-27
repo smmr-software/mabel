@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"runtime/debug"
 	"strings"
 
 	"github.com/smmr-software/mabel/full"
@@ -62,6 +63,15 @@ func main() {
 		fmt.Println(menu.String())
 		return
 	} else if *vrsn {
+		info, ok := debug.ReadBuildInfo()
+		if ok {
+			for _, setting := range info.Settings {
+				if setting.Key == "vcs.revision" && commit == "unknown" {
+					commit = setting.Value
+				}
+			}
+		}
+
 		fmt.Printf(
 			"Mabel %s\nCommit: %s\nBuilt by: %s\n",
 			version, commit, builtBy,
