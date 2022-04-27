@@ -16,9 +16,10 @@ import (
 )
 
 var (
-	version = "v0.0.0"
-	commit  = "unknown"
-	builtBy = "unknown"
+	version  = "v0.0.0"
+	commit   = "unknown"
+	modified = ""
+	builtBy  = "unknown"
 )
 
 func main() {
@@ -66,15 +67,22 @@ func main() {
 		info, ok := debug.ReadBuildInfo()
 		if ok {
 			for _, setting := range info.Settings {
-				if setting.Key == "vcs.revision" && commit == "unknown" {
-					commit = setting.Value
+				switch setting.Key {
+				case "vcs.revision":
+					if commit == "unknown" {
+						commit = setting.Value
+					}
+				case "vcs.modified":
+					if setting.Value == "true" {
+						modified = " (modified)"
+					}
 				}
 			}
 		}
 
 		fmt.Printf(
-			"Mabel %s\nCommit: %s\nBuilt by: %s\n",
-			version, commit, builtBy,
+			"Mabel %s\nCommit: %s%s\nBuilt by: %s\n",
+			version, commit, modified, builtBy,
 		)
 		return
 	}
