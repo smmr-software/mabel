@@ -16,10 +16,11 @@ import (
 )
 
 var (
-	version  = "v0.0.0"
-	commit   = "unknown"
+	version  = ""
+	commit   = ""
 	modified = ""
-	builtBy  = "unknown"
+	builtBy  = ""
+	date     = ""
 )
 
 func main() {
@@ -69,7 +70,7 @@ func main() {
 			for _, setting := range info.Settings {
 				switch setting.Key {
 				case "vcs.revision":
-					if commit == "unknown" {
+					if commit == "" {
 						commit = setting.Value
 					}
 				case "vcs.modified":
@@ -80,9 +81,20 @@ func main() {
 			}
 		}
 
+		if version == "" {
+			version = info.Main.Version
+		}
+		if builtBy != "" {
+			builtBy = fmt.Sprintf("Built by: %s\n", builtBy)
+		}
+		if date != "" {
+			date = fmt.Sprintf("Built on: %s\n", date)
+		}
+
 		fmt.Printf(
-			"Mabel %s\nCommit: %s%s\nBuilt by: %s\n",
-			version, commit, modified, builtBy,
+			"Mabel %s\nCommit: %s%s\n%s%s",
+			version, commit, modified,
+			builtBy, date,
 		)
 		return
 	}
