@@ -103,6 +103,7 @@ func main() {
 	downloadFlag := flag.Lookup("download")
 	portFlag := flag.Lookup("port")
 	themeFlag := flag.Lookup("theme")
+	thm := conf.getTheme()
 
 	if !downloadFlag.Changed && conf.Download != "" {
 		flag.Set("download", conf.Download)
@@ -111,14 +112,14 @@ func main() {
 		flag.Set("port", fmt.Sprint(conf.Port))
 	}
 	if themeFlag.Changed {
-		conf.Theme = styles.StringToTheme(theme)
+		thm = styles.StringToTheme(theme)
 	}
 
-	styles.BorderWindow = styles.BorderWindow.BorderForeground(conf.Theme.Primary)
+	styles.BorderWindow = styles.BorderWindow.BorderForeground(thm.Primary)
 
 	if flag.NArg() == 1 {
-		mini.Execute(&args[0], download, port, conf.Theme)
+		mini.Execute(&args[0], download, port, thm)
 	} else {
-		full.Execute(&args, download, port, conf.Theme)
+		full.Execute(&args, download, port, thm)
 	}
 }

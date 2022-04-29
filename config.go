@@ -7,41 +7,39 @@ import (
 	"github.com/adrg/xdg"
 )
 
-type config struct {
-	Download string
-	Port     uint
-	Theme    *styles.ColorTheme
-}
+var (
+	md  toml.MetaData
+	err error
+)
 
-type rawConfig struct {
+type config struct {
 	Download string
 	Port     uint
 	Theme    toml.Primitive
 }
 
-func getConfig() config {
-	var conf rawConfig
-	theme := &styles.DefaultTheme
-
-	file := xdg.ConfigHome + "/mabel/config.toml"
-	md, err := toml.DecodeFile(file, &conf)
-	if err != nil {
-		return config{Theme: theme}
-	}
-
-	if md.Type("theme") == "String" {
+func (c *config) getTheme() *styles.ColorTheme {
+	switch md.Type("theme") {
+	case "String":
 		var str string
-		md.PrimitiveDecode(conf.Theme, &str)
-		theme = styles.StringToTheme(&str)
-	} else if md.Type("theme") == "Hash" {
+		md.PrimitiveDecode(c.Theme, &str)
+		return styles.StringToTheme(&str)
+	case "Hash":
 		var hash styles.CustomTheme
-		md.PrimitiveDecode(conf.Theme, &hash)
-		theme = hash.ToTheme()
+		md.PrimitiveDecode(c.Theme, &hash)
+		return hash.ToTheme()
+	default:
+		return &styles.DefaultTheme
+	}
+}
+
+func getConfig() (conf config) {
+	file := xdg.ConfigHome + "/mabel/config.toml"
+
+	md, err = toml.DecodeFile(file, &conf)
+	if err != nil {
+		return config{}
 	}
 
-	return config{
-		Download: conf.Download,
-		Port:     conf.Port,
-		Theme:    theme,
-	}
+	return conf
 }
