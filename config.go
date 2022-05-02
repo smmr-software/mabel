@@ -15,6 +15,7 @@ var (
 type config struct {
 	Download string
 	Port     uint
+	Log      bool
 	Theme    toml.Primitive
 }
 

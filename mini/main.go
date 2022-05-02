@@ -17,6 +17,8 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 	gloss "github.com/charmbracelet/lipgloss"
+
+	"github.com/adrg/xdg"
 )
 
 const interval = 500 * time.Millisecond
@@ -29,12 +31,22 @@ type model struct {
 	client           *torrent.Client
 }
 
-func genMabelConfig(port *uint) *torrent.ClientConfig {
+func genMabelConfig(port *uint, logging *bool) *torrent.ClientConfig {
 	config := torrent.NewDefaultClientConfig()
 	config.Logger = log.Default
 	config.Logger.Handlers = []log.Handler{log.DiscardHandler}
 	config.Seed = true
 	config.ListenPort = int(*port)
+
+	if *logging {
+		if path, err := xdg.StateFile("mabel/log.txt"); err == nil {
+			if file, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE, 0755); err == nil {
+				handler := log.DefaultHandler
+				handler.W = file
+				config.Logger.Handlers = []log.Handler{handler}
+			}
+		}
+	}
 
 	metadataDirectory := os.TempDir()
 	if metadataStorage, err := storage.NewDefaultPieceCompletionForDir(metadataDirectory); err != nil {
@@ -46,8 +58,8 @@ func genMabelConfig(port *uint) *torrent.ClientConfig {
 	return config
 }
 
-func initialModel(t, dir *string, port *uint, theme *styles.ColorTheme) (model, error) {
-	client, err := torrent.NewClient(genMabelConfig(port))
+func initialModel(t, dir *string, port *uint, logging *bool, theme *styles.ColorTheme) (model, error) {
+	client, err := torrent.NewClient(genMabelConfig(port, logging))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -119,8 +131,8 @@ func (m model) View() string {
 	return fmt.Sprintf("%s\n%s\n", name+strings.Repeat(" ", spacer)+meta, bar)
 }
 
-func Execute(t, dir *string, port *uint, theme *styles.ColorTheme) {
-	model, err := initialModel(t, dir, port, theme)
+func Execute(t, dir *string, port *uint, logging *bool, theme *styles.ColorTheme) {
+	model, err := initialModel(t, dir, port, logging, theme)
 	if err != nil {
 		log.Fatal(err)
 	}

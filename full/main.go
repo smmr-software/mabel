@@ -20,7 +20,7 @@ func (m model) Init() tea.Cmd {
 	)
 }
 
-func Execute(torrents *[]string, dir *string, port *uint, theme *styles.ColorTheme) {
+func Execute(torrents *[]string, dir *string, port *uint, logging *bool, theme *styles.ColorTheme) {
 	model, err := initialModel(torrents, dir, port, theme)
 	if err != nil {
 		log.Fatal(err)

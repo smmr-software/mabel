@@ -28,6 +28,7 @@ func main() {
 		download = flag.StringP("download", "d", xdg.UserDirs.Download, "Set the default directory for downloaded torrents.")
 		port     = flag.UintP("port", "p", 42069, "Set the port number to which the client will bind.")
 		theme    = flag.StringP("theme", "t", "default", "Set the color theme that the client will use.")
+		logging  = flag.BoolP("log", "l", false, "Enable client logging.")
 		help     = flag.BoolP("help", "h", false, "Print this help message.")
 		vrsn     = flag.BoolP("version", "v", false, "Print version information.")
 	)
@@ -51,6 +52,8 @@ func main() {
 		menu.WriteString("\n        Set the port number to which the client will bind. [default: " + green.Render("42069") + "]")
 		menu.WriteString("\n    " + green.Render("-t") + ", " + green.Render("--theme"))
 		menu.WriteString("\n        Set the color theme that the client will use. [default: " + green.Render("default") + "]")
+		menu.WriteString("\n    " + green.Render("-l") + ", " + green.Render("--log"))
+		menu.WriteString("\n        Enable client logging. [file: " + green.Render("$XDG_STATE_HOME/mabel/log.txt") + "]")
 		menu.WriteString("\n    " + green.Render("-h") + ", " + green.Render("--help"))
 		menu.WriteString("\n        Print this help message.")
 		menu.WriteString("\n    " + green.Render("-v") + ", " + green.Render("--version"))
@@ -103,6 +106,7 @@ func main() {
 	downloadFlag := flag.Lookup("download")
 	portFlag := flag.Lookup("port")
 	themeFlag := flag.Lookup("theme")
+	loggingFlag := flag.Lookup("log")
 	thm := conf.getTheme()
 
 	if !downloadFlag.Changed && conf.Download != "" {
@@ -111,6 +115,9 @@ func main() {
 	if !portFlag.Changed && conf.Port != 0 {
 		flag.Set("port", fmt.Sprint(conf.Port))
 	}
+	if !loggingFlag.Changed {
+		flag.Set("log", fmt.Sprint(conf.Log))
+	}
 	if themeFlag.Changed {
 		thm = styles.StringToTheme(theme)
 	}
@@ -118,8 +125,8 @@ func main() {
 	styles.BorderWindow = styles.BorderWindow.BorderForeground(thm.Primary)
 
 	if flag.NArg() == 1 {
-		mini.Execute(&args[0], download, port, thm)
+		mini.Execute(&args[0], download, port, logging, thm)
 	} else {
-		full.Execute(&args, download, port, thm)
+		full.Execute(&args, download, port, logging, thm)
 	}
 }
