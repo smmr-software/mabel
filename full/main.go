@@ -21,7 +21,7 @@ func (m model) Init() tea.Cmd {
 }
 
 func Execute(torrents *[]string, dir *string, port *uint, logging *bool, theme *styles.ColorTheme) {
-	model, err := initialModel(torrents, dir, port, theme)
+	model, err := initialModel(torrents, dir, port, logging, theme)
 	if err != nil {
 		log.Fatal(err)
 	}

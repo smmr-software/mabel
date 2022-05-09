@@ -14,12 +14,15 @@ import (
 	"github.com/charmbracelet/bubbles/help"
 	clist "github.com/charmbracelet/bubbles/list"
 	"github.com/charmbracelet/bubbles/textinput"
+
+	"github.com/adrg/xdg"
 )
 
 type model struct {
 	width, height   int
 	startupTorrents *[]string
 	dir             *string
+	logging         *bool
 	theme           *styles.ColorTheme
 
 	client       *torrent.Client
@@ -73,12 +76,23 @@ func initialPortStartupFailure() *portStartupFailure {
 	return &port
 }
 
-func genMabelConfig(port *uint) *torrent.ClientConfig {
+func genMabelConfig(port *uint, logging *bool) *torrent.ClientConfig {
 	config := torrent.NewDefaultClientConfig()
 	config.Logger = log.Default
 	config.Logger.Handlers = []log.Handler{log.DiscardHandler}
 	config.Seed = true
 	config.ListenPort = int(*port)
+
+	if *logging {
+		config.Debug = true
+		if path, err := xdg.StateFile("mabel/client.log"); err == nil {
+			if file, err := os.OpenFile(path, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644); err == nil {
+				handler := log.DefaultHandler
+				handler.W = file
+				config.Logger.Handlers = []log.Handler{handler}
+			}
+		}
+	}
 
 	metadataDirectory := os.TempDir()
 	if metadataStorage, err := storage.NewDefaultPieceCompletionForDir(metadataDirectory); err != nil {
@@ -99,14 +113,15 @@ func genList() *clist.Model {
 	return &list
 }
 
-func initialModel(torrents *[]string, dir *string, port *uint, theme *styles.ColorTheme) (model, error) {
-	config := genMabelConfig(port)
+func initialModel(torrents *[]string, dir *string, port *uint, logging *bool, theme *styles.ColorTheme) (model, error) {
+	config := genMabelConfig(port, logging)
 	client, err := torrent.NewClient(config)
 	hlp := help.New()
 
 	m := model{
 		startupTorrents: torrents,
 		dir:             dir,
+		logging:         logging,
 		theme:           theme,
 
 		client:       client,

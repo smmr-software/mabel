@@ -79,7 +79,7 @@ func portStartupFailureKeyPress(m *model, msg *tea.KeyMsg) (tea.Model, tea.Cmd) 
 		}
 		port := uint(prt)
 
-		config := genMabelConfig(&port)
+		config := genMabelConfig(&port, m.logging)
 		client, err := torrent.NewClient(config)
 		if err != nil {
 			return m, reportError(err)
