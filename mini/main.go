@@ -39,8 +39,9 @@ func genMabelConfig(port *uint, logging *bool) *torrent.ClientConfig {
 	config.ListenPort = int(*port)
 
 	if *logging {
-		if path, err := xdg.StateFile("mabel/log.txt"); err == nil {
-			if file, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE, 0755); err == nil {
+		config.Debug = true
+		if path, err := xdg.StateFile("mabel/mini.log"); err == nil {
+			if file, err := os.OpenFile(path, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644); err == nil {
 				handler := log.DefaultHandler
 				handler.W = file
 				config.Logger.Handlers = []log.Handler{handler}
