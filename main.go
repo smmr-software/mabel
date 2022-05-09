@@ -53,7 +53,7 @@ func main() {
 		menu.WriteString("\n    " + green.Render("-t") + ", " + green.Render("--theme"))
 		menu.WriteString("\n        Set the color theme that the client will use. [default: " + green.Render("default") + "]")
 		menu.WriteString("\n    " + green.Render("-l") + ", " + green.Render("--log"))
-		menu.WriteString("\n        Enable client logging. [file: " + green.Render("$XDG_STATE_HOME/mabel/log.txt") + "]")
+		menu.WriteString("\n        Enable client logging. [dir: " + green.Render("$XDG_STATE_HOME/mabel") + "]")
 		menu.WriteString("\n    " + green.Render("-h") + ", " + green.Render("--help"))
 		menu.WriteString("\n        Print this help message.")
 		menu.WriteString("\n    " + green.Render("-v") + ", " + green.Render("--version"))
