@@ -1,3 +1,5 @@
+// Package main creates and reads the config file, handles flags, and
+// executes the mini and full clients.
 package main
 
 import (
@@ -35,7 +37,7 @@ func main() {
 	flag.Parse()
 	args := flag.Args()
 
-	if *help {
+	if *help { // print the flag help info
 		green := gloss.NewStyle().Foreground(gloss.Color("2"))
 		yellow := gloss.NewStyle().Foreground(gloss.Color("3"))
 
@@ -67,7 +69,7 @@ func main() {
 
 		fmt.Println(menu.String())
 		return
-	} else if *vrsn {
+	} else if *vrsn { // generate and print the version info
 		info, ok := debug.ReadBuildInfo()
 		if ok {
 			for _, setting := range info.Settings {
@@ -102,6 +104,8 @@ func main() {
 		return
 	}
 
+	// Check the config file and update the download, port, theme, and
+	// log flags with user configuration or set them to default
 	conf := getConfig()
 	downloadFlag := flag.Lookup("download")
 	portFlag := flag.Lookup("port")

@@ -19,6 +19,9 @@ type config struct {
 	Theme    toml.Primitive
 }
 
+// getTheme checks the config file for a configured theme key and
+// returns a ColorTheme. If the theme key is not present, the function
+// returns the default theme.
 func (c *config) getTheme() *styles.ColorTheme {
 	switch md.Type("theme") {
 	case "String":
@@ -34,6 +37,8 @@ func (c *config) getTheme() *styles.ColorTheme {
 	}
 }
 
+// getConfig checks for a TOML file in the config directory and returns
+// a config.
 func getConfig() (conf config) {
 	file := xdg.ConfigHome + "/mabel/config.toml"
 
