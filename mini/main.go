@@ -31,6 +31,8 @@ type model struct {
 	client           *torrent.Client
 }
 
+// genMabelConfig creates a file for logs from the mini client to be
+// written to.
 func genMabelConfig(port *uint, logging *bool) *torrent.ClientConfig {
 	config := torrent.NewDefaultClientConfig()
 	config.Logger = log.Default
@@ -59,6 +61,8 @@ func genMabelConfig(port *uint, logging *bool) *torrent.ClientConfig {
 	return config
 }
 
+// initialModel creates the model for the mini client. If the torrent
+// cannot be generated, the client quits.
 func initialModel(t, dir *string, port *uint, logging *bool, theme *styles.ColorTheme) (model, error) {
 	client, err := torrent.NewClient(genMabelConfig(port, logging))
 	if err != nil {
@@ -73,12 +77,18 @@ func initialModel(t, dir *string, port *uint, logging *bool, theme *styles.Color
 	return m, nil
 }
 
+// tick refreshes the UI every half a second in order to update
+// download progress.
+// Note: could be improved to update by interval of download progress,
+// rather than a time interval.
 func tick() tea.Cmd {
 	return tea.Tick(time.Duration(interval), func(t time.Time) tea.Msg {
 		return tickMsg(t)
 	})
 }
 
+// Init creates the UI model instance. If the torrrent cannot be
+// generated, the client quits.
 func (m model) Init() tea.Cmd {
 	cmd, err := trrnt.AddTorrent(m.torrent, m.saveDir, m.client, nil, m.theme)
 	if err != nil {
@@ -88,6 +98,8 @@ func (m model) Init() tea.Cmd {
 	return cmd
 }
 
+// Update updates the UI model based on torrent progress, window size
+// changes, and user keyboard messages.
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
@@ -104,6 +116,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, nil
 }
 
+// View prints the UI model with the download stats and progress bar.
 func (m model) View() string {
 	var download, upload, peers, meta, bar string
 
@@ -132,6 +145,8 @@ func (m model) View() string {
 	return fmt.Sprintf("%s\n%s\n", name+strings.Repeat(" ", spacer)+meta, bar)
 }
 
+// Execute runs the creation of the initial model and a Bubble Tea
+// program, and quits the client if that fails.
 func Execute(t, dir *string, port *uint, logging *bool, theme *styles.ColorTheme) {
 	model, err := initialModel(t, dir, port, logging, theme)
 	if err != nil {
