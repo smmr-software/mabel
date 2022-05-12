@@ -1,3 +1,4 @@
+// Package mini generates the mini client for single torrents.
 package mini
 
 import (
