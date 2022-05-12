@@ -103,7 +103,7 @@ func main() {
 	}
 
 	// Check the config file and update the download, port, theme, and
-	// log flags with user configuration or set them to default.
+	// log flags with user configuration or set them to default
 	conf := getConfig()
 	downloadFlag := flag.Lookup("download")
 	portFlag := flag.Lookup("port")
