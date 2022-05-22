@@ -13,6 +13,8 @@ import (
 	gloss "github.com/charmbracelet/lipgloss"
 )
 
+// View returns the UI model in its current state as a string to be
+// displayed to the user.
 func (m model) View() string {
 	if m.err != nil {
 		return errorView(&m)
@@ -27,6 +29,8 @@ func (m model) View() string {
 	}
 }
 
+// portStartupFailureView renders the screen when the port binding
+// fails and the user must provide a different port.
 func portStartupFailureView(m *model) string {
 	fullscreen := gloss.NewStyle().
 		Width(m.width).
@@ -47,6 +51,7 @@ func portStartupFailureView(m *model) string {
 	)
 }
 
+// addPromptView renders the screen when a new torrent is being added.
 func addPromptView(m *model) string {
 	fullscreen := gloss.NewStyle().
 		Width(m.width).
@@ -71,6 +76,8 @@ func addPromptView(m *model) string {
 	return fullscreen.Render(content + help + "\n")
 }
 
+// errorView renders the screen when an error occurs, presenting the
+// error and allowing the user to return home.
 func errorView(m *model) string {
 	popupWidth := m.width / 3
 	popupHeight := m.height / 4
@@ -108,6 +115,9 @@ func errorView(m *model) string {
 	return fullscreen.Render(content + help + "\n")
 }
 
+// torrentDetailView renders the screen when the user requests to see
+// torrent details, including download progress stats, the progress bar
+// metainfo, the torrent name, and when it was created.
 func torrentDetailView(m *model) string {
 	fullscreen := gloss.NewStyle().
 		Width(m.width).
@@ -193,6 +203,7 @@ func torrentDetailView(m *model) string {
 	return fullscreen.Render(content + help + "\n")
 }
 
+// mainView renders the main screen with the torrent list.
 func mainView(m *model) string {
 	fullscreen := gloss.NewStyle().
 		Width(m.width).

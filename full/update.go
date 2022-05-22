@@ -18,15 +18,20 @@ const interval = 500 * time.Millisecond
 type tickMsg time.Time
 type mabelError error
 
+// reportError takes an error and returns it to Bubble Tea to be
+// displayed to the user.
 func reportError(err error) tea.Cmd {
 	return func() tea.Msg {
 		return mabelError(err)
 	}
 }
 
+// Update responds to port startup failure, window size changes, user
+// keyboard messages, if torrent detail view is requested, or if a
+// torrent is being added and updates the UI model accordingly.
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
-	case tea.WindowSizeMsg:
+	case tea.WindowSizeMsg: // Change to fit new window size
 		width := msg.Width - styles.BorderWindow.GetHorizontalBorderSize()
 		height := msg.Height - styles.BorderWindow.GetHorizontalBorderSize()
 
@@ -38,27 +43,27 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return m, nil
 	case tea.KeyMsg:
 		switch {
-		case msg.Type == tea.KeyCtrlC:
+		case msg.Type == tea.KeyCtrlC: // Quit client
 			if m.client != nil {
 				m.client.Close()
 			}
 			return m, tea.Quit
-		case m.err != nil:
+		case m.err != nil: // Dismiss error display
 			m.err = nil
 			return m, nil
-		case m.portStartupFailure.enabled:
+		case m.portStartupFailure.enabled: // Deal with port startup failure
 			return portStartupFailureKeyPress(&m, &msg)
-		case m.addPrompt.enabled:
+		case m.addPrompt.enabled: // Switch to add prompt screen
 			return addPromptKeyPress(&m, &msg)
-		case m.viewingTorrentDetails:
+		case m.viewingTorrentDetails: // Close torrent details screen if open
 			m.viewingTorrentDetails = false
 			return m, nil
-		default:
+		default: // Deal with default user keyboard messages
 			return defaultKeyPress(&m, &msg)
 		}
 	case tickMsg:
 		return m, tick()
-	case mabelError:
+	case mabelError: // Deal with error
 		m.err = msg
 		return m, nil
 	default:
@@ -66,6 +71,8 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	}
 }
 
+// portStartupFailureKeyPress allows the user to choose a port if the
+// attempted port binding fails.
 func portStartupFailureKeyPress(m *model, msg *tea.KeyMsg) (tea.Model, tea.Cmd) {
 	switch msg.String() {
 	case "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "backspace":
@@ -93,6 +100,7 @@ func portStartupFailureKeyPress(m *model, msg *tea.KeyMsg) (tea.Model, tea.Cmd) 
 	}
 }
 
+// addPromptKeyPress handles user key presses when adding a torrent.
 func addPromptKeyPress(m *model, msg *tea.KeyMsg) (tea.Model, tea.Cmd) {
 	switch {
 	case key.Matches(*msg, addPromptKeys.quit):
@@ -135,6 +143,8 @@ func addPromptKeyPress(m *model, msg *tea.KeyMsg) (tea.Model, tea.Cmd) {
 	}
 }
 
+// defaultKeyPress allows the user to interact with the home page and
+// quit the client.
 func defaultKeyPress(m *model, msg *tea.KeyMsg) (tea.Model, tea.Cmd) {
 	switch {
 	case key.Matches(*msg, homeKeys.quit):
@@ -172,6 +182,10 @@ func defaultKeyPress(m *model, msg *tea.KeyMsg) (tea.Model, tea.Cmd) {
 	return m, nil
 }
 
+// tick refreshes the UI every half a second in order to update
+// download progress.
+// Note: could be improved to update by interval of download progress,
+// rather than a time interval.
 func tick() tea.Cmd {
 	return tea.Tick(time.Duration(interval), func(t time.Time) tea.Msg {
 		return tickMsg(t)
