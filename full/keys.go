@@ -15,10 +15,15 @@ type homeKeyMap struct {
 	quit     key.Binding
 }
 
+// ShortHelp returns the key bindings for the help and quit actions in
+// the home screen.
 func (k homeKeyMap) ShortHelp() []key.Binding {
 	return []key.Binding{k.help, k.quit}
 }
 
+// FullHelp returns the key bindings for the up, down, next, previous,
+// add, delete, details, deselect, help, and quit actions in the home
+// screen.
 func (k homeKeyMap) FullHelp() [][]key.Binding {
 	return [][]key.Binding{
 		{k.up, k.down},
@@ -29,6 +34,8 @@ func (k homeKeyMap) FullHelp() [][]key.Binding {
 	}
 }
 
+// Define the key bindings and help symbols for each action in the home
+// screen.
 var homeKeys = homeKeyMap{
 	up: key.NewBinding(
 		key.WithKeys("k", "up"),
@@ -78,10 +85,14 @@ type addPromptKeyMap struct {
 	forward key.Binding
 }
 
+// ShortHelp returns the key bindings for the forward, back, and quit
+// actions in the the add prompt screen.
 func (k addPromptKeyMap) ShortHelp() []key.Binding {
 	return []key.Binding{k.forward, k.back, k.quit}
 }
 
+// FullHelp returns the key bindings for the forward, back, and quit
+// actions in the the add prompt screen.
 func (k addPromptKeyMap) FullHelp() [][]key.Binding {
 	return [][]key.Binding{
 		{k.back},
@@ -90,6 +101,8 @@ func (k addPromptKeyMap) FullHelp() [][]key.Binding {
 	}
 }
 
+// Define the key bindings and help symbols for each action in the add
+// prompt screen.
 var addPromptKeys = addPromptKeyMap{
 	quit: key.NewBinding(
 		key.WithKeys("esc"),

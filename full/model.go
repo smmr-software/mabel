@@ -50,6 +50,8 @@ type portStartupFailure struct {
 	port    textinput.Model
 }
 
+// initialAddPrompt returns a pointer to the model for the torrent add
+// prompt screen.
 func initialAddPrompt(dir *string) *modelAddPrompt {
 	torrent := textinput.New()
 	torrent.Width = 32
@@ -67,6 +69,8 @@ func initialAddPrompt(dir *string) *modelAddPrompt {
 	return &s
 }
 
+// initialPortStartupFailure returns a pointer to the model for the
+// port startup failure screen.
 func initialPortStartupFailure() *portStartupFailure {
 	input := textinput.New()
 	input.Width = 32
@@ -76,6 +80,8 @@ func initialPortStartupFailure() *portStartupFailure {
 	return &port
 }
 
+// genMabelConfig creates a file for logs from the full client to be
+// written to.
 func genMabelConfig(port *uint, logging *bool) *torrent.ClientConfig {
 	config := torrent.NewDefaultClientConfig()
 	config.Logger = log.Default
@@ -104,6 +110,8 @@ func genMabelConfig(port *uint, logging *bool) *torrent.ClientConfig {
 	return config
 }
 
+// genList returns a pointer to a new Bubbles list model for torrents
+// on the main page.
 func genList() *clist.Model {
 	list := clist.New(make([]clist.Item, 0), list.ItemDelegate{}, 0, 0)
 	list.SetShowTitle(false)
@@ -113,6 +121,7 @@ func genList() *clist.Model {
 	return &list
 }
 
+// initialModel creates the model for the full client.
 func initialModel(torrents *[]string, dir *string, port *uint, logging *bool, theme *styles.ColorTheme) (model, error) {
 	config := genMabelConfig(port, logging)
 	client, err := torrent.NewClient(config)
@@ -134,6 +143,7 @@ func initialModel(torrents *[]string, dir *string, port *uint, logging *bool, th
 		portStartupFailure: initialPortStartupFailure(),
 	}
 
+	// Check for an error, listens for port startup failure or other error
 	if err != nil {
 		msg := err.Error()
 		switch {

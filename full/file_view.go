@@ -14,6 +14,8 @@ import (
 	"github.com/dustin/go-humanize"
 )
 
+// fileView renders the list of torrent files and their download
+// percentages.
 func fileView(files *[]*torrent.File, w *int, h *int) string {
 	width := *w / 3
 	height := *h / 4
