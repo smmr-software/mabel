@@ -1,3 +1,5 @@
+// Package main creates and reads the config file, handles flags, and
+// executes the mini and full clients.
 package main
 
 import (
