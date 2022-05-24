@@ -1,3 +1,5 @@
+// Package list defines the styles and renders the Bubbles list for
+// torrents on the main screen.
 package list
 
 import (
@@ -17,6 +19,7 @@ import (
 	gloss "github.com/charmbracelet/lipgloss"
 )
 
+// Define the torrent items that go in the torrent list
 type Item struct {
 	Self    *torrent.Torrent
 	Theme   *styles.ColorTheme
@@ -26,8 +29,15 @@ type Item struct {
 	Program string
 }
 
+// FilterValue currently has no function, as torrent filtering is not
+// currently supported in the main screen.
 func (i Item) FilterValue() string { return "" }
-func (i Item) Title() string       { return stripansi.Strip(i.Self.Name()) }
+
+// Title returns the working name for the torrent without any styling.
+func (i Item) Title() string { return stripansi.Strip(i.Self.Name()) }
+
+// Description returns the torrent info, including the download,
+// upload, and peers stats if the torrent download is incomplete.
 func (i Item) Description() string {
 	t := i.Self
 	info := t.Info()
@@ -52,9 +62,17 @@ func (i Item) Description() string {
 
 type ItemDelegate struct{}
 
-func (d ItemDelegate) Height() int                               { return 2 }
-func (d ItemDelegate) Spacing() int                              { return 0 }
+// Height returns the height setting for the list delegate, 2.
+func (d ItemDelegate) Height() int { return 2 }
+
+// Spacing returns the spacing setting for the list delegate, 0.
+func (d ItemDelegate) Spacing() int { return 0 }
+
+// Update updates the list model.
 func (d ItemDelegate) Update(msg tea.Msg, m *list.Model) tea.Cmd { return nil }
+
+// Render renders the full torrent list for the main screen with the
+// color theme styling.
 func (d ItemDelegate) Render(w io.Writer, m list.Model, index int, listItem list.Item) {
 	var (
 		i = listItem.(Item)
