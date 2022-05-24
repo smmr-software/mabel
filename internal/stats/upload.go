@@ -7,6 +7,8 @@ import (
 	"github.com/dustin/go-humanize"
 )
 
+// Upload retrieves the amount of data seeded for a torrent and returns
+// it as a string.
 func Upload(t *torrent.Torrent) string {
 	var (
 		stats  = t.Stats()

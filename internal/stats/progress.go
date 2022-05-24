@@ -7,6 +7,8 @@ import (
 	"github.com/charmbracelet/bubbles/progress"
 )
 
+// ProgressBar retrieves the download information and renders it as a
+// Bubbles progress bar.
 func ProgressBar(t *torrent.Torrent, width *int, theme *styles.ColorTheme) string {
 	var (
 		done    = t.BytesCompleted()
