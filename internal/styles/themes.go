@@ -14,6 +14,8 @@ type CustomTheme struct {
 	GradientEnd, GradientSolid string
 }
 
+// StringToTheme converts strings from the config file into ColorTheme
+// pointers.
 func StringToTheme(s *string) *ColorTheme {
 	switch *s {
 	case "desert":
@@ -27,6 +29,8 @@ func StringToTheme(s *string) *ColorTheme {
 	}
 }
 
+// ToTheme translates a CustomTheme of strings to a ColorTheme of Lip
+// Gloss AdaptiveColors.
 func (c *CustomTheme) ToTheme() *ColorTheme {
 	theme := StringToTheme(&c.Base)
 
@@ -82,10 +86,15 @@ func (c *CustomTheme) ToTheme() *ColorTheme {
 	return theme
 }
 
+// UseSolidGradient returns a boolean based on whether the gradient for
+// the progress bar is solid or not.
 func (t *ColorTheme) UseSolidGradient() bool {
 	return t.GradientSolid != gloss.AdaptiveColor{}
 }
 
+// AdaptiveColorToString returns the Light or Dark alternative of an
+// AdaptiveColor as a string, based on the background color of the
+// terminal.
 func AdaptiveColorToString(c *gloss.AdaptiveColor) string {
 	if gloss.HasDarkBackground() {
 		return c.Dark
@@ -93,6 +102,7 @@ func AdaptiveColorToString(c *gloss.AdaptiveColor) string {
 	return c.Light
 }
 
+// Define the default theme
 var DefaultTheme = ColorTheme{
 	Primary: gloss.AdaptiveColor{
 		Light: "#464FB6",
@@ -124,6 +134,7 @@ var DefaultTheme = ColorTheme{
 	},
 }
 
+// Define the desert theme
 var DesertTheme = ColorTheme{
 	Primary: gloss.AdaptiveColor{
 		Light: "#D08B5D",
@@ -155,6 +166,7 @@ var DesertTheme = ColorTheme{
 	},
 }
 
+// Define the purple theme
 var PurpleTheme = ColorTheme{
 	Primary: gloss.AdaptiveColor{
 		Light: "#8C00FF",
@@ -182,6 +194,7 @@ var PurpleTheme = ColorTheme{
 	},
 }
 
+// Define the ANSI/8-bit theme
 var ANSITheme = ColorTheme{
 	Primary:       gloss.AdaptiveColor{Light: "4", Dark: "4"},
 	Light:         gloss.AdaptiveColor{Light: "14", Dark: "14"},
