@@ -13,6 +13,9 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 )
 
+// addMagnetLink takes a magnet link and adds the torrent to the
+// client. If it is a new torrent, the torrent info is added to the
+// Bubbles list.
 func addMagnetLink(input *string, dir *storage.ClientImpl, client *torrent.Client, l *clist.Model, theme *styles.ColorTheme) (tea.Cmd, error) {
 	spec, err := torrent.TorrentSpecFromMagnetUri(*input)
 	if err != nil {

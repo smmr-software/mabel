@@ -1,3 +1,5 @@
+// Package torrent runs the torrent downloads of the client in
+// metainfo, infohash, and magnet link formats.
 package torrent
 
 import (
@@ -21,6 +23,8 @@ var magnetPrefix = "magnet:"
 var infohashPrefix = "infohash:"
 var hashLength = 40
 
+// AddTorrents takes a group of torrents as strings, adds them to the
+// client, and returns them batched.
 func AddTorrents(t *[]string, dir *string, client *torrent.Client, l *list.Model, theme *styles.ColorTheme) tea.Cmd {
 	cmds := make([]tea.Cmd, 0)
 
@@ -34,6 +38,8 @@ func AddTorrents(t *[]string, dir *string, client *torrent.Client, l *list.Model
 	return tea.Batch(cmds...)
 }
 
+// AddTorrent takes a torrent as a string and adds it to the client
+// based on its format.
 func AddTorrent(t, dir *string, client *torrent.Client, l *list.Model, theme *styles.ColorTheme) (tea.Cmd, error) {
 	store := getStorage(dir)
 	if strings.HasPrefix(*t, magnetPrefix) {
@@ -45,6 +51,8 @@ func AddTorrent(t, dir *string, client *torrent.Client, l *list.Model, theme *st
 	}
 }
 
+// downloadTorrent asynchronously waits for torrent info to arrive,
+// triggers the download, and returns a Bubble Tea start message.
 func downloadTorrent(t *torrent.Torrent) tea.Cmd {
 	return func() tea.Msg {
 		<-t.GotInfo()
@@ -53,6 +61,9 @@ func downloadTorrent(t *torrent.Torrent) tea.Cmd {
 	}
 }
 
+// getStorage returns a storage implementation that writes downloaded
+// files to a user-defined directory, and writes unnecessary files to a
+// temporary directory.
 func getStorage(dir *string) storage.ClientImpl {
 	var err error
 	*dir, err = home.Expand(*dir)
