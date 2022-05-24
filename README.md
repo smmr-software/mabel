@@ -13,6 +13,14 @@ community, including:
 
 - A [Nerd Font] installed and enabled in your terminal.
 
+## Install
+
+Coming soon to a package manager near you!
+
+```sh
+go install github.com/smmr-software/mabel@latest
+```
+
 ## License
 
 [GPLv3](COPYING).
