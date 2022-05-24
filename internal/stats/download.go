@@ -1,3 +1,5 @@
+// Package stats retrieves download, upload, peers, and progress stats
+// for torrents.
 package stats
 
 import (
@@ -7,6 +9,8 @@ import (
 	"github.com/dustin/go-humanize"
 )
 
+// Download retrieves the download information for a torrent and
+// returns it as a string.
 func Download(t *torrent.Torrent, showPercent bool) string {
 	var (
 		done    = t.BytesCompleted()
