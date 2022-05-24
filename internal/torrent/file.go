@@ -17,8 +17,8 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 )
 
-// addFromFile takes a metainfo (.torrent) file adds the torrent to the
-// client. If it is a new torrent, the torrent info is added to the
+// addFromFile takes a metainfo (.torrent) file and adds the torrent to
+// the client. If it is a new torrent, the torrent info is added to the
 // Bubbles list.
 func addFromFile(input *string, dir *storage.ClientImpl, client *torrent.Client, l *clist.Model, theme *styles.ColorTheme) (tea.Cmd, error) {
 	path, err := home.Expand(*input)
