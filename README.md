@@ -27,7 +27,7 @@ go install github.com/smmr-software/mabel@latest
 
 ***
 
-A [SMMR Software] creation.
+A [SMMR Software] creation. 🏖
 
 [charmbracelet/bubbletea]: https://github.com/charmbracelet/bubbletea
 [anacrolix/torrent]: https://github.com/anacrolix/torrent
