@@ -54,6 +54,82 @@ A brief breakdown of the controls:
 
 Once again, press `q` or `ctrl+c` to close the client.
 
+## Config and Flags
+
+Mabel can be configured via a TOML file or via flags at runtime. Flags
+take precedence over the config file.
+
+### Config File
+
+Located at `$XDG_CONFIG_HOME/mabel/config.toml`. A basic example:
+```toml
+# The default torrent download directory.
+# Supports expansion of ~ characters
+# Default: $XDG_DOWNLOAD_DIR
+download = "~/movies/buffer"
+
+# The port to which the client will bind
+# Default: 42069
+port = 126
+
+# Toggle client logging (logs are written to $XDG_STATE_HOME/mabel)
+log = false
+```
+
+#### Theme
+
+The `theme` key is special, as it can be one of two types.
+
+As a string, `theme` selects one of our default themes. The currently
+available themes are:
+- default
+- desert
+- purple/lean/drank
+- 8-bit/ansi
+
+As a table [a.k.a (hash)map or dictionary], the `theme` key lets you
+customize your colors in-depth. The `theme.base` key provides a fallback
+for any unset values in the table, and follows the same rules as the
+string `theme` key.
+
+The `theme.gradient*` keys customize the gradients used in progress bars
+throughout Mabel. `theme.gradient-solid` takes precedence over
+`theme.gradient-start` and `theme.gradient-end`. The latter two only
+work with 24-bit color.
+
+Some examples:
+```toml
+[theme] # default, but with a red primary color
+base = "default"
+primary = "#FF0000"
+
+[theme] # the same as previous
+primary = "#FF0000"
+
+[theme] # 8-bit, with a blue error color
+base = "8-bit"
+error = "12"
+
+[theme] # default, with a gradient from rusty red to vivid burgundy
+gradient-start = "#D52941"
+gradient-end = "#990D35"
+
+[theme] # a completely custom theme where everything is green
+primary = "#00FF00"
+light = "#00FF00"
+dark = "#00FF00"
+error = "#00FF00"
+tooltip = "#00FF00"
+gradient-solid = "#00FF00"
+```
+
+### Flags
+
+Runtime flags are documented in Mabel's help message, which you can view
+by passing `-h` on invocation. Flags encompass all the options
+configurable in the TOML config, plus help and version information
+messages.
+
 ## License
 
 [GPLv3](COPYING).
