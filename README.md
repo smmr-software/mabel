@@ -11,7 +11,7 @@ community, including:
 
 ## Prerequisites
 
-- A [Nerd Font] installed and enabled in your terminal.
+- A [Nerd Font] installed and enabled in your terminal
 
 ## Install
 
@@ -84,37 +84,45 @@ As a string, `theme` selects one of our default themes. The currently
 available themes are:
 - default
 - desert
-- purple/lean/drank
+- purple
 - 8-bit/ansi
 
-As a table [a.k.a (hash)map or dictionary], the `theme` key lets you
-customize your colors in-depth. The `theme.base` key provides a fallback
-for any unset values in the table, and follows the same rules as the
-string `theme` key.
+As a table [a.k.a (hash)map or dictionary], the `theme` key can also
+allow you to customize your colors in-depth. The `theme.base` key
+provides a fallback for any unset values in the table, and follows the
+same rules as the string `theme` key.
 
 The `theme.gradient*` keys customize the gradients used in progress bars
-throughout Mabel. `theme.gradient-solid` takes precedence over
-`theme.gradient-start` and `theme.gradient-end`. The latter two only
-work with 24-bit color.
+throughout Mabel. `gradient-solid` takes precedence over
+`gradient-start` and `gradient-end`. The latter two only work with
+24-bit color.
 
 Some examples:
 ```toml
-[theme] # default, but with a red primary color
+theme = "desert"
+
+# default, with a red primary color
+[theme]
 base = "default"
 primary = "#FF0000"
 
-[theme] # the same as previous
+# the same as previous
+[theme]
 primary = "#FF0000"
 
-[theme] # 8-bit, with a blue error color
+# 8-bit, with a blue error color
+[theme]
 base = "8-bit"
 error = "12"
 
-[theme] # default, with a gradient from rusty red to vivid burgundy
+# default, with a gradient from Pink Lightly Toasted to SMMR Software
+# Example Color 2 (https://colornames.org/color/990d35)
+[theme]
 gradient-start = "#D52941"
 gradient-end = "#990D35"
 
-[theme] # a completely custom theme where everything is green
+# a completely custom theme where everything is green
+[theme]
 primary = "#00FF00"
 light = "#00FF00"
 dark = "#00FF00"
