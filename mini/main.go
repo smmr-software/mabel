@@ -1,4 +1,5 @@
-// Package mini generates the mini client for single torrents.
+// Package mini generates the mini client for single downloading
+// torrents.
 package mini
 
 import (
@@ -32,8 +33,9 @@ type model struct {
 	client           *torrent.Client
 }
 
-// genMabelConfig creates a file for logs from the mini client to be
-// written to.
+// genMabelConfig creates the torrent client, file for logs from the
+// mini client, and the directory for metadata storage. It also
+// configures the seeding and listening port.
 func genMabelConfig(port *uint, logging *bool) *torrent.ClientConfig {
 	config := torrent.NewDefaultClientConfig()
 	config.Logger = log.Default
@@ -63,7 +65,7 @@ func genMabelConfig(port *uint, logging *bool) *torrent.ClientConfig {
 }
 
 // initialModel creates the model for the mini client. If the torrent
-// cannot be generated, the client quits.
+// cannot be generated, the client aborts.
 func initialModel(t, dir *string, port *uint, logging *bool, theme *styles.ColorTheme) (model, error) {
 	client, err := torrent.NewClient(genMabelConfig(port, logging))
 	if err != nil {
@@ -88,8 +90,8 @@ func tick() tea.Cmd {
 	})
 }
 
-// Init creates the UI model instance. If the torrrent cannot be
-// generated, the client quits.
+// Init starts the UI and adds startup torrents. If the torrrent cannot
+// be generated, the client quits.
 func (m model) Init() tea.Cmd {
 	cmd, err := trrnt.AddTorrent(m.torrent, m.saveDir, m.client, nil, m.theme)
 	if err != nil {
@@ -146,8 +148,8 @@ func (m model) View() string {
 	return fmt.Sprintf("%s\n%s\n", name+strings.Repeat(" ", spacer)+meta, bar)
 }
 
-// Execute runs the creation of the initial model and a Bubble Tea
-// program, and quits the client if that fails.
+// Execute creates the initial model and a Bubble Tea program, and
+// aborts the client if that fails.
 func Execute(t, dir *string, port *uint, logging *bool, theme *styles.ColorTheme) {
 	model, err := initialModel(t, dir, port, logging, theme)
 	if err != nil {
