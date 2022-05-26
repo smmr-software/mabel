@@ -37,7 +37,7 @@ func main() {
 	flag.Parse()
 	args := flag.Args()
 
-	if *help { // print the flag help info when the help flag is used
+	if *help { // print the flag help info
 		green := gloss.NewStyle().Foreground(gloss.Color("2"))
 		yellow := gloss.NewStyle().Foreground(gloss.Color("3"))
 
@@ -69,7 +69,7 @@ func main() {
 
 		fmt.Println(menu.String())
 		return
-	} else if *vrsn { // update and print the version info when the version flag is used
+	} else if *vrsn { // generate and print the version info when the version flag is used
 		info, ok := debug.ReadBuildInfo()
 		if ok {
 			for _, setting := range info.Settings {
