@@ -99,6 +99,7 @@ throughout Mabel. `gradient-solid` takes precedence over
 
 Some examples:
 ```toml
+# just the desert theme
 theme = "desert"
 
 # default, with a red primary color
