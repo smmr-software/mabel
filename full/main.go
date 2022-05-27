@@ -10,7 +10,7 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 )
 
-// Init creates the UI model instance with startup torreents.
+// Init starts the UI and adds startup torrents.
 func (m model) Init() tea.Cmd {
 	return tea.Batch(
 		torrent.AddTorrents(
@@ -22,8 +22,8 @@ func (m model) Init() tea.Cmd {
 	)
 }
 
-// Execute runs the creation of the initial model and a Bubble Tea
-// program, and quits the client if that fails.
+// Execute creates the initial model and a Bubble Tea program, and
+// aborts the client if that fails.
 func Execute(torrents *[]string, dir *string, port *uint, logging *bool, theme *styles.ColorTheme) {
 	model, err := initialModel(torrents, dir, port, logging, theme)
 	if err != nil {

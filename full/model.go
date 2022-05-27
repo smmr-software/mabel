@@ -80,8 +80,9 @@ func initialPortStartupFailure() *portStartupFailure {
 	return &port
 }
 
-// genMabelConfig creates a file for logs from the full client to be
-// written to.
+// genMabelConfig creates the torrent client, file for logs from the
+// mini client, and the directory for metadata storage. It also
+// configures the seeding and listening port.
 func genMabelConfig(port *uint, logging *bool) *torrent.ClientConfig {
 	config := torrent.NewDefaultClientConfig()
 	config.Logger = log.Default
@@ -143,7 +144,7 @@ func initialModel(torrents *[]string, dir *string, port *uint, logging *bool, th
 		portStartupFailure: initialPortStartupFailure(),
 	}
 
-	// Check for an error, listens for port startup failure or other error
+	// Check for port startup failure or other error
 	if err != nil {
 		msg := err.Error()
 		switch {

@@ -21,8 +21,7 @@ func (k homeKeyMap) ShortHelp() []key.Binding {
 	return []key.Binding{k.help, k.quit}
 }
 
-// FullHelp returns the key bindings for the up, down, next, previous,
-// add, delete, details, deselect, help, and quit actions in the home
+// FullHelp returns the key bindings for all actions in the home
 // screen.
 func (k homeKeyMap) FullHelp() [][]key.Binding {
 	return [][]key.Binding{
@@ -91,8 +90,8 @@ func (k addPromptKeyMap) ShortHelp() []key.Binding {
 	return []key.Binding{k.forward, k.back, k.quit}
 }
 
-// FullHelp returns the key bindings for the forward, back, and quit
-// actions in the the add prompt screen.
+// FullHelp returns the key bindings for all actions in the the add
+// prompt screen.
 func (k addPromptKeyMap) FullHelp() [][]key.Binding {
 	return [][]key.Binding{
 		{k.back},

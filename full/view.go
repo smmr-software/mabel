@@ -13,8 +13,8 @@ import (
 	gloss "github.com/charmbracelet/lipgloss"
 )
 
-// View prints the UI model in the error, port startup failure, add
-// prompt, torrent detail, or main view.
+// View returns the UI model in the error, port startup failure, add
+// prompt, torrent detail, or main view as a string.
 func (m model) View() string {
 	if m.err != nil {
 		return errorView(&m)
@@ -52,8 +52,7 @@ func portStartupFailureView(m *model) string {
 }
 
 // addPromptView renders the screen when a new torrent is being added
-// and the user provides the magnet link and optionally the save
-// directory.
+// and the user provides the torrent and optionally the save directory.
 func addPromptView(m *model) string {
 	fullscreen := gloss.NewStyle().
 		Width(m.width).
