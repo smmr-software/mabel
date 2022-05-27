@@ -101,8 +101,8 @@ func (m model) Init() tea.Cmd {
 	return cmd
 }
 
-// Update updates the UI model based on torrent progress, window size
-// changes, and user keyboard messages.
+// Update responds to torrent progress, window size changes, and user
+// keyboard messages and updates the UI model accordingly.
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
