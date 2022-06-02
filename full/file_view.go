@@ -51,7 +51,7 @@ func fileView(files *[]*torrent.File, w *int, h *int) string {
 
 		padding := width - gloss.Width(download) - 2
 
-		name := utils.TruncateForMinimumSpacing(
+		name := utils.TruncateForMinimumPadding(
 			stripansi.Strip(f.DisplayPath()),
 			&padding, 5,
 		)

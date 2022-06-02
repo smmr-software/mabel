@@ -84,8 +84,8 @@ func (k addPromptKeyMap) ShortHelp() []key.Binding {
 
 func (k addPromptKeyMap) FullHelp() [][]key.Binding {
 	return [][]key.Binding{
-		{k.back},
 		{k.forward},
+		{k.back},
 		{k.quit},
 	}
 }

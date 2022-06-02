@@ -127,7 +127,7 @@ func (m model) View() string {
 	}
 
 	spacer := m.width - gloss.Width(meta)
-	name := utils.TruncateForMinimumSpacing(t.Name(), &spacer, 5)
+	name := utils.TruncateForMinimumPadding(t.Name(), &spacer, 5)
 
 	return fmt.Sprintf("%s\n%s\n", name+strings.Repeat(" ", spacer)+meta, bar)
 }

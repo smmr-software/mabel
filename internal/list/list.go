@@ -68,7 +68,7 @@ func (d ItemDelegate) Render(w io.Writer, m list.Model, index int, listItem list
 
 		meta   = i.Description()
 		spacer = m.Width() - gloss.Width(meta) - leftPadding
-		name   = utils.TruncateForMinimumSpacing(i.Title(), &spacer, 5)
+		name   = utils.TruncateForMinimumPadding(i.Title(), &spacer, 5)
 	)
 
 	if index == m.Index() {

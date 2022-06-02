@@ -2,10 +2,10 @@ package utils
 
 import gloss "github.com/charmbracelet/lipgloss"
 
-func TruncateForMinimumSpacing(str string, spacing *int, min int) string {
+func TruncateForMinimumPadding(str string, width *int, padding int) string {
 	runes := []rune(str)
 	initial := len(runes)
-	for *spacing-gloss.Width(string(runes)) < min {
+	for *width-gloss.Width(string(runes)) < padding {
 		if index := len(runes) - 1; index > 0 {
 			runes = runes[:index]
 		} else {
@@ -18,9 +18,9 @@ func TruncateForMinimumSpacing(str string, spacing *int, min int) string {
 
 	final := string(runes)
 
-	*spacing -= gloss.Width(final)
-	if *spacing < 0 {
-		*spacing = 0
+	*width -= gloss.Width(final)
+	if *width < 0 {
+		*width = 0
 	}
 
 	return final
