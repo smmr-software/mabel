@@ -6,8 +6,8 @@ import (
 	"github.com/anacrolix/torrent"
 )
 
-// Peers retrieves the peers information for a torrent and returns it
-// as a string.
+// Peers retrieves the peer information for a torrent and returns it as
+// a string.
 func Peers(t *torrent.Torrent) string {
 	stats := t.Stats()
 
