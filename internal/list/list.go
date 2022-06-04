@@ -33,11 +33,11 @@ type Item struct {
 // currently supported in the main screen.
 func (i Item) FilterValue() string { return "" }
 
-// Title returns the working name for the torrent without any styling.
+// Title returns the name of the torrent.
 func (i Item) Title() string { return stripansi.Strip(i.Self.Name()) }
 
 // Description returns the torrent info, including the download,
-// upload, and peers stats if the torrent download is incomplete.
+// upload, and peers stats.
 func (i Item) Description() string {
 	t := i.Self
 	info := t.Info()
@@ -62,7 +62,7 @@ func (i Item) Description() string {
 
 type ItemDelegate struct{}
 
-// Height returns the height setting for the list delegate, 2.
+// Height returns the height setting for a list entry.
 func (d ItemDelegate) Height() int { return 2 }
 
 // Spacing returns the spacing setting for the list delegate, 0.
@@ -71,8 +71,8 @@ func (d ItemDelegate) Spacing() int { return 0 }
 // Update updates the list model.
 func (d ItemDelegate) Update(msg tea.Msg, m *list.Model) tea.Cmd { return nil }
 
-// Render renders the full torrent list for the main screen with the
-// color theme styling.
+// Render renders a list entry for the torrent list with the color
+// theme styling.
 func (d ItemDelegate) Render(w io.Writer, m list.Model, index int, listItem list.Item) {
 	var (
 		i = listItem.(Item)
