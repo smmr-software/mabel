@@ -3,8 +3,8 @@ package utils
 import gloss "github.com/charmbracelet/lipgloss"
 
 // TruncateForMinimumSpacing ensures that a string fits into screen
-// space with a given amount of padding, by possibly truncating the
-// string until it fits in the width with the padding.
+// space with a given amount of padding, by truncating the string until
+// it fits in the width with the padding when necessary.
 func TruncateForMinimumSpacing(str string, spacing *int, min int) string {
 	runes := []rune(str)
 	initial := len(runes)
