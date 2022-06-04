@@ -1,4 +1,4 @@
-// Package mini generates the mini client for single downloading
+// Package mini generates the mini client for downloading single
 // torrents.
 package mini
 
@@ -33,9 +33,8 @@ type model struct {
 	client           *torrent.Client
 }
 
-// genMabelConfig creates the torrent client, file for logs from the
-// mini client, and the directory for metadata storage. It also
-// configures the seeding and listening port.
+// genMabelConfig configures the torrent client (seeding, listening
+// port, log directory, etc.)
 func genMabelConfig(port *uint, logging *bool) *torrent.ClientConfig {
 	config := torrent.NewDefaultClientConfig()
 	config.Logger = log.Default
@@ -91,7 +90,7 @@ func tick() tea.Cmd {
 }
 
 // Init starts the UI and adds startup torrents. If the torrrent cannot
-// be generated, the client quits.
+// be generated, the client aborts.
 func (m model) Init() tea.Cmd {
 	cmd, err := trrnt.AddTorrent(m.torrent, m.saveDir, m.client, nil, m.theme)
 	if err != nil {
