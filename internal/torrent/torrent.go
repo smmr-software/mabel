@@ -1,5 +1,6 @@
-// Package torrent runs the torrent downloads of the client in
-// metainfo, infohash, and magnet link formats.
+// Package torrent interfaces wiith the anacrolix/torrent library to
+// run the torrent downloads of the client in metainfo, infohash, and
+// magnet link formats.
 package torrent
 
 import (
@@ -62,7 +63,7 @@ func downloadTorrent(t *torrent.Torrent) tea.Cmd {
 }
 
 // getStorage returns a storage implementation that writes downloaded
-// files to a user-defined directory, and writes unnecessary files to a
+// files to a user-defined directory, and writes metadata files to a
 // temporary directory.
 func getStorage(dir *string) storage.ClientImpl {
 	var err error
