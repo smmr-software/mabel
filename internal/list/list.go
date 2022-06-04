@@ -65,7 +65,7 @@ type ItemDelegate struct{}
 // Height returns the height setting for a list entry.
 func (d ItemDelegate) Height() int { return 2 }
 
-// Spacing returns the spacing setting for the list delegate, 0.
+// Spacing returns the spacing setting for a list entry.
 func (d ItemDelegate) Spacing() int { return 0 }
 
 // Update updates the list model.
