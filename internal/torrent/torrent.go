@@ -1,5 +1,5 @@
-// Package torrent interfaces wiith the anacrolix/torrent library to
-// run the torrent downloads of the client in metainfo, infohash, and
+// Package torrent interfaces with the anacrolix/torrent library to run
+// the torrent downloads of the client in metainfo, infohash, and
 // magnet link formats.
 package torrent
 
