@@ -18,8 +18,8 @@ const interval = 500 * time.Millisecond
 type tickMsg time.Time
 type mabelError error
 
-// reportError checks for a Bubble Tea error and returns an error to
-// Update to be displayed to the user.
+// reportError takes an error and returns it to Bubble Tea to be
+// displayed to the user.
 func reportError(err error) tea.Cmd {
 	return func() tea.Msg {
 		return mabelError(err)
@@ -48,7 +48,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.client.Close()
 			}
 			return m, tea.Quit
-		case m.err != nil: // Send error to be displayed to the user
+		case m.err != nil: // Dismiss error display
 			m.err = nil
 			return m, nil
 		case m.portStartupFailure.enabled: // Deal with port startup failure
@@ -100,8 +100,7 @@ func portStartupFailureKeyPress(m *model, msg *tea.KeyMsg) (tea.Model, tea.Cmd) 
 	}
 }
 
-// addPromptKeyPress allows the user to add a torrent and choose a
-// custom directory when adding a prompt.
+// addPromptKeyPress handles user key presses when adding a torrent.
 func addPromptKeyPress(m *model, msg *tea.KeyMsg) (tea.Model, tea.Cmd) {
 	switch {
 	case key.Matches(*msg, addPromptKeys.quit):
