@@ -69,7 +69,7 @@ func main() {
 
 		fmt.Println(menu.String())
 		return
-	} else if *vrsn { // generate and print the version info when the version flag is used
+	} else if *vrsn { // generate and print the version info
 		info, ok := debug.ReadBuildInfo()
 		if ok {
 			for _, setting := range info.Settings {

@@ -37,7 +37,8 @@ func (c *config) getTheme() *styles.ColorTheme {
 	}
 }
 
-// getConfig checks for a TOML file in the directory and returns a config.
+// getConfig checks for a TOML file in the config directory and returns
+// a config.
 func getConfig() (conf config) {
 	file := xdg.ConfigHome + "/mabel/config.toml"
 
