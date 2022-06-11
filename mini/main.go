@@ -144,7 +144,7 @@ func (m model) View() string {
 	spacer := m.width - gloss.Width(meta)
 	name := utils.TruncateForMinimumPadding(t.Name(), &spacer, 5)
 
-	return fmt.Sprintf("%s\n%s\n", name+strings.Repeat(" ", spacer)+meta, bar)
+	return gloss.NewStyle().Width(m.width).Render(fmt.Sprintf("%s\n%s\n", name+strings.Repeat(" ", spacer)+meta, bar))
 }
 
 // Execute creates the initial model and a Bubble Tea program, and
