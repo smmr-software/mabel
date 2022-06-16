@@ -31,9 +31,8 @@ type model struct {
 	list *clist.Model
 	help *help.Model
 
-	addPrompt             *modelAddPrompt
-	portStartupFailure    *portStartupFailure
-	viewingTorrentDetails bool
+	addPrompt          *modelAddPrompt
+	portStartupFailure *portStartupFailure
 
 	err error
 }

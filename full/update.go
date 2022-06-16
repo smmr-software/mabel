@@ -55,9 +55,6 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return portStartupFailureKeyPress(&m, &msg)
 		case m.addPrompt.enabled: // Switch to add prompt screen
 			return addPromptKeyPress(&m, &msg)
-		case m.viewingTorrentDetails: // Close torrent details screen if open
-			m.viewingTorrentDetails = false
-			return m, nil
 		default: // Deal with default user keyboard messages
 			return defaultKeyPress(&m, &msg)
 		}
@@ -157,7 +154,13 @@ func defaultKeyPress(m *model, msg *tea.KeyMsg) (tea.Model, tea.Cmd) {
 		m.addPrompt.enabled = true
 	case key.Matches(*msg, homeKeys.details):
 		if t, ok := m.list.SelectedItem().(list.Item); ok && t.Self.Info() != nil {
-			m.viewingTorrentDetails = true
+			return torrentDetails{
+				width:  m.width,
+				height: m.height,
+				item:   &t,
+				theme:  m.theme,
+				main:   m,
+			}, nil
 		}
 	case key.Matches(*msg, homeKeys.up):
 		m.list.CursorUp()
