@@ -45,66 +45,57 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.client.Close()
 			}
 			return m, tea.Quit
-		case m.err != nil: // Dismiss error display
-			m.err = nil
-			return m, nil
-		default: // Deal with default user keyboard messages
-			return defaultKeyPress(&m, &msg)
+		case key.Matches(msg, homeKeys.quit):
+			m.client.Close()
+			return m, tea.Quit
+		case key.Matches(msg, homeKeys.help):
+			m.help.ShowAll = !m.help.ShowAll
+		case key.Matches(msg, homeKeys.add):
+			return initialAddPrompt(
+				m.width, m.height,
+				m.dir, m.theme,
+				m.help, &m,
+			), nil
+		case key.Matches(msg, homeKeys.details):
+			if t, ok := m.list.SelectedItem().(list.Item); ok && t.Self.Info() != nil {
+				return torrentDetails{
+					width:  m.width,
+					height: m.height,
+					item:   &t,
+					theme:  m.theme,
+					main:   &m,
+				}, nil
+			}
+		case key.Matches(msg, homeKeys.up):
+			m.list.CursorUp()
+		case key.Matches(msg, homeKeys.down):
+			m.list.CursorDown()
+		case key.Matches(msg, homeKeys.next):
+			m.list.Paginator.NextPage()
+		case key.Matches(msg, homeKeys.prev):
+			m.list.Paginator.PrevPage()
+		case key.Matches(msg, homeKeys.delete):
+			zero := list.Item{}
+			if t, ok := m.list.SelectedItem().(list.Item); ok && t != zero {
+				t.Self.Drop()
+				m.list.RemoveItem(m.list.Index())
+			}
+			if m.list.Index() == len(m.list.Items()) {
+				m.list.CursorUp()
+			}
+		case key.Matches(msg, homeKeys.deselect):
+			m.list.ResetSelected()
 		}
 	case tickMsg:
 		return m, tick()
 	case mabelError: // Deal with error
-		m.err = msg
-		return m, nil
-	default:
-		return m, nil
-	}
-}
-
-// defaultKeyPress allows the user to interact with the home page and
-// quit the client.
-func defaultKeyPress(m *model, msg *tea.KeyMsg) (tea.Model, tea.Cmd) {
-	switch {
-	case key.Matches(*msg, homeKeys.quit):
-		m.client.Close()
-		return m, tea.Quit
-	case key.Matches(*msg, homeKeys.help):
-		m.help.ShowAll = !m.help.ShowAll
-	case key.Matches(*msg, homeKeys.add):
-		return initialAddPrompt(
-			m.width, m.height,
-			m.dir, m.theme,
-			m.help, m,
-		), nil
-	case key.Matches(*msg, homeKeys.details):
-		if t, ok := m.list.SelectedItem().(list.Item); ok && t.Self.Info() != nil {
-			return torrentDetails{
-				width:  m.width,
-				height: m.height,
-				item:   &t,
-				theme:  m.theme,
-				main:   m,
-			}, nil
-		}
-	case key.Matches(*msg, homeKeys.up):
-		m.list.CursorUp()
-	case key.Matches(*msg, homeKeys.down):
-		m.list.CursorDown()
-	case key.Matches(*msg, homeKeys.next):
-		m.list.Paginator.NextPage()
-	case key.Matches(*msg, homeKeys.prev):
-		m.list.Paginator.PrevPage()
-	case key.Matches(*msg, homeKeys.delete):
-		zero := list.Item{}
-		if t, ok := m.list.SelectedItem().(list.Item); ok && t != zero {
-			t.Self.Drop()
-			m.list.RemoveItem(m.list.Index())
-		}
-		if m.list.Index() == len(m.list.Items()) {
-			m.list.CursorUp()
-		}
-	case key.Matches(*msg, homeKeys.deselect):
-		m.list.ResetSelected()
+		return errorScreen{
+			width:  m.width,
+			height: m.height,
+			err:    msg,
+			theme:  m.theme,
+			main:   &m,
+		}, nil
 	}
 	return m, nil
 }
