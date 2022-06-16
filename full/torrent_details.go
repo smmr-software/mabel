@@ -19,7 +19,7 @@ type torrentDetails struct {
 	width, height int
 	item          *list.Item
 	theme         *styles.ColorTheme
-	main          *Model
+	main          *model
 }
 
 func (m torrentDetails) Init() tea.Cmd {
