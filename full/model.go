@@ -31,41 +31,14 @@ type model struct {
 	list *clist.Model
 	help *help.Model
 
-	addPrompt          *modelAddPrompt
 	portStartupFailure *portStartupFailure
 
 	err error
 }
 
-type modelAddPrompt struct {
-	enabled bool
-	dir     bool
-	torrent textinput.Model
-	saveDir textinput.Model
-}
-
 type portStartupFailure struct {
 	enabled bool
 	port    textinput.Model
-}
-
-// initialAddPrompt returns a pointer to the model for the torrent add
-// prompt screen.
-func initialAddPrompt(dir *string) *modelAddPrompt {
-	torrent := textinput.New()
-	torrent.Width = 32
-	saveDir := torrent
-
-	saveDir.SetValue(*dir)
-	saveDir.Blur()
-
-	s := modelAddPrompt{
-		enabled: false,
-		dir:     false,
-		torrent: torrent,
-		saveDir: saveDir,
-	}
-	return &s
 }
 
 // initialPortStartupFailure returns a pointer to the model for the
@@ -138,7 +111,6 @@ func initialModel(torrents *[]string, dir *string, port *uint, logging *bool, th
 		list: genList(),
 		help: &hlp,
 
-		addPrompt:          initialAddPrompt(dir),
 		portStartupFailure: initialPortStartupFailure(),
 	}
 

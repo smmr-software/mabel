@@ -15,8 +15,6 @@ func (m model) View() string {
 		return errorView(&m)
 	} else if m.portStartupFailure.enabled {
 		return portStartupFailureView(&m)
-	} else if m.addPrompt.enabled {
-		return addPromptView(&m)
 	} else {
 		return mainView(&m)
 	}
@@ -42,31 +40,6 @@ func portStartupFailureView(m *model) string {
 			body.String(),
 		),
 	)
-}
-
-// addPromptView renders the screen when a new torrent is being added.
-func addPromptView(m *model) string {
-	fullscreen := gloss.NewStyle().
-		Width(m.width).
-		Height(m.height).
-		Inherit(styles.BorderWindow)
-
-	var body strings.Builder
-	body.WriteString("Add Torrent\n")
-	body.WriteString(styles.BorderWindow.Render(m.addPrompt.torrent.View()))
-	body.WriteString("\n\nSave Directory (Optional)\n")
-	body.WriteString(styles.BorderWindow.Render(m.addPrompt.saveDir.View()))
-
-	help := m.help.View(addPromptKeys)
-	height := m.height - gloss.Height(help) - 1
-
-	content := gloss.Place(
-		m.width, height,
-		gloss.Center, gloss.Center,
-		body.String(),
-	)
-
-	return fullscreen.Render(content + help + "\n")
 }
 
 // errorView renders the screen when an error occurs, presenting the
