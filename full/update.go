@@ -1,13 +1,11 @@
 package full
 
 import (
-	"strconv"
 	"time"
 
 	"github.com/smmr-software/mabel/internal/list"
 	"github.com/smmr-software/mabel/internal/styles"
 
-	torrent "github.com/anacrolix/torrent"
 	"github.com/charmbracelet/bubbles/key"
 	tea "github.com/charmbracelet/bubbletea"
 )
@@ -50,8 +48,6 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case m.err != nil: // Dismiss error display
 			m.err = nil
 			return m, nil
-		case m.portStartupFailure.enabled: // Deal with port startup failure
-			return portStartupFailureKeyPress(&m, &msg)
 		default: // Deal with default user keyboard messages
 			return defaultKeyPress(&m, &msg)
 		}
@@ -61,35 +57,6 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.err = msg
 		return m, nil
 	default:
-		return m, nil
-	}
-}
-
-// portStartupFailureKeyPress allows the user to choose a port if the
-// attempted port binding fails.
-func portStartupFailureKeyPress(m *model, msg *tea.KeyMsg) (tea.Model, tea.Cmd) {
-	switch msg.String() {
-	case "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "backspace":
-		var cmd tea.Cmd
-		m.portStartupFailure.port, cmd = m.portStartupFailure.port.Update(*msg)
-		return m, cmd
-	default:
-		prt, err := strconv.Atoi(m.portStartupFailure.port.Value())
-		if err != nil {
-			return m, reportError(err)
-		}
-		port := uint(prt)
-
-		config := genMabelConfig(&port, m.logging)
-		client, err := torrent.NewClient(config)
-		if err != nil {
-			return m, reportError(err)
-		}
-
-		m.client = client
-		m.clientConfig = config
-		m.portStartupFailure.enabled = false
-
 		return m, nil
 	}
 }

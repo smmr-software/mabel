@@ -13,7 +13,7 @@ import (
 
 	"github.com/charmbracelet/bubbles/help"
 	clist "github.com/charmbracelet/bubbles/list"
-	"github.com/charmbracelet/bubbles/textinput"
+	"github.com/charmbracelet/bubbletea"
 
 	"github.com/adrg/xdg"
 )
@@ -31,25 +31,7 @@ type model struct {
 	list *clist.Model
 	help *help.Model
 
-	portStartupFailure *portStartupFailure
-
 	err error
-}
-
-type portStartupFailure struct {
-	enabled bool
-	port    textinput.Model
-}
-
-// initialPortStartupFailure returns a pointer to the model for the
-// port startup failure screen.
-func initialPortStartupFailure() *portStartupFailure {
-	input := textinput.New()
-	input.Width = 32
-	input.Focus()
-
-	port := portStartupFailure{port: input}
-	return &port
 }
 
 // genMabelConfig configures the torrent client (seeding, listening
@@ -94,7 +76,7 @@ func genList() *clist.Model {
 }
 
 // initialModel creates the model for the full client.
-func initialModel(torrents *[]string, dir *string, port *uint, logging *bool, theme *styles.ColorTheme) (model, error) {
+func initialModel(torrents *[]string, dir *string, port *uint, logging *bool, theme *styles.ColorTheme) (tea.Model, error) {
 	config := genMabelConfig(port, logging)
 	client, err := torrent.NewClient(config)
 	hlp := help.New()
@@ -110,8 +92,6 @@ func initialModel(torrents *[]string, dir *string, port *uint, logging *bool, th
 
 		list: genList(),
 		help: &hlp,
-
-		portStartupFailure: initialPortStartupFailure(),
 	}
 
 	// Check for port startup failure or other error
@@ -119,10 +99,11 @@ func initialModel(torrents *[]string, dir *string, port *uint, logging *bool, th
 		msg := err.Error()
 		switch {
 		case strings.HasPrefix(msg, "subsequent listen"), strings.HasPrefix(msg, "first listen"):
-			m.portStartupFailure.enabled = true
+			return initialPortStartupFailure(&m), nil
 		default:
 			return model{}, err
 		}
 	}
+
 	return m, nil
 }

@@ -1,8 +1,6 @@
 package full
 
 import (
-	"strings"
-
 	"github.com/smmr-software/mabel/internal/styles"
 
 	gloss "github.com/charmbracelet/lipgloss"
@@ -13,33 +11,9 @@ import (
 func (m model) View() string {
 	if m.err != nil {
 		return errorView(&m)
-	} else if m.portStartupFailure.enabled {
-		return portStartupFailureView(&m)
 	} else {
 		return mainView(&m)
 	}
-}
-
-// portStartupFailureView renders the screen when the port binding
-// fails and the user must provide a different port.
-func portStartupFailureView(m *model) string {
-	fullscreen := gloss.NewStyle().
-		Width(m.width).
-		Height(m.height).
-		Inherit(styles.BorderWindow)
-
-	var body strings.Builder
-	body.WriteString(styles.Bold.Render("Port Binding Failure"))
-	body.WriteString("\nplease provide an unused port number for the client to bind with\n\n")
-	body.WriteString(styles.BorderWindow.Render(m.portStartupFailure.port.View()))
-
-	return fullscreen.Render(
-		gloss.Place(
-			m.width, m.height,
-			gloss.Center, gloss.Center,
-			body.String(),
-		),
-	)
 }
 
 // errorView renders the screen when an error occurs, presenting the
