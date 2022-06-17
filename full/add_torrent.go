@@ -26,6 +26,9 @@ func (m addTorrent) Init() tea.Cmd {
 	return tick()
 }
 
+// Update responds to messages by refreshing and resizing the view. It
+// responds to several kinds of key presses in order to progress through
+// adding the torrent.
 func (m addTorrent) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
@@ -79,6 +82,8 @@ func (m addTorrent) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, nil
 }
 
+// View renders a text box for the torrent and a second for a save
+// directory to facilitate adding a torrent to the client.
 func (m addTorrent) View() string {
 	fullscreen := gloss.NewStyle().
 		Width(m.width).

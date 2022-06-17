@@ -18,6 +18,9 @@ func (m errorScreen) Init() tea.Cmd {
 	return tick()
 }
 
+// Update responds to messages by refreshing and resizing the view. It
+// responds to two kinds of key presses: the client quits on Ctrl+C,
+// while every other key returns the user to the main view.
 func (m errorScreen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
@@ -37,6 +40,7 @@ func (m errorScreen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	}
 }
 
+// View presents an error to the user in a centered modal
 func (m errorScreen) View() string {
 	popupWidth := m.width / 3
 	popupHeight := m.height / 4

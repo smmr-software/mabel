@@ -23,6 +23,10 @@ func (m portStartupFailure) Init() tea.Cmd {
 	return tick()
 }
 
+// Update responds to messages by refreshing and resizing the view. It
+// responds to three kinds of key presses: the client quits on Ctrl+C,
+// numeric keys and backspace are passed to the text field, while other
+// keys attempt to bind the client to the port provided.
 func (m portStartupFailure) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
@@ -64,6 +68,8 @@ func (m portStartupFailure) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	}
 }
 
+// View renders a text field for a user to provide an alternative port
+// when port binding fails on startup.
 func (m portStartupFailure) View() string {
 	fullscreen := gloss.NewStyle().
 		Width(m.width).

@@ -26,6 +26,9 @@ func (m torrentDetails) Init() tea.Cmd {
 	return tick()
 }
 
+// Update responds to messages by refreshing and resizing the view. It
+// responds to two kinds of key presses: the client quits on Ctrl+C,
+// while every other key returns the user to the main view.
 func (m torrentDetails) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
@@ -44,6 +47,8 @@ func (m torrentDetails) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, nil
 }
 
+// View renders the details of a specific torrent, including download
+// progress, metainfo, name, and files.
 func (m torrentDetails) View() string {
 	fullscreen := gloss.NewStyle().
 		Width(m.width).
