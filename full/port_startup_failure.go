@@ -31,6 +31,8 @@ func (m portStartupFailure) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return m, nil
 	case tea.KeyMsg:
 		switch msg.String() {
+		case "ctrl+c":
+			return m, tea.Quit
 		case "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "backspace":
 			var cmd tea.Cmd
 			m.input, cmd = m.input.Update(msg)
