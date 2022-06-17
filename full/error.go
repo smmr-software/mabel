@@ -25,6 +25,10 @@ func (m errorScreen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.height = msg.Height - styles.BorderWindow.GetHorizontalBorderSize()
 		return m, nil
 	case tea.KeyMsg:
+		if msg.Type == tea.KeyCtrlC {
+			m.main.client.Close()
+			return m, tea.Quit
+		}
 		return m.main, nil
 	case tickMsg:
 		return m, tick()
