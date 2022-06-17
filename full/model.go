@@ -30,8 +30,6 @@ type model struct {
 
 	list *clist.Model
 	help *help.Model
-
-	err error
 }
 
 // genMabelConfig configures the torrent client (seeding, listening
