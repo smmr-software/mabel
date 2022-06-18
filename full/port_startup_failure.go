@@ -19,6 +19,7 @@ type portStartupFailure struct {
 	main          *model
 }
 
+// Init starts ticking to refresh the UI without user interaction
 func (m portStartupFailure) Init() tea.Cmd {
 	return tick()
 }
@@ -96,6 +97,8 @@ func (m portStartupFailure) View() string {
 	)
 }
 
+// initialPortStartupFailure accepts a pointer to the main model,
+// creates a textbox, and returns the initial model state.
 func initialPortStartupFailure(parent *model) portStartupFailure {
 	input := textinput.New()
 	input.Width = 32

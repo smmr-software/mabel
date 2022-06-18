@@ -22,6 +22,7 @@ type addTorrent struct {
 	main             *model
 }
 
+// Init starts ticking to refresh the UI without user interaction
 func (m addTorrent) Init() tea.Cmd {
 	return tick()
 }
@@ -114,6 +115,8 @@ func (m addTorrent) View() string {
 	return fullscreen.Render(content + help + "\n")
 }
 
+// initialAddPrompt creates the initial state of the add prompt view,
+// creating text boxes and accepting data from the main model.
 func initialAddPrompt(w, h int, dir *string, theme *styles.ColorTheme, help *help.Model, parent *model) addTorrent {
 	torrent := textinput.New()
 	torrent.Width = 32
