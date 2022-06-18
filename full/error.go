@@ -14,7 +14,7 @@ type errorScreen struct {
 	main          *model
 }
 
-// Init starts ticking to refresh the UI without user interaction
+// Init starts ticking to refresh the UI without user interaction.
 func (m errorScreen) Init() tea.Cmd {
 	return tick()
 }

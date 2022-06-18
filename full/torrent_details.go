@@ -22,7 +22,7 @@ type torrentDetails struct {
 	main          *model
 }
 
-// Init starts ticking to refresh the UI without user interaction
+// Init starts ticking to refresh the UI without user interaction.
 func (m torrentDetails) Init() tea.Cmd {
 	return tick()
 }
