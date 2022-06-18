@@ -32,8 +32,14 @@ func (m torrentDetails) Init() tea.Cmd {
 func (m torrentDetails) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
-		m.width = msg.Width - styles.BorderWindow.GetHorizontalBorderSize()
-		m.height = msg.Height - styles.BorderWindow.GetHorizontalBorderSize()
+		w := msg.Width - styles.BorderWindow.GetHorizontalBorderSize()
+		h := msg.Height - styles.BorderWindow.GetHorizontalBorderSize()
+
+		m.width = w
+		m.main.width = w
+		m.height = h
+		m.main.height = h
+
 		return m, nil
 	case tea.KeyMsg:
 		if msg.Type == tea.KeyCtrlC {
