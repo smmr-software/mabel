@@ -23,9 +23,8 @@ func reportError(err error) tea.Cmd {
 	}
 }
 
-// Update responds to port startup failure, window size changes, user
-// keyboard messages, if torrent detail view is requested, or if a
-// torrent is being added and updates the UI model accordingly.
+// Update responds to window size changes, user keyboard messages,
+// client errors, and updates the UI model accordingly.
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg: // Change to fit new window size
