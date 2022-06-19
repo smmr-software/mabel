@@ -25,13 +25,13 @@ func (m errorScreen) Init() tea.Cmd {
 func (m errorScreen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
-		w := msg.Width - styles.BorderWindow.GetHorizontalBorderSize()
-		h := msg.Height - styles.BorderWindow.GetHorizontalBorderSize()
+		m.width = msg.Width - styles.BorderWindow.GetHorizontalBorderSize()
+		m.height = msg.Height - styles.BorderWindow.GetHorizontalBorderSize()
 
-		m.width = w
-		m.main.width = w
-		m.height = h
-		m.main.height = h
+		updated, _ := m.main.Update(msg)
+		if mdl, ok := updated.(model); ok {
+			m.main = &mdl
+		}
 
 		return m, nil
 	case tea.KeyMsg:
