@@ -9,6 +9,11 @@ community, including:
 - [charmbracelet/bubbletea]
 - [anacrolix/torrent]
 
+## Screenshots
+
+<img width="50%" src="/default.png" alt="Mabel downloading several torrents, default theme">
+<img width="50%" src="/desert.png" alt="Mabel looking at torrent details, desert theme">
+
 ## Prerequisites
 
 - A [Nerd Font] installed and enabled in your terminal
