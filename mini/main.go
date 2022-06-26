@@ -35,12 +35,13 @@ type model struct {
 
 // genMabelConfig configures the torrent client (seeding, listening
 // port, log directory, etc.)
-func genMabelConfig(port *uint, logging *bool) *torrent.ClientConfig {
+func genMabelConfig(port *uint, logging, encrypt *bool) *torrent.ClientConfig {
 	config := torrent.NewDefaultClientConfig()
 	config.Logger = log.Default
 	config.Logger.Handlers = []log.Handler{log.DiscardHandler}
 	config.Seed = true
 	config.ListenPort = int(*port)
+	config.HeaderObfuscationPolicy.RequirePreferred = *encrypt
 
 	if *logging {
 		config.Debug = true
@@ -65,8 +66,8 @@ func genMabelConfig(port *uint, logging *bool) *torrent.ClientConfig {
 
 // initialModel creates the model for the mini client. If the torrent
 // cannot be generated, the client aborts.
-func initialModel(t, dir *string, port *uint, logging *bool, theme *styles.ColorTheme) (model, error) {
-	client, err := torrent.NewClient(genMabelConfig(port, logging))
+func initialModel(t, dir *string, port *uint, logging, encrypt *bool, theme *styles.ColorTheme) (model, error) {
+	client, err := torrent.NewClient(genMabelConfig(port, logging, encrypt))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -149,8 +150,8 @@ func (m model) View() string {
 
 // Execute creates the initial model and a Bubble Tea program, and
 // aborts the client if that fails.
-func Execute(t, dir *string, port *uint, logging *bool, theme *styles.ColorTheme) {
-	model, err := initialModel(t, dir, port, logging, theme)
+func Execute(t, dir *string, port *uint, logging, encrypt *bool, theme *styles.ColorTheme) {
+	model, err := initialModel(t, dir, port, logging, encrypt, theme)
 	if err != nil {
 		log.Fatal(err)
 	}

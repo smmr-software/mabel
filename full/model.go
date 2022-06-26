@@ -23,6 +23,7 @@ type model struct {
 	startupTorrents *[]string
 	dir             *string
 	logging         *bool
+	encrypt         *bool
 	theme           *styles.ColorTheme
 
 	client       *torrent.Client
@@ -34,12 +35,13 @@ type model struct {
 
 // genMabelConfig configures the torrent client (seeding, listening
 // port, log directory, etc.)
-func genMabelConfig(port *uint, logging *bool) *torrent.ClientConfig {
+func genMabelConfig(port *uint, logging, encrypt *bool) *torrent.ClientConfig {
 	config := torrent.NewDefaultClientConfig()
 	config.Logger = log.Default
 	config.Logger.Handlers = []log.Handler{log.DiscardHandler}
 	config.Seed = true
 	config.ListenPort = int(*port)
+	config.HeaderObfuscationPolicy.RequirePreferred = *encrypt
 
 	if *logging {
 		config.Debug = true
@@ -74,8 +76,8 @@ func genList() *clist.Model {
 }
 
 // initialModel creates the model for the full client.
-func initialModel(torrents *[]string, dir *string, port *uint, logging *bool, theme *styles.ColorTheme) (tea.Model, error) {
-	config := genMabelConfig(port, logging)
+func initialModel(torrents *[]string, dir *string, port *uint, logging, encrypt *bool, theme *styles.ColorTheme) (tea.Model, error) {
+	config := genMabelConfig(port, logging, encrypt)
 	client, err := torrent.NewClient(config)
 	hlp := help.New()
 
@@ -83,6 +85,7 @@ func initialModel(torrents *[]string, dir *string, port *uint, logging *bool, th
 		startupTorrents: torrents,
 		dir:             dir,
 		logging:         logging,
+		encrypt:         encrypt,
 		theme:           theme,
 
 		client:       client,

@@ -55,7 +55,7 @@ func (m portStartupFailure) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 			port := uint(prt)
 
-			config := genMabelConfig(&port, m.main.logging)
+			config := genMabelConfig(&port, m.main.logging, m.main.encrypt)
 			client, err := torrent.NewClient(config)
 			if err != nil {
 				return m, reportError(err)

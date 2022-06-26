@@ -15,8 +15,11 @@ var (
 type config struct {
 	Download string
 	Port     uint
-	Log      bool
-	Theme    toml.Primitive
+
+	Log               bool
+	RequireEncryption bool `toml:"require_encryption"`
+
+	Theme toml.Primitive
 }
 
 // getTheme checks the config file for a configured theme key and

@@ -79,6 +79,10 @@ port = 126
 
 # Toggle client logging (logs are written to $XDG_STATE_HOME/mabel)
 log = false
+
+# Mabel always prefers encrypted connections. If set to true,
+# require_encryption will have Mabel ignore unencrypted peers.
+require_encryption = false
 ```
 
 #### Theme

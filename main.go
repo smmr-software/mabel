@@ -31,6 +31,7 @@ func main() {
 		port     = flag.UintP("port", "p", 42069, "Set the port number to which the client will bind.")
 		theme    = flag.StringP("theme", "t", "default", "Set the color theme that the client will use.")
 		logging  = flag.BoolP("log", "l", false, "Enable client logging.")
+		encrypt  = flag.BoolP("encrypt", "e", false, "Ignore unencrypted peers.")
 		help     = flag.BoolP("help", "h", false, "Print this help message.")
 		vrsn     = flag.BoolP("version", "v", false, "Print version information.")
 	)
@@ -56,6 +57,8 @@ func main() {
 		menu.WriteString("\n        Set the color theme that the client will use. [default: " + green.Render("default") + "]")
 		menu.WriteString("\n    " + green.Render("-l") + ", " + green.Render("--log"))
 		menu.WriteString("\n        Enable client logging. [dir: " + green.Render("$XDG_STATE_HOME/mabel") + "]")
+		menu.WriteString("\n    " + green.Render("-e") + ", " + green.Render("--encrypt"))
+		menu.WriteString("\n        Ignore unencrypted peers.")
 		menu.WriteString("\n    " + green.Render("-h") + ", " + green.Render("--help"))
 		menu.WriteString("\n        Print this help message.")
 		menu.WriteString("\n    " + green.Render("-v") + ", " + green.Render("--version"))
@@ -111,6 +114,7 @@ func main() {
 	portFlag := flag.Lookup("port")
 	themeFlag := flag.Lookup("theme")
 	loggingFlag := flag.Lookup("log")
+	encryptFlag := flag.Lookup("encrypt")
 	thm := conf.getTheme()
 
 	if !downloadFlag.Changed && conf.Download != "" {
@@ -122,6 +126,9 @@ func main() {
 	if !loggingFlag.Changed {
 		flag.Set("log", fmt.Sprint(conf.Log))
 	}
+	if !encryptFlag.Changed {
+		flag.Set("encrypt", fmt.Sprint(conf.RequireEncryption))
+	}
 	if themeFlag.Changed {
 		thm = styles.StringToTheme(theme)
 	}
@@ -129,8 +136,8 @@ func main() {
 	styles.BorderWindow = styles.BorderWindow.BorderForeground(thm.Primary)
 
 	if flag.NArg() == 1 {
-		mini.Execute(&args[0], download, port, logging, thm)
+		mini.Execute(&args[0], download, port, logging, encrypt, thm)
 	} else {
-		full.Execute(&args, download, port, logging, thm)
+		full.Execute(&args, download, port, logging, encrypt, thm)
 	}
 }
