@@ -4,35 +4,22 @@ import "github.com/charmbracelet/bubbles/key"
 
 type CustomKeyMap struct {
 	home struct {
-		up       string
-		down     string
-		next     string
-		prev     string
-		add      string
-		delete   string
-		details  string
-		deselect string
-		help     string
-		quit     string
+		up, down, next,
+		prev, add, delete,
+		details, deselect,
+		help, quit string
 	}
 	addPrompt struct {
-		quit    string
-		back    string
+		quit, back,
 		forward string
 	} `toml:"add-prompt"`
 }
 
 type homeKeyMap struct {
-	up       key.Binding
-	down     key.Binding
-	next     key.Binding
-	prev     key.Binding
-	add      key.Binding
-	delete   key.Binding
-	details  key.Binding
-	deselect key.Binding
-	help     key.Binding
-	quit     key.Binding
+	up, down, next,
+	prev, add, delete,
+	details, deselect,
+	help, quit key.Binding
 }
 
 // ShortHelp returns the key bindings for the help and quit actions in
@@ -99,9 +86,7 @@ var homeKeys = homeKeyMap{
 }
 
 type addPromptKeyMap struct {
-	quit    key.Binding
-	back    key.Binding
-	forward key.Binding
+	quit, back, forward key.Binding
 }
 
 // ShortHelp returns the key bindings for the forward, back, and quit
