@@ -9,9 +9,12 @@ type ColorTheme struct {
 }
 
 type CustomTheme struct {
-	Base, Primary, Light, Dark, Error,
-	Tooltip, GradientStart,
-	GradientEnd, GradientSolid string
+	Base, Primary, Light,
+	Dark, Error, Tooltip string
+
+	GradientStart string `toml:"gradient-start"`
+	GradientEnd   string `toml:"gradient-end"`
+	GradientSolid string `toml:"gradient-solid"`
 }
 
 // StringToTheme converts strings from the config file into ColorTheme
