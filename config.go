@@ -18,7 +18,7 @@ type config struct {
 	Port     uint
 	Log      bool
 	Theme    toml.Primitive
-	Keys full.CustomKeyMap
+	Keys     full.CustomKeyMap
 }
 
 // getTheme checks the config file for a configured theme key and
