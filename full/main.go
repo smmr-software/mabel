@@ -24,7 +24,8 @@ func (m model) Init() tea.Cmd {
 
 // Execute creates the initial model and a Bubble Tea program, and
 // aborts the client if that fails.
-func Execute(torrents *[]string, dir *string, port *uint, logging, encrypt *bool, theme *styles.ColorTheme) {
+func Execute(torrents *[]string, dir *string, port *uint, logging, encrypt *bool, theme *styles.ColorTheme, keys CustomKeyMap) {
+	keys.ToKeys()
 	model, err := initialModel(torrents, dir, port, logging, encrypt, theme)
 	if err != nil {
 		log.Fatal(err)
