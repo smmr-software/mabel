@@ -7,12 +7,25 @@ type CustomKeyMap struct {
 		Up, Down, Next,
 		Prev, Add, Delete,
 		Details, Deselect,
-		Help, Quit string
+		Help, Quit CustomKey
 	}
 	AddPrompt struct {
 		Quit, Back,
-		Forward string
+		Forward CustomKey
 	} `toml:"add-prompt"`
+}
+
+type CustomKey struct {
+	Key string
+	Icon string
+	Desc string
+}
+
+func (k CustomKey) isZero() bool {
+	if k.Key == "" && k.Icon == "" && k.Desc == "" {
+		return true
+	}
+	return false
 }
 
 type homeKeyMap struct {
@@ -123,82 +136,82 @@ var addPromptKeys = addPromptKeyMap{
 }
 
 func (c CustomKeyMap) ToKeys() {
-	if c.Home.Up != "" {
+	if !c.Home.Up.isZero() {
 		homeKeys.up = key.NewBinding(
-			key.WithKeys(c.Home.Up),
-			key.WithHelp(c.Home.Up, "up"),
+			key.WithKeys(c.Home.Up.Key),
+			key.WithHelp(c.Home.Up.Icon, c.Home.Up.Desc),
 		)
 	}
-	if c.Home.Down != "" {
+	if !c.Home.Down.isZero() {
 		homeKeys.down = key.NewBinding(
-			key.WithKeys(c.Home.Down),
-			key.WithHelp(c.Home.Down, "down"),
+			key.WithKeys(c.Home.Down.Key),
+			key.WithHelp(c.Home.Down.Icon, c.Home.Down.Desc),
 		)
 	}
-	if c.Home.Next != "" {
+	if !c.Home.Next.isZero() {
 		homeKeys.next = key.NewBinding(
-			key.WithKeys(c.Home.Next),
-			key.WithHelp(c.Home.Next, "next page"),
+			key.WithKeys(c.Home.Next.Key),
+			key.WithHelp(c.Home.Next.Icon, c.Home.Next.Desc),
 		)
 	}
-	if c.Home.Prev != "" {
+	if !c.Home.Prev.isZero() {
 		homeKeys.prev = key.NewBinding(
-			key.WithKeys(c.Home.Prev),
-			key.WithHelp(c.Home.Prev, "prev page"),
+			key.WithKeys(c.Home.Prev.Key),
+			key.WithHelp(c.Home.Prev.Icon, c.Home.Prev.Desc),
 		)
 	}
-	if c.Home.Add != "" {
+	if !c.Home.Add.isZero() {
 		homeKeys.add = key.NewBinding(
-			key.WithKeys(c.Home.Add),
-			key.WithHelp(c.Home.Add, "add torrent"),
+			key.WithKeys(c.Home.Add.Key),
+			key.WithHelp(c.Home.Add.Icon, c.Home.Add.Desc),
 		)
 	}
-	if c.Home.Delete != "" {
+	if !c.Home.Delete.isZero() {
 		homeKeys.delete = key.NewBinding(
-			key.WithKeys(c.Home.Delete),
-			key.WithHelp(c.Home.Delete, "delete"),
+			key.WithKeys(c.Home.Delete.Key),
+			key.WithHelp(c.Home.Delete.Icon, c.Home.Delete.Desc),
 		)
 	}
-	if c.Home.Deselect != "" {
+	if !c.Home.Deselect.isZero() {
 		homeKeys.deselect = key.NewBinding(
-			key.WithKeys(c.Home.Deselect),
-			key.WithHelp(c.Home.Deselect, "deselect"),
+			key.WithKeys(c.Home.Deselect.Key),
+			key.WithHelp(c.Home.Deselect.Icon, c.Home.Deselect.Desc),
 		)
 	}
-	if c.Home.Details != "" {
+	if !c.Home.Details.isZero() {
 		homeKeys.details = key.NewBinding(
-			key.WithKeys(c.Home.Details),
-			key.WithHelp(c.Home.Details, "torrent details"),
+			key.WithKeys(c.Home.Details.Key),
+			key.WithHelp(c.Home.Details.Icon, c.Home.Details.Desc),
 		)
 	}
-	if c.Home.Help != "" {
+	if !c.Home.Help.isZero() {
 		homeKeys.help = key.NewBinding(
-			key.WithKeys(c.Home.Help),
-			key.WithHelp(c.Home.Help, "toggle help"),
+			key.WithKeys(c.Home.Help.Key),
+			key.WithHelp(c.Home.Help.Icon, c.Home.Help.Desc),
 		)
 	}
-	if c.Home.Quit != "" {
+	if !c.Home.Quit.isZero() {
 		homeKeys.quit = key.NewBinding(
-			key.WithKeys(c.Home.Quit),
-			key.WithHelp(c.Home.Quit, "quit"),
+			key.WithKeys(c.Home.Quit.Key),
+			key.WithHelp(c.Home.Quit.Icon, c.Home.Quit.Desc),
 		)
 	}
-	if c.AddPrompt.Quit != "" {
+	if !c.AddPrompt.Quit.isZero() {
 		addPromptKeys.quit = key.NewBinding(
-			key.WithKeys(c.AddPrompt.Quit),
-			key.WithHelp(c.AddPrompt.Quit, "home"),
+			key.WithKeys(c.AddPrompt.Quit.Key),
+			key.WithHelp(c.AddPrompt.Quit.Icon, c.AddPrompt.Quit.Desc),
 		)
 	}
-	if c.AddPrompt.Back != "" {
+	if !c.AddPrompt.Back.isZero() {
 		addPromptKeys.back = key.NewBinding(
-			key.WithKeys(c.AddPrompt.Back),
-			key.WithHelp(c.AddPrompt.Back, "home"),
+			key.WithKeys(c.AddPrompt.Back.Key),
+			key.WithHelp(c.AddPrompt.Back.Icon, c.AddPrompt.Back.Desc),
 		)
 	}
-	if c.AddPrompt.Forward != "" {
+	if !c.AddPrompt.Forward.isZero() {
 		addPromptKeys.forward = key.NewBinding(
-			key.WithKeys(c.AddPrompt.Forward),
-			key.WithHelp(c.AddPrompt.Forward, "home"),
+			key.WithKeys(c.AddPrompt.Forward.Key),
+			key.WithHelp(c.AddPrompt.Forward.Icon, c.AddPrompt.Forward.Desc),
 		)
 	}
 }
