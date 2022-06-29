@@ -21,6 +21,7 @@ type CustomKey struct {
 	Desc string
 }
 
+// isZero checks if a CustomKey object is of nil value.
 func (k CustomKey) isZero() bool {
 	if k.Key == "" && k.Icon == "" && k.Desc == "" {
 		return true
@@ -135,6 +136,8 @@ var addPromptKeys = addPromptKeyMap{
 	),
 }
 
+// ToKeys changes the default homeKeys and addPromptKeys key bindings
+// if there is user configuration.
 func (c CustomKeyMap) ToKeys() {
 	if !c.Home.Up.isZero() {
 		homeKeys.up = key.NewBinding(
