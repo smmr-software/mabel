@@ -107,8 +107,9 @@ func main() {
 		return
 	}
 
-	// Check the config file and update the download, port, theme, and
-	// log flags with user configuration or set them to default
+	// Check the config file and update download, port, theme, log, and
+	// keys based on flags or user configuration. Otherwise, set them
+	// to default
 	conf := getConfig()
 	downloadFlag := flag.Lookup("download")
 	portFlag := flag.Lookup("port")
