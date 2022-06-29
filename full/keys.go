@@ -3,15 +3,15 @@ package full
 import "github.com/charmbracelet/bubbles/key"
 
 type CustomKeyMap struct {
-	home struct {
-		up, down, next,
-		prev, add, delete,
-		details, deselect,
-		help, quit string
+	Home struct {
+		Up, Down, Next,
+		Prev, Add, Delete,
+		Details, Deselect,
+		Help, Quit string
 	}
-	addPrompt struct {
-		quit, back,
-		forward string
+	AddPrompt struct {
+		Quit, Back,
+		Forward string
 	} `toml:"add-prompt"`
 }
 
@@ -123,82 +123,82 @@ var addPromptKeys = addPromptKeyMap{
 }
 
 func (c CustomKeyMap) ToKeys() {
-	if c.home.up != "" {
+	if c.Home.Up != "" {
 		homeKeys.up = key.NewBinding(
-			key.WithKeys(c.home.up),
-			key.WithHelp(c.home.up, "up"),
+			key.WithKeys(c.Home.Up),
+			key.WithHelp(c.Home.Up, "up"),
 		)
 	}
-	if c.home.down != "" {
+	if c.Home.Down != "" {
 		homeKeys.down = key.NewBinding(
-			key.WithKeys(c.home.down),
-			key.WithHelp(c.home.down, "down"),
+			key.WithKeys(c.Home.Down),
+			key.WithHelp(c.Home.Down, "down"),
 		)
 	}
-	if c.home.next != "" {
+	if c.Home.Next != "" {
 		homeKeys.next = key.NewBinding(
-			key.WithKeys(c.home.next),
-			key.WithHelp(c.home.next, "next page"),
+			key.WithKeys(c.Home.Next),
+			key.WithHelp(c.Home.Next, "next page"),
 		)
 	}
-	if c.home.prev != "" {
+	if c.Home.Prev != "" {
 		homeKeys.prev = key.NewBinding(
-			key.WithKeys(c.home.prev),
-			key.WithHelp(c.home.prev, "prev page"),
+			key.WithKeys(c.Home.Prev),
+			key.WithHelp(c.Home.Prev, "prev page"),
 		)
 	}
-	if c.home.add != "" {
+	if c.Home.Add != "" {
 		homeKeys.add = key.NewBinding(
-			key.WithKeys(c.home.add),
-			key.WithHelp(c.home.add, "add torrent"),
+			key.WithKeys(c.Home.Add),
+			key.WithHelp(c.Home.Add, "add torrent"),
 		)
 	}
-	if c.home.delete != "" {
+	if c.Home.Delete != "" {
 		homeKeys.delete = key.NewBinding(
-			key.WithKeys(c.home.delete),
-			key.WithHelp(c.home.delete, "delete"),
+			key.WithKeys(c.Home.Delete),
+			key.WithHelp(c.Home.Delete, "delete"),
 		)
 	}
-	if c.home.deselect != "" {
+	if c.Home.Deselect != "" {
 		homeKeys.deselect = key.NewBinding(
-			key.WithKeys(c.home.deselect),
-			key.WithHelp(c.home.deselect, "deselect"),
+			key.WithKeys(c.Home.Deselect),
+			key.WithHelp(c.Home.Deselect, "deselect"),
 		)
 	}
-	if c.home.details != "" {
+	if c.Home.Details != "" {
 		homeKeys.details = key.NewBinding(
-			key.WithKeys(c.home.details),
-			key.WithHelp(c.home.details, "torrent details"),
+			key.WithKeys(c.Home.Details),
+			key.WithHelp(c.Home.Details, "torrent details"),
 		)
 	}
-	if c.home.help != "" {
+	if c.Home.Help != "" {
 		homeKeys.help = key.NewBinding(
-			key.WithKeys(c.home.help),
-			key.WithHelp(c.home.help, "toggle help"),
+			key.WithKeys(c.Home.Help),
+			key.WithHelp(c.Home.Help, "toggle help"),
 		)
 	}
-	if c.home.quit != "" {
+	if c.Home.Quit != "" {
 		homeKeys.quit = key.NewBinding(
-			key.WithKeys(c.home.quit),
-			key.WithHelp(c.home.quit, "quit"),
+			key.WithKeys(c.Home.Quit),
+			key.WithHelp(c.Home.Quit, "quit"),
 		)
 	}
-	if c.addPrompt.quit != "" {
+	if c.AddPrompt.Quit != "" {
 		addPromptKeys.quit = key.NewBinding(
-			key.WithKeys(c.addPrompt.quit),
-			key.WithHelp(c.addPrompt.quit, "home"),
+			key.WithKeys(c.AddPrompt.Quit),
+			key.WithHelp(c.AddPrompt.Quit, "home"),
 		)
 	}
-	if c.addPrompt.back != "" {
+	if c.AddPrompt.Back != "" {
 		addPromptKeys.back = key.NewBinding(
-			key.WithKeys(c.addPrompt.back),
-			key.WithHelp(c.addPrompt.back, "home"),
+			key.WithKeys(c.AddPrompt.Back),
+			key.WithHelp(c.AddPrompt.Back, "home"),
 		)
 	}
-	if c.addPrompt.forward != "" {
+	if c.AddPrompt.Forward != "" {
 		addPromptKeys.forward = key.NewBinding(
-			key.WithKeys(c.addPrompt.forward),
-			key.WithHelp(c.addPrompt.forward, "home"),
+			key.WithKeys(c.AddPrompt.Forward),
+			key.WithHelp(c.AddPrompt.Forward, "home"),
 		)
 	}
 }
