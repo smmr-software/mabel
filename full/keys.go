@@ -3,7 +3,7 @@ package full
 import "github.com/charmbracelet/bubbles/key"
 
 type CustomKeyMap struct {
-	customHomeKeyMap struct {
+	home struct {
 		up       string
 		down     string
 		next     string
@@ -15,11 +15,11 @@ type CustomKeyMap struct {
 		help     string
 		quit     string
 	}
-	customAddPromptKeyMap struct {
+	addPrompt struct {
 		quit    string
 		back    string
 		forward string
-	}
+	} `toml: "add-prompt"`
 }
 
 type homeKeyMap struct {
@@ -137,83 +137,83 @@ var addPromptKeys = addPromptKeyMap{
 	),
 }
 
-func (c *CustomKeyMap) ToKeys() {
-	if c.customHomeKeyMap.up != "" {
+func (c CustomKeyMap) ToKeys() {
+	if c.home.up != "" {
 		homeKeys.up = key.NewBinding(
-			key.WithKeys(c.customHomeKeyMap.up),
-			key.WithHelp(c.customHomeKeyMap.up, "up"),
+			key.WithKeys(c.home.up),
+			key.WithHelp(c.home.up, "up"),
 		)
 	}
-	if c.customHomeKeyMap.down != "" {
+	if c.home.down != "" {
 		homeKeys.down = key.NewBinding(
-			key.WithKeys(c.customHomeKeyMap.down),
-			key.WithHelp(c.customHomeKeyMap.down, "down"),
+			key.WithKeys(c.home.down),
+			key.WithHelp(c.home.down, "down"),
 		)
 	}
-	if c.customHomeKeyMap.next != "" {
+	if c.home.next != "" {
 		homeKeys.next = key.NewBinding(
-			key.WithKeys(c.customHomeKeyMap.next),
-			key.WithHelp(c.customHomeKeyMap.next, "next page"),
+			key.WithKeys(c.home.next),
+			key.WithHelp(c.home.next, "next page"),
 		)
 	}
-	if c.customHomeKeyMap.prev != "" {
+	if c.home.prev != "" {
 		homeKeys.prev = key.NewBinding(
-			key.WithKeys(c.customHomeKeyMap.prev),
-			key.WithHelp(c.customHomeKeyMap.prev, "prev page"),
+			key.WithKeys(c.home.prev),
+			key.WithHelp(c.home.prev, "prev page"),
 		)
 	}
-	if c.customHomeKeyMap.add != "" {
+	if c.home.add != "" {
 		homeKeys.add = key.NewBinding(
-			key.WithKeys(c.customHomeKeyMap.add),
-			key.WithHelp(c.customHomeKeyMap.add, "add torrent"),
+			key.WithKeys(c.home.add),
+			key.WithHelp(c.home.add, "add torrent"),
 		)
 	}
-	if c.customHomeKeyMap.delete != "" {
+	if c.home.delete != "" {
 		homeKeys.delete = key.NewBinding(
-			key.WithKeys(c.customHomeKeyMap.delete),
-			key.WithHelp(c.customHomeKeyMap.delete, "delete"),
+			key.WithKeys(c.home.delete),
+			key.WithHelp(c.home.delete, "delete"),
 		)
 	}
-	if c.customHomeKeyMap.deselect != "" {
+	if c.home.deselect != "" {
 		homeKeys.deselect = key.NewBinding(
-			key.WithKeys(c.customHomeKeyMap.deselect),
-			key.WithHelp(c.customHomeKeyMap.deselect, "deselect"),
+			key.WithKeys(c.home.deselect),
+			key.WithHelp(c.home.deselect, "deselect"),
 		)
 	}
-	if c.customHomeKeyMap.details != "" {
+	if c.home.details != "" {
 		homeKeys.details = key.NewBinding(
-			key.WithKeys(c.customHomeKeyMap.details),
-			key.WithHelp(c.customHomeKeyMap.details, "torrent details"),
+			key.WithKeys(c.home.details),
+			key.WithHelp(c.home.details, "torrent details"),
 		)
 	}
-	if c.customHomeKeyMap.help != "" {
+	if c.home.help != "" {
 		homeKeys.help = key.NewBinding(
-			key.WithKeys(c.customHomeKeyMap.help),
-			key.WithHelp(c.customHomeKeyMap.help, "toggle help"),
+			key.WithKeys(c.home.help),
+			key.WithHelp(c.home.help, "toggle help"),
 		)
 	}
-	if c.customHomeKeyMap.quit != "" {
+	if c.home.quit != "" {
 		homeKeys.quit = key.NewBinding(
-			key.WithKeys(c.customHomeKeyMap.quit),
-			key.WithHelp(c.customHomeKeyMap.quit, "quit"),
+			key.WithKeys(c.home.quit),
+			key.WithHelp(c.home.quit, "quit"),
 		)
 	}
-	if c.customAddPromptKeyMap.quit != "" {
+	if c.addPrompt.quit != "" {
 		addPromptKeys.quit = key.NewBinding(
-			key.WithKeys(c.customAddPromptKeyMap.quit),
-			key.WithHelp(c.customAddPromptKeyMap.quit, "home"),
+			key.WithKeys(c.addPrompt.quit),
+			key.WithHelp(c.addPrompt.quit, "home"),
 		)
 	}
-	if c.customAddPromptKeyMap.back != "" {
+	if c.addPrompt.back != "" {
 		addPromptKeys.back = key.NewBinding(
-			key.WithKeys(c.customAddPromptKeyMap.back),
-			key.WithHelp(c.customAddPromptKeyMap.back, "home"),
+			key.WithKeys(c.addPrompt.back),
+			key.WithHelp(c.addPrompt.back, "home"),
 		)
 	}
-	if c.customAddPromptKeyMap.forward != "" {
+	if c.addPrompt.forward != "" {
 		addPromptKeys.forward = key.NewBinding(
-			key.WithKeys(c.customAddPromptKeyMap.forward),
-			key.WithHelp(c.customAddPromptKeyMap.forward, "home"),
+			key.WithKeys(c.addPrompt.forward),
+			key.WithHelp(c.addPrompt.forward, "home"),
 		)
 	}
 }
