@@ -112,6 +112,7 @@ func main() {
 	themeFlag := flag.Lookup("theme")
 	loggingFlag := flag.Lookup("log")
 	thm := conf.getTheme()
+	key := conf.Keys
 
 	if !downloadFlag.Changed && conf.Download != "" {
 		flag.Set("download", conf.Download)
@@ -131,6 +132,6 @@ func main() {
 	if flag.NArg() == 1 {
 		mini.Execute(&args[0], download, port, logging, thm)
 	} else {
-		full.Execute(&args, download, port, logging, thm)
+		full.Execute(&args, download, port, logging, thm, key)
 	}
 }

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/smmr-software/mabel/full"
 	"github.com/smmr-software/mabel/internal/styles"
 
 	"github.com/BurntSushi/toml"
@@ -17,6 +18,7 @@ type config struct {
 	Port     uint
 	Log      bool
 	Theme    toml.Primitive
+	Keys full.CustomKeyMap
 }
 
 // getTheme checks the config file for a configured theme key and
