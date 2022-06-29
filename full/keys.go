@@ -19,7 +19,7 @@ type CustomKeyMap struct {
 		quit    string
 		back    string
 		forward string
-	} `toml: "add-prompt"`
+	} `toml:"add-prompt"`
 }
 
 type homeKeyMap struct {
