@@ -16,17 +16,12 @@ type CustomKeyMap struct {
 }
 
 type CustomKey struct {
-	Key string
-	Icon string
-	Desc string
+	Key, Icon, Desc string
 }
 
 // isZero checks if a CustomKey object is of nil value.
 func (k CustomKey) isZero() bool {
-	if k.Key == "" && k.Icon == "" && k.Desc == "" {
-		return true
-	}
-	return false
+	return k.Key == "" && k.Icon == "" && k.Desc == ""
 }
 
 type homeKeyMap struct {
