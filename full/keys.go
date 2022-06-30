@@ -105,7 +105,7 @@ func (k addTorrentKeyMap) ShortHelp() []key.Binding {
 }
 
 // FullHelp returns the key bindings for all actions in the the add
-// prompt screen.
+// torrent screen.
 func (k addTorrentKeyMap) FullHelp() [][]key.Binding {
 	return [][]key.Binding{
 		{k.next},
@@ -115,7 +115,7 @@ func (k addTorrentKeyMap) FullHelp() [][]key.Binding {
 }
 
 // Define the key bindings and help symbols for each action in the add
-// prompt screen.
+// torrent screen.
 var addTorrentKeys = addTorrentKeyMap{
 	quit: key.NewBinding(
 		key.WithKeys("esc"),

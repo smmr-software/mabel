@@ -160,7 +160,7 @@ menu.
 
 In the home screen, options for key bindings include [up, down, next,
 previous, add, delete, details, deselect, help, and quit]. In the add
-prompt screen, you can configure the [quit, previous, and next keys].
+torrent screen, you can configure the [quit, previous, and next keys].
 
 Some examples: 
 ```toml
