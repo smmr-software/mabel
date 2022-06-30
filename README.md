@@ -26,6 +26,14 @@ Coming soon to a package manager near you!
 go install github.com/smmr-software/mabel@latest
 ```
 
+### Build from Source
+
+```sh
+git clone https://github.com/smmr-software/mabel.git
+cd mabel
+go build .
+```
+
 ## Usage
 
 ```
