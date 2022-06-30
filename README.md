@@ -171,10 +171,10 @@ Some examples:
       key = "b"
       desc = "sos"
   
-  # keys in the add prompt
+  # keys in the add prompt screen
   [keys.add-prompt]
 
-    # just changes the keybind to return
+    # just changes the quit keybind to return
     [keys.add-prompt.quit]
       key = "return"
 ```
