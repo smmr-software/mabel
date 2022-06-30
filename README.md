@@ -141,9 +141,10 @@ gradient-solid = "#00FF00"
 
 The `keys` key allows the user to configure their key bindings in both
 the home and add prompt screen. To remap a specific key, use the key
-`keys.SCREEN.ACTION`. `key` selects the actual key being used ([with
-names and options defined by Bubble Tea]), `icon` defines the icon in
-the help menu, and `desc` defines the help text in the help menu.
+`keys.SCREEN.ACTION`. The property `key` selects the actual key being
+used ([with names and options defined by Bubble Tea]), `icon` defines
+the icon in the help menu, and `desc` defines the help text in the help
+menu.
 
 In the home screen, options for key bindings include [up, down, next,
 previous, add, delete, details, deselect, help, and quit]. In the add
