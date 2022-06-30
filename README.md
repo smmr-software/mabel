@@ -101,8 +101,8 @@ allow you to customize your colors in-depth. The `theme.base` key
 provides a fallback for any unset values in the table, and follows the
 same rules as the string `theme` key.
 
-The `theme.gradient*` keys customize the gradients used in progress bars
-throughout Mabel. `gradient-solid` takes precedence over
+The `theme.gradient*` keys customize the gradients used in progress
+bars throughout Mabel. `gradient-solid` takes precedence over
 `gradient-start` and `gradient-end`. The latter two only work with
 24-bit color.
 
@@ -143,8 +143,8 @@ gradient-solid = "#00FF00"
 
 ### Flags
 
-Runtime flags are documented in Mabel's help message, which you can view
-by passing `-h` on invocation. Flags encompass all the options
+Runtime flags are documented in Mabel's help message, which you can
+view by passing `-h` on invocation. Flags encompass all the options
 configurable in the TOML config, plus help and version information
 messages.
 
