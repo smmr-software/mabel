@@ -10,8 +10,8 @@ type CustomKeyMap struct {
 		Help, Quit CustomKey
 	}
 	AddPrompt struct {
-		Quit, Back,
-		Forward CustomKey
+		Quit, Prev,
+		Next CustomKey
 	} `toml:"add-prompt"`
 }
 
@@ -95,21 +95,21 @@ var homeKeys = homeKeyMap{
 }
 
 type addPromptKeyMap struct {
-	quit, back, forward key.Binding
+	quit, prev, next key.Binding
 }
 
 // ShortHelp returns the key bindings for the forward, back, and quit
 // actions in the the add prompt screen.
 func (k addPromptKeyMap) ShortHelp() []key.Binding {
-	return []key.Binding{k.forward, k.back, k.quit}
+	return []key.Binding{k.next, k.prev, k.quit}
 }
 
 // FullHelp returns the key bindings for all actions in the the add
 // prompt screen.
 func (k addPromptKeyMap) FullHelp() [][]key.Binding {
 	return [][]key.Binding{
-		{k.forward},
-		{k.back},
+		{k.next},
+		{k.prev},
 		{k.quit},
 	}
 }
@@ -121,11 +121,11 @@ var addPromptKeys = addPromptKeyMap{
 		key.WithKeys("esc"),
 		key.WithHelp("⎋", "home"),
 	),
-	back: key.NewBinding(
+	prev: key.NewBinding(
 		key.WithKeys("shift+tab"),
 		key.WithHelp("⇧ ↹", "previous"),
 	),
-	forward: key.NewBinding(
+	next: key.NewBinding(
 		key.WithKeys("enter", "tab"),
 		key.WithHelp("↵", "next"),
 	),
@@ -200,16 +200,16 @@ func (c CustomKeyMap) ToKeys() {
 			key.WithHelp(c.AddPrompt.Quit.Icon, c.AddPrompt.Quit.Desc),
 		)
 	}
-	if !c.AddPrompt.Back.isZero() {
-		addPromptKeys.back = key.NewBinding(
-			key.WithKeys(c.AddPrompt.Back.Key),
-			key.WithHelp(c.AddPrompt.Back.Icon, c.AddPrompt.Back.Desc),
+	if !c.AddPrompt.Prev.isZero() {
+		addPromptKeys.prev = key.NewBinding(
+			key.WithKeys(c.AddPrompt.Prev.Key),
+			key.WithHelp(c.AddPrompt.Prev.Icon, c.AddPrompt.Prev.Desc),
 		)
 	}
-	if !c.AddPrompt.Forward.isZero() {
-		addPromptKeys.forward = key.NewBinding(
-			key.WithKeys(c.AddPrompt.Forward.Key),
-			key.WithHelp(c.AddPrompt.Forward.Icon, c.AddPrompt.Forward.Desc),
+	if !c.AddPrompt.Next.isZero() {
+		addPromptKeys.next = key.NewBinding(
+			key.WithKeys(c.AddPrompt.Next.Key),
+			key.WithHelp(c.AddPrompt.Next.Icon, c.AddPrompt.Next.Desc),
 		)
 	}
 }

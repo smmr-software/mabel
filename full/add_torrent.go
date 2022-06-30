@@ -49,7 +49,7 @@ func (m addTorrent) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, tea.Quit
 		case key.Matches(msg, addPromptKeys.quit):
 			return m.main, nil
-		case key.Matches(msg, addPromptKeys.forward):
+		case key.Matches(msg, addPromptKeys.next):
 			if m.dir {
 				input := m.torrent.Value()
 				dir := m.saveDir.Value()
@@ -66,7 +66,7 @@ func (m addTorrent) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.dir = true
 				return m, nil
 			}
-		case key.Matches(msg, addPromptKeys.back):
+		case key.Matches(msg, addPromptKeys.prev):
 			if m.dir {
 				m.saveDir.Blur()
 				m.torrent.Focus()
