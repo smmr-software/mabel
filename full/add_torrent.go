@@ -47,9 +47,9 @@ func (m addTorrent) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case msg.Type == tea.KeyCtrlC:
 			m.main.client.Close()
 			return m, tea.Quit
-		case key.Matches(msg, addPromptKeys.quit):
+		case key.Matches(msg, addTorrentKeys.quit):
 			return m.main, nil
-		case key.Matches(msg, addPromptKeys.next):
+		case key.Matches(msg, addTorrentKeys.next):
 			if m.dir {
 				input := m.torrent.Value()
 				dir := m.saveDir.Value()
@@ -66,7 +66,7 @@ func (m addTorrent) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.dir = true
 				return m, nil
 			}
-		case key.Matches(msg, addPromptKeys.prev):
+		case key.Matches(msg, addTorrentKeys.prev):
 			if m.dir {
 				m.saveDir.Blur()
 				m.torrent.Focus()
@@ -103,7 +103,7 @@ func (m addTorrent) View() string {
 	body.WriteString("\n\nSave Directory (Optional)\n")
 	body.WriteString(styles.BorderWindow.Render(m.saveDir.View()))
 
-	help := m.help.View(addPromptKeys)
+	help := m.help.View(addTorrentKeys)
 	height := m.height - gloss.Height(help) - 1
 
 	content := gloss.Place(
@@ -115,9 +115,9 @@ func (m addTorrent) View() string {
 	return fullscreen.Render(content + help + "\n")
 }
 
-// initialAddPrompt creates the initial state of the add prompt view,
+// initialAddTorrent creates the initial state of the add torrent view,
 // creating text boxes and accepting data from the main model.
-func initialAddPrompt(w, h int, dir *string, theme *styles.ColorTheme, help *help.Model, parent *model) addTorrent {
+func initialAddTorrent(w, h int, dir *string, theme *styles.ColorTheme, help *help.Model, parent *model) addTorrent {
 	torrent := textinput.New()
 	torrent.Width = 32
 	saveDir := torrent

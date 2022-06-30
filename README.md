@@ -144,7 +144,7 @@ gradient-solid = "#00FF00"
 #### Keys
 
 The `keys` key allows the user to configure their key bindings in both
-the home and add prompt screen. To remap a specific key, use the key
+the home and add torrent screen. To remap a specific key, use the key
 `keys.SCREEN.ACTION`. The property `key` selects the actual key being
 used ([with names and options defined by Bubble Tea]), `icon` defines
 the icon in the help menu, and `desc` defines the help text in the help
@@ -172,11 +172,11 @@ Some examples:
       key = "b"
       desc = "sos"
   
-  # keys in the add prompt screen
-  [keys.add-prompt]
+  # keys in the add torrent screen
+  [keys.add-torrent]
 
     # just changes the quit keybind to return
-    [keys.add-prompt.quit]
+    [keys.add-torrent.quit]
       key = "return"
 ```
 

@@ -50,7 +50,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case key.Matches(msg, homeKeys.help):
 			m.help.ShowAll = !m.help.ShowAll
 		case key.Matches(msg, homeKeys.add):
-			return initialAddPrompt(
+			return initialAddTorrent(
 				m.width, m.height,
 				m.dir, m.theme,
 				m.help, &m,

@@ -9,10 +9,10 @@ type CustomKeyMap struct {
 		Details, Deselect,
 		Help, Quit CustomKey
 	}
-	AddPrompt struct {
+	AddTorrent struct {
 		Quit, Prev,
 		Next CustomKey
-	} `toml:"add-prompt"`
+	} `toml:"add-torrent"`
 }
 
 type CustomKey struct {
@@ -94,19 +94,19 @@ var homeKeys = homeKeyMap{
 	),
 }
 
-type addPromptKeyMap struct {
+type addTorrentKeyMap struct {
 	quit, prev, next key.Binding
 }
 
 // ShortHelp returns the key bindings for the forward, back, and quit
-// actions in the the add prompt screen.
-func (k addPromptKeyMap) ShortHelp() []key.Binding {
+// actions in the the add torrent screen.
+func (k addTorrentKeyMap) ShortHelp() []key.Binding {
 	return []key.Binding{k.next, k.prev, k.quit}
 }
 
 // FullHelp returns the key bindings for all actions in the the add
 // prompt screen.
-func (k addPromptKeyMap) FullHelp() [][]key.Binding {
+func (k addTorrentKeyMap) FullHelp() [][]key.Binding {
 	return [][]key.Binding{
 		{k.next},
 		{k.prev},
@@ -116,7 +116,7 @@ func (k addPromptKeyMap) FullHelp() [][]key.Binding {
 
 // Define the key bindings and help symbols for each action in the add
 // prompt screen.
-var addPromptKeys = addPromptKeyMap{
+var addTorrentKeys = addTorrentKeyMap{
 	quit: key.NewBinding(
 		key.WithKeys("esc"),
 		key.WithHelp("⎋", "home"),
@@ -131,7 +131,7 @@ var addPromptKeys = addPromptKeyMap{
 	),
 }
 
-// ToKeys changes the default homeKeys and addPromptKeys key bindings
+// ToKeys changes the default homeKeys and addTorrentKeys key bindings
 // if there is user configuration.
 func (c CustomKeyMap) ToKeys() {
 	if !c.Home.Up.isZero() {
@@ -194,22 +194,22 @@ func (c CustomKeyMap) ToKeys() {
 			key.WithHelp(c.Home.Quit.Icon, c.Home.Quit.Desc),
 		)
 	}
-	if !c.AddPrompt.Quit.isZero() {
-		addPromptKeys.quit = key.NewBinding(
-			key.WithKeys(c.AddPrompt.Quit.Key),
-			key.WithHelp(c.AddPrompt.Quit.Icon, c.AddPrompt.Quit.Desc),
+	if !c.AddTorrent.Quit.isZero() {
+		addTorrentKeys.quit = key.NewBinding(
+			key.WithKeys(c.AddTorrent.Quit.Key),
+			key.WithHelp(c.AddTorrent.Quit.Icon, c.AddTorrent.Quit.Desc),
 		)
 	}
-	if !c.AddPrompt.Prev.isZero() {
-		addPromptKeys.prev = key.NewBinding(
-			key.WithKeys(c.AddPrompt.Prev.Key),
-			key.WithHelp(c.AddPrompt.Prev.Icon, c.AddPrompt.Prev.Desc),
+	if !c.AddTorrent.Prev.isZero() {
+		addTorrentKeys.prev = key.NewBinding(
+			key.WithKeys(c.AddTorrent.Prev.Key),
+			key.WithHelp(c.AddTorrent.Prev.Icon, c.AddTorrent.Prev.Desc),
 		)
 	}
-	if !c.AddPrompt.Next.isZero() {
-		addPromptKeys.next = key.NewBinding(
-			key.WithKeys(c.AddPrompt.Next.Key),
-			key.WithHelp(c.AddPrompt.Next.Icon, c.AddPrompt.Next.Desc),
+	if !c.AddTorrent.Next.isZero() {
+		addTorrentKeys.next = key.NewBinding(
+			key.WithKeys(c.AddTorrent.Next.Key),
+			key.WithHelp(c.AddTorrent.Next.Icon, c.AddTorrent.Next.Desc),
 		)
 	}
 }
