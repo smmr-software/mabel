@@ -141,6 +141,44 @@ tooltip = "#00FF00"
 gradient-solid = "#00FF00"
 ```
 
+#### Keys
+
+The `keys` key allows the user to configure their key bindings in both
+the home and add prompt screen. To remap a specific key, use the key
+`keys.SCREEN.ACTION`. `key` selects the actual key being used ([with
+names and options defined by Bubble Tea]), `icon` defines the icon in
+the help menu, and `desc` defines the help text in the help menu.
+
+In the home screen, options for key bindings include [up, down, next,
+previous, add, delete, details, deselect, help, and quit]. In the add
+prompt screen, you can configure the [quit, previous, and next keys].
+
+Some examples: 
+```toml
+[keys]
+  # keys in the home screen
+  [keys.home]
+
+    # changes the next keybind to tab, with help menu info "↹ next"
+    [keys.home.next]
+      key = "tab"
+      icon = "↹"
+      desc = "next"
+
+    # changes the help keybind to b, keeping the icon as default but
+    # the description as "sos"
+    [keys.home.help]
+      key = "b"
+      desc = "sos"
+  
+  # keys in the add prompt
+  [keys.add-prompt]
+
+    # just changes the keybind to return
+    [keys.add-prompt.quit]
+      key = "return"
+```
+
 ### Flags
 
 Runtime flags are documented in Mabel's help message, which you can
@@ -160,3 +198,6 @@ A [SMMR Software] creation. 🏖
 [anacrolix/torrent]: https://github.com/anacrolix/torrent
 [Nerd Font]: https://www.nerdfonts.com
 [SMMR Software]: https://smmr.software/
+[with names and options defined by Bubble Tea]: https://github.com/charmbracelet/bubbletea/blob/master/key.go
+[up, down, next, previous, add, delete, details, deselect, help, and quit]: https://github.com/smmr-software/mabel/blob/45d822acf103368b544e64309ff33bceeab5372a/full/keys.go#L54-L95
+[quit, previous, and next keys]: https://github.com/smmr-software/mabel/blob/45d822acf103368b544e64309ff33bceeab5372a/full/keys.go#L119-L132
