@@ -23,15 +23,10 @@ community, including:
 Coming soon to a package manager near you!
 
 ```sh
+# Build from source
 go install github.com/smmr-software/mabel@latest
-```
-
-### Build from Source
-
-```sh
-git clone https://github.com/smmr-software/mabel.git
-cd mabel
-go build .
+# Homebrew
+brew install mabel
 ```
 
 ## Usage
