@@ -18,7 +18,7 @@ type config struct {
 	Port     uint
 
 	Log               bool
-	RequireEncryption bool `toml:"require_encryption"`
+	RequireEncryption bool `toml:"require-encryption"`
 
 	Theme toml.Primitive
 	Keys  full.CustomKeyMap
