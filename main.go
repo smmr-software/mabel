@@ -92,6 +92,9 @@ func main() {
 		if version == "" {
 			version = info.Main.Version
 		}
+		if commit != "" {
+			commit = fmt.Sprintf("Commit: %s%s\n", commit, modified)
+		}
 		if builtBy != "" {
 			builtBy = fmt.Sprintf("Built by: %s\n", builtBy)
 		}
@@ -100,8 +103,8 @@ func main() {
 		}
 
 		fmt.Printf(
-			"Mabel %s\nCommit: %s%s\n%s%s",
-			version, commit, modified,
+			"Mabel %s\n%s%s%s",
+			version, commit,
 			builtBy, date,
 		)
 		return
