@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Mabel
+GenericName=BitTorrent Client
+Comment=Download and seed files with BitTorrent from your terminal
+Categories=Network;FileTransfer;P2P;ConsoleOnly;
+Keywords=torrents;downloading;uploading;share;sharing;
+Terminal=true
+Exec=mabel %U
+MimeType=application/x-bittorrent;x-scheme-handler/magnet;

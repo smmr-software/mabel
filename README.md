@@ -29,6 +29,16 @@ go install github.com/smmr-software/mabel@latest
 brew install mabel
 ```
 
+### Desktop File
+
+Some systems can install the desktop entry file to get Mabel to appear
+in the list of applications (and open torrent files with `xdg-open`):
+
+```sh
+curl -sSL https://raw.githubusercontent.com/smmr-software/mabel/main/mabel.desktop -o ~/.local/share/applications/mabel.desktop
+update-desktop-database ~/.local/share/applications
+```
+
 ## Usage
 
 ```
