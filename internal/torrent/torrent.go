@@ -48,7 +48,7 @@ func AddTorrent(t, dir *string, client *torrent.Client, l *list.Model, theme *st
 	} else if strings.HasPrefix(*t, infohashPrefix) || len(*t) == hashLength {
 		return addInfoHash(t, &store, client, l, theme)
 	} else {
-		return addFromFile(t, &store, client, l, theme)
+		return addMetaInfoFile(t, &store, client, l, theme)
 	}
 }
 

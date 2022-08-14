@@ -1,6 +1,8 @@
 package torrent
 
 import (
+	"net/http"
+	"strings"
 	"time"
 
 	"github.com/smmr-software/mabel/internal/list"
@@ -17,18 +19,34 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 )
 
-// addFromFile takes a metainfo (.torrent) file and adds the torrent to
-// the client. If it is a new torrent, the torrent info is added to the
+// addMetaInfoFile takes a metainfo (.torrent) file and adds the torrent
+// to the client. The file can either be local or accessible over
+// HTTP(S). If it is a new torrent, the torrent info is added to the
 // Bubbles list.
-func addFromFile(input *string, dir *storage.ClientImpl, client *torrent.Client, l *clist.Model, theme *styles.ColorTheme) (tea.Cmd, error) {
-	path, err := home.Expand(*input)
-	if err != nil {
-		return nil, err
-	}
+func addMetaInfoFile(input *string, dir *storage.ClientImpl, client *torrent.Client, l *clist.Model, theme *styles.ColorTheme) (tea.Cmd, error) {
+	var meta *metainfo.MetaInfo
 
-	meta, err := metainfo.LoadFromFile(path)
-	if err != nil {
-		return nil, err
+	if strings.HasPrefix(*input, "http") {
+		response, err := http.Get(*input)
+		if err != nil {
+			return nil, err
+		}
+
+		meta, err = metainfo.Load(response.Body)
+		defer response.Body.Close()
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		path, err := home.Expand(*input)
+		if err != nil {
+			return nil, err
+		}
+
+		meta, err = metainfo.LoadFromFile(path)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	spec := torrent.TorrentSpecFromMetaInfo(meta)
