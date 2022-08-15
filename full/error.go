@@ -25,8 +25,8 @@ func (m errorScreen) Init() tea.Cmd {
 func (m errorScreen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
-		m.width = msg.Width - styles.BorderWindow.GetHorizontalBorderSize()
-		m.height = msg.Height - styles.BorderWindow.GetHorizontalBorderSize()
+		m.width = msg.Width - styles.Fullscreen.GetHorizontalBorderSize()
+		m.height = msg.Height - styles.Fullscreen.GetHorizontalBorderSize()
 
 		updated, _ := m.main.Update(msg)
 		if mdl, ok := updated.(model); ok {
@@ -56,13 +56,13 @@ func (m errorScreen) View() string {
 	fullscreen := gloss.NewStyle().
 		Width(m.width).
 		Height(m.height).
-		Inherit(styles.BorderWindow).
+		Inherit(styles.Fullscreen).
 		BorderForeground(m.theme.Error)
 	popupWindow := gloss.NewStyle().
 		Width(popupWidth).
 		Height(popupHeight).
 		Padding(0, padding).
-		Inherit(styles.BorderWindow).
+		Inherit(styles.Window).
 		BorderForeground(m.theme.Error)
 	header := gloss.NewStyle().Bold(true)
 

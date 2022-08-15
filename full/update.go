@@ -28,8 +28,8 @@ func reportError(err error) tea.Cmd {
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg: // Change to fit new window size
-		width := msg.Width - styles.BorderWindow.GetHorizontalBorderSize()
-		height := msg.Height - styles.BorderWindow.GetHorizontalBorderSize()
+		width := msg.Width - styles.Fullscreen.GetHorizontalBorderSize()
+		height := msg.Height - styles.Fullscreen.GetHorizontalBorderSize()
 
 		m.width = width
 		m.help.Width = width

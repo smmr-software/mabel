@@ -19,6 +19,7 @@ type config struct {
 
 	Log               bool
 	RequireEncryption bool `toml:"require-encryption"`
+	Borderless        bool
 
 	Theme toml.Primitive
 	Keys  full.CustomKeyMap

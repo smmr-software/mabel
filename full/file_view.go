@@ -22,7 +22,7 @@ func fileView(files *[]*torrent.File, w *int, h *int) string {
 	box := gloss.NewStyle().
 		Width(width).
 		Height(height).
-		Inherit(styles.BorderWindow).
+		Inherit(styles.Window).
 		UnsetAlign()
 	if len(*files) < height {
 		box.UnsetHeight()

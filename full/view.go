@@ -12,7 +12,7 @@ func (m model) View() string {
 	fullscreen := gloss.NewStyle().
 		Width(m.width).
 		Height(m.height).
-		Inherit(styles.BorderWindow)
+		Inherit(styles.Fullscreen)
 
 	var content string
 	if torrents := m.client.Torrents(); len(torrents) > 0 {

@@ -33,8 +33,8 @@ func (m addTorrent) Init() tea.Cmd {
 func (m addTorrent) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
-		m.width = msg.Width - styles.BorderWindow.GetHorizontalBorderSize()
-		m.height = msg.Height - styles.BorderWindow.GetHorizontalBorderSize()
+		m.width = msg.Width - styles.Fullscreen.GetHorizontalBorderSize()
+		m.height = msg.Height - styles.Fullscreen.GetHorizontalBorderSize()
 
 		updated, _ := m.main.Update(msg)
 		if mdl, ok := updated.(model); ok {
@@ -95,13 +95,13 @@ func (m addTorrent) View() string {
 	fullscreen := gloss.NewStyle().
 		Width(m.width).
 		Height(m.height).
-		Inherit(styles.BorderWindow)
+		Inherit(styles.Fullscreen)
 
 	var body strings.Builder
 	body.WriteString("Add Torrent\n")
-	body.WriteString(styles.BorderWindow.Render(m.torrent.View()))
+	body.WriteString(styles.Window.Render(m.torrent.View()))
 	body.WriteString("\n\nSave Directory (Optional)\n")
-	body.WriteString(styles.BorderWindow.Render(m.saveDir.View()))
+	body.WriteString(styles.Window.Render(m.saveDir.View()))
 
 	help := m.help.View(addTorrentKeys)
 	height := m.height - gloss.Height(help) - 1

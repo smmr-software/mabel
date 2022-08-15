@@ -27,13 +27,14 @@ var (
 
 func main() {
 	var (
-		download = flag.StringP("download", "d", xdg.UserDirs.Download, "Set the default directory for downloaded torrents.")
-		port     = flag.UintP("port", "p", 42069, "Set the port number to which the client will bind.")
-		theme    = flag.StringP("theme", "t", "default", "Set the color theme that the client will use.")
-		logging  = flag.BoolP("log", "l", false, "Enable client logging.")
-		encrypt  = flag.BoolP("encrypt", "e", false, "Ignore unencrypted peers.")
-		help     = flag.BoolP("help", "h", false, "Print this help message.")
-		vrsn     = flag.BoolP("version", "v", false, "Print version information.")
+		download   = flag.StringP("download", "d", xdg.UserDirs.Download, "Set the default directory for downloaded torrents.")
+		port       = flag.UintP("port", "p", 42069, "Set the port number to which the client will bind.")
+		theme      = flag.StringP("theme", "t", "default", "Set the color theme that the client will use.")
+		logging    = flag.BoolP("log", "l", false, "Enable client logging.")
+		encrypt    = flag.BoolP("encrypt", "e", false, "Ignore unencrypted peers.")
+		borderless = flag.BoolP("borderless", "b", false, "Do not render an outer border.")
+		help       = flag.BoolP("help", "h", false, "Print this help message.")
+		vrsn       = flag.BoolP("version", "v", false, "Print version information.")
 	)
 	flag.Parse()
 	args := flag.Args()
@@ -59,6 +60,8 @@ func main() {
 		menu.WriteString("\n        Enable client logging. [dir: " + green.Render("$XDG_STATE_HOME/mabel") + "]")
 		menu.WriteString("\n    " + green.Render("-e") + ", " + green.Render("--encrypt"))
 		menu.WriteString("\n        Ignore unencrypted peers.")
+		menu.WriteString("\n    " + green.Render("-b") + ", " + green.Render("--borderless"))
+		menu.WriteString("\n        Do not render an outer border.")
 		menu.WriteString("\n    " + green.Render("-h") + ", " + green.Render("--help"))
 		menu.WriteString("\n        Print this help message.")
 		menu.WriteString("\n    " + green.Render("-v") + ", " + green.Render("--version"))
@@ -119,6 +122,7 @@ func main() {
 	themeFlag := flag.Lookup("theme")
 	loggingFlag := flag.Lookup("log")
 	encryptFlag := flag.Lookup("encrypt")
+	borderlessFlag := flag.Lookup("borderless")
 	thm := conf.getTheme()
 	key := conf.Keys
 
@@ -134,11 +138,18 @@ func main() {
 	if !encryptFlag.Changed {
 		flag.Set("encrypt", fmt.Sprint(conf.RequireEncryption))
 	}
+	if !borderlessFlag.Changed {
+		flag.Set("borderless", fmt.Sprint(conf.Borderless))
+	}
 	if themeFlag.Changed {
 		thm = styles.StringToTheme(theme)
 	}
 
-	styles.BorderWindow = styles.BorderWindow.BorderForeground(thm.Primary)
+	if *borderless {
+		styles.Fullscreen = styles.Fullscreen.BorderStyle(gloss.HiddenBorder())
+	}
+	styles.Window = styles.Window.BorderForeground(thm.Primary)
+	styles.Fullscreen = styles.Fullscreen.BorderForeground(thm.Primary)
 
 	if flag.NArg() == 1 {
 		mini.Execute(&args[0], download, port, logging, encrypt, thm)
