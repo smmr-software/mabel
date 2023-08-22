@@ -2,7 +2,8 @@
 package full
 
 import (
-	"log"
+	"fmt"
+	"os"
 
 	"github.com/smmr-software/mabel/internal/styles"
 	"github.com/smmr-software/mabel/internal/torrent"
@@ -28,10 +29,12 @@ func Execute(torrents *[]string, dir *string, port *uint, logging, encrypt *bool
 	keys.ToKeys()
 	model, err := initialModel(torrents, dir, port, logging, encrypt, theme)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
+		os.Exit(1)
 	}
 
-	if err := tea.NewProgram(model, tea.WithAltScreen()).Start(); err != nil {
-		log.Fatal(err)
+	if _, err := tea.NewProgram(model, tea.WithAltScreen()).Run(); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
 	}
 }

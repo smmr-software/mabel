@@ -69,7 +69,8 @@ func genMabelConfig(port *uint, logging, encrypt *bool) *torrent.ClientConfig {
 func initialModel(t, dir *string, port *uint, logging, encrypt *bool, theme *styles.ColorTheme) (model, error) {
 	client, err := torrent.NewClient(genMabelConfig(port, logging, encrypt))
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
+		os.Exit(1)
 	}
 	m := model{
 		torrent: t,
@@ -95,7 +96,8 @@ func tick() tea.Cmd {
 func (m model) Init() tea.Cmd {
 	cmd, err := trrnt.AddTorrent(m.torrent, m.saveDir, m.client, nil, m.theme)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
+		os.Exit(1)
 	}
 
 	return cmd
@@ -153,10 +155,12 @@ func (m model) View() string {
 func Execute(t, dir *string, port *uint, logging, encrypt *bool, theme *styles.ColorTheme) {
 	model, err := initialModel(t, dir, port, logging, encrypt, theme)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
+		os.Exit(1)
 	}
 
-	if err := tea.NewProgram(model).Start(); err != nil {
-		log.Fatal(err)
+	if _, err := tea.NewProgram(model).Run(); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
 	}
 }
